@@ -1,22 +1,28 @@
 name: director_app_tfg
-description: A new Flutter project.
-publish_to: 'none'
+description: Nuestro Padre Jesús de la Redención.
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.1.4 <4.0.0'
+  sdk: ">=3.1.4 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
     - lib/config/assets/images/
+    
+flutter_icons:
+  image_path: 'lib/config/assets/images/icon.png'
+  android: true
+  ios: true
