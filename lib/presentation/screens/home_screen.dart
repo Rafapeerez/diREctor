@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:director_app_tfg/presentation/views/home_view.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String name = 'home-screen';
@@ -7,6 +8,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const HomeView();
   }
 }

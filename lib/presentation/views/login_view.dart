@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 class LogInView extends StatelessWidget {
@@ -18,14 +19,13 @@ class LogInView extends StatelessWidget {
             Image.asset('lib/config/assets/images/icon.png'),
             const SizedBox(height: 60),
             _LogInButton(),
+            FilledButton(onPressed: () => context.go('/home-screen'), child: const Text('mOCK'))
           ],
         )
       ])
     );
   }
 }
-
-
 
 class _LogInButton extends StatelessWidget {
 
