@@ -1,3 +1,4 @@
+import 'package:director_app_tfg/config/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:director_app_tfg/config/router/router.dart';
 
@@ -13,6 +14,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      theme: AppTheme().getTheme(),
     );
   }
 }

@@ -19,7 +19,10 @@ class LogInView extends StatelessWidget {
             Image.asset('lib/config/assets/images/icon.png'),
             const SizedBox(height: 60),
             _LogInButton(),
-            FilledButton(onPressed: () => context.go('/home-screen'), child: const Text('mOCK'))
+            FilledButton(
+              onPressed: () => context.go('/home-screen'), 
+              child: const Text('mOCK')
+            )
           ],
         )
       ])
@@ -32,16 +35,9 @@ class _LogInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final colors = Theme.of(context).colorScheme;
 
     return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.fromLTRB(3, 3, 12, 3),
-        backgroundColor: const Color.fromRGBO(66, 133, 244, 1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.0),
-        ),
-
-      ), 
       icon: ClipRRect(
         borderRadius: BorderRadius.circular(3),
         child: Container(
@@ -51,6 +47,13 @@ class _LogInButton extends StatelessWidget {
       ), 
       label: const Text('Inicia sesión con Google', style: TextStyle(color: Colors.white),),
       onPressed: () => {},   
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.fromLTRB(3, 3, 12, 3),
+        backgroundColor: colors.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0.0),
+        ),
+      ), 
     );
   }
 }
