@@ -20,8 +20,8 @@ class LogInView extends StatelessWidget {
             const SizedBox(height: 60),
             _LogInButton(),
             FilledButton(
-              onPressed: () => context.go('/home-screen'), 
-              child: const Text('mOCK')
+              child: const Text('mOCK'),
+              onPressed: () => context.go('/home-screen') 
             )
           ],
         )
@@ -42,7 +42,7 @@ class _LogInButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(3),
         child: Container(
           color: Colors.white,
-          child: Image.asset('lib/config/assets/images/sign_in_google.png', width: size.width * 0.1)
+          child: Image.asset('lib/config/assets/images/signInGoogle.png', width: size.width * 0.1)
         ),
       ), 
       label: const Text('Inicia sesión con Google', style: TextStyle(color: Colors.white),),

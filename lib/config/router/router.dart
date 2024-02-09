@@ -1,7 +1,7 @@
-import 'package:director_app_tfg/presentation/screens/home_screen.dart';
-import 'package:director_app_tfg/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../presentation/screens/screens.dart';
 
 final GoRouter appRouter = GoRouter(
   routes: [
@@ -14,7 +14,14 @@ final GoRouter appRouter = GoRouter(
           path: 'home-screen',
           name: HomeScreen.name,
           builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
-        )
+          routes: [
+            GoRoute(
+              path: 'events-screen',
+              name: EventsScreen.name,
+              builder: (BuildContext context, GoRouterState state) => const EventsScreen(),
+            )
+          ]
+        ),
       ]
     ),
   ]

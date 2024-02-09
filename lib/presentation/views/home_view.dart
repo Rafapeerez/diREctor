@@ -8,16 +8,22 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: CustomAppBar(scaffoldKey: _scaffoldKey),
+      key: scaffoldKey,
+      appBar: CustomAppBar(scaffoldKey: scaffoldKey),
       drawer: const CustomMenuDrawer(),
-      body: const Column(
-        children: [
-          CustomCard(title: 'Concierto', isAttendingEvent: true,/*  image:'lib/config/assets/images/PalmSunday.jpg',*/description: 'asdasdadasdasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', )
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomCard(title: 'Eventos', image:'lib/config/assets/images/eventos.jpg', description: 'Salidas Procesionales y Conciertos', route: '/home-screen/events-screen'),
+            CustomCard(title: 'Semana Santa',   image:'lib/config/assets/images/SemanaSanta.jpg', description: 'Todos los días de nuestra Semana Santa', route: 'Easter-screen'),
+            CustomCard(title: 'Repertorio', image: 'lib/config/assets/images/repertorio.jpg', description: 'Marchas', route: 'march-screen'),
+            CustomCard(title: 'Reglas', image:'lib/config/assets/images/Reglas.jpg', route: 'rules-screen'),
+            SizedBox(height: 10)
+          ],
+        ),
       ),
     );
   }
