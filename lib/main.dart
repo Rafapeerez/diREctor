@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => AppTheme( ThemeData.dark() ),
+      create: (_) => AppTheme( ),
       child: const MaterialAppWithTheme(),
     );
   }

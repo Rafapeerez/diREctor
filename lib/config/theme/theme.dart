@@ -11,12 +11,16 @@ class AppTheme with ChangeNotifier {
     colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(118, 151, 229, 1))
   );
 
-  ThemeData _currentTheme = ThemeData(
-    useMaterial3: true,
-    colorSchemeSeed: const Color.fromRGBO(118, 151, 229, 1),
+  ThemeData _currentTheme = ThemeData.light().copyWith(
+    colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(118, 151, 229, 1))
   );
+  
+  AppTheme() {
+    _currentTheme = _currentTheme.copyWith(
 
-  AppTheme(this._currentTheme);
+      brightness: Brightness.light, 
+    );
+  }
 
   ThemeData getTheme() {
     return _currentTheme;
