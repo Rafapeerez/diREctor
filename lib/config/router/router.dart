@@ -1,3 +1,4 @@
+import 'package:director_app_tfg/presentation/screens/holy_week_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +20,12 @@ final GoRouter appRouter = GoRouter(
               path: 'events-screen',
               name: EventsScreen.name,
               builder: (BuildContext context, GoRouterState state) => const EventsScreen(),
-            )
+            ),
+            GoRoute(
+              path: 'holyweek-screen',
+              name: HolyWeekScreen.name,
+              builder: (BuildContext context, GoRouterState state) => const HolyWeekScreen(),
+            ),
           ]
         ),
       ]

@@ -19,6 +19,9 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final colors = Theme.of(context).colorScheme;
+
     return InkWell(
       onTap: () => context.go(route),
       child: Card(

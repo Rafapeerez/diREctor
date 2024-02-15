@@ -1,6 +1,6 @@
+import 'package:director_app_tfg/presentation/views/menu_view.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_card.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_menu_drawer.dart';
 import 'package:flutter/material.dart';
 
 class EventsView extends StatelessWidget {
@@ -13,7 +13,7 @@ class EventsView extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: const CustomMenuDrawer(),
+      drawer: const MenuView(),
       body: const SingleChildScrollView(
         child: Column(
           children: [

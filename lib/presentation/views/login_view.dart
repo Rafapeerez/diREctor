@@ -42,7 +42,7 @@ class _LogInButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(3),
         child: Container(
           color: Colors.white,
-          child: Image.asset('lib/config/assets/images/signInGoogle.png', width: size.width * 0.1)
+          child: Image.asset('lib/config/assets/images/SignInGoogle.png', width: size.width * 0.1)
         ),
       ), 
       label: const Text('Inicia sesión con Google', style: TextStyle(color: Colors.white),),
