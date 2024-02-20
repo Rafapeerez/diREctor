@@ -48,6 +48,10 @@ class MenuView extends StatelessWidget {
             hasSwitch: true,
           ),
           const CustomListTile(
+            option: "Reglas",
+            icon: Icon(Icons.file_copy_outlined, size: 30)
+          ),
+          const CustomListTile(
             option: "Cerrar Sesión",
             icon: Icon(Icons.logout_outlined, size: 30)
           ),

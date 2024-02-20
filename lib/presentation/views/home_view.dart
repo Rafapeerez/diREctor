@@ -19,8 +19,7 @@ class HomeView extends StatelessWidget {
           children: [
             CustomCard(title: 'Eventos', image:'lib/config/assets/images/Eventos.jpg', description: 'Salidas Procesionales y Conciertos', route: '/home-screen/events-screen'),
             CustomCard(title: 'Semana Santa',   image:'lib/config/assets/images/SemanaSanta.jpg', description: 'Todos los días de nuestra Semana Santa', route: '/home-screen/holyweek-screen'),
-            CustomCard(title: 'Repertorio', image: 'lib/config/assets/images/Repertorio.jpg', description: 'Marchas', route: 'march-screen'),
-            CustomCard(title: 'Reglas', image:'lib/config/assets/images/Reglas.jpg', route: 'rules-screen'),
+            CustomCard(title: 'Repertorio', image: 'lib/config/assets/images/Repertorio.jpg', description: 'Marchas', route: '/home-screen/marchs-screen'),
             SizedBox(height: 10)
           ],
         ),

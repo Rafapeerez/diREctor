@@ -29,32 +29,35 @@ class _CustomListTileState extends State<CustomListTile> {
     final theme = Provider.of<AppTheme>(context);
     final colors = Theme.of(context).colorScheme;
 
-    return Column(children: [
-      ListTile(
-        title: Row(children: [
-          widget.icon,
-          const SizedBox(width: 20),
-          Text(widget.option),
-          const Spacer(),
-          widget.hasSwitch == true ? Switch(
-              value: isDark,
-              activeColor: colors.primary,
-              onChanged: (bool value) {
-                setState(() {
-                  isDark = value;
-                });
-                theme.setTheme(value);
-              },
-            )
-            : const SizedBox()
-        ]),
-        onTap: widget.route == ""
+    return Column(
+      children: [
+        ListTile(
+          title: Row(
+            children: [
+              widget.icon,
+              const SizedBox(width: 20),
+              Text(widget.option),
+              const Spacer(),
+              widget.hasSwitch == true ? Switch(
+                  value: isDark,
+                  activeColor: colors.primary,
+                  onChanged: (bool value) {
+                    setState(() {
+                      isDark = value;
+                    });
+                    theme.setTheme(value);
+                  },
+                )
+                : const SizedBox()
+            ]
+          ),
+          onTap: widget.route == ""
             ? () {}
             : () {
                 context.pop();
                 context.go(widget.route);
-              },
-      ),
+            },
+        ),
       const Divider()
     ]);
   }
