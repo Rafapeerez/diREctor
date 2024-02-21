@@ -1,4 +1,5 @@
 import 'package:director_app_tfg/presentation/views/menu_view.dart';
+import 'package:director_app_tfg/presentation/views/profile_view.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class HomeView extends StatelessWidget {
       key: scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: scaffoldKey),
       drawer: const MenuView(),
+      endDrawer: const ProfileView(),
       body: const SingleChildScrollView(
         child: Column(
           children: [
