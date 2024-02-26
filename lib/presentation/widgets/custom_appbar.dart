@@ -1,4 +1,3 @@
-import 'package:director_app_tfg/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
