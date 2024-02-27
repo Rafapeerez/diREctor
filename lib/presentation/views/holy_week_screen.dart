@@ -14,9 +14,8 @@ class HolyWeekView extends StatelessWidget {
       key: scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: scaffoldKey),
       drawer: const MenuView(),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
+      body: ListView(
+          children: const [
             CustomCard(title: 'Jueves de Pasión', image:'lib/config/assets/images/JuevesPasion.jpg', route: '/home-screen/events-screen'),
             CustomCard(title: 'Sábado de Pasión',   image:'lib/config/assets/images/SabadoPasion.jpg', route: '/home-screen/holyweek-screen'),
             CustomCard(title: 'Domingo de Ramos', image:'lib/config/assets/images/DomingoRamos.jpg', route: 'rules-screen'),
@@ -30,7 +29,6 @@ class HolyWeekView extends StatelessWidget {
             SizedBox(height: 10)
           ],
         ),
-      ),
     );
   }
-/*  */}
+}
