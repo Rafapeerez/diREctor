@@ -29,6 +29,13 @@ final GoRouter appRouter = GoRouter(
               path: 'marchs-screen',
               name: MarchsScreen.name,
               builder: (BuildContext context, GoRouterState state) => const MarchsScreen(),
+              routes: [
+                GoRoute(
+                  path: 'marchdetails-screen',
+                  name: MarchDetailsScreen.name,
+                  builder: (BuildContext context, GoRouterState state) => const MarchDetailsScreen()
+                )
+              ]
             ),
           ]
         ),

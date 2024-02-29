@@ -8,14 +8,14 @@ class CustomCard extends StatelessWidget {
   final bool isAttendingEvent;
   final String route;
 
-  const CustomCard(
-      {super.key,
-      required this.title,
-      this.description = "",
-      this.image = "",
-      this.isAttendingEvent= false,
-      required this.route
-      });
+  const CustomCard({
+    super.key,
+    required this.title,
+    this.description = "",
+    this.image = "",
+    this.isAttendingEvent= false,
+    required this.route
+  });
 
   @override
   Widget build(BuildContext context) {

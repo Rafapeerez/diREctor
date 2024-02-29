@@ -2,6 +2,7 @@ import 'package:director_app_tfg/presentation/views/menu_view.dart';
 import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MarchsView extends StatelessWidget {
   const MarchsView({super.key});
@@ -16,9 +17,18 @@ class MarchsView extends StatelessWidget {
       drawer: const MenuView(),
       body: ListView(
         children: const [
-          _CustomMarch(name: "Marcha Real" , letter: "MR"),
-          _CustomMarch(name: "Orando al Padre", letter: "OP",),
-          _CustomMarch(name: "Caenaculum", letter: "C",),
+          _CustomMarch(
+            name: "Marcha Real", 
+            letter: "MR"
+          ),
+          _CustomMarch(
+            name: "Orando al Padre",
+            letter: "OP",
+          ),
+          _CustomMarch(
+            name: "Caenaculum",
+            letter: "C",
+          ),
         ],
       ),
     );
@@ -29,16 +39,13 @@ class _CustomMarch extends StatelessWidget {
   final String name;
   final String letter;
 
-  const _CustomMarch({
-    required this.name,
-    required this.letter
-  });
+  const _CustomMarch({required this.name, required this.letter});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        
+        context.go("/home-screen/marchs-screen/marchdetails-screen");
       },
       child: Column(
         children: [
@@ -50,12 +57,10 @@ class _CustomMarch extends StatelessWidget {
                 Text(
                   name,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 20
-                  ),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 const Spacer(),
-                const Icon( 
+                const Icon(
                   Icons.arrow_forward_outlined,
                   size: 30,
                 )
