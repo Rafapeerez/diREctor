@@ -2,6 +2,7 @@ import 'package:director_app_tfg/presentation/views/menu_view.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
+import 'package:director_app_tfg/presentation/widgets/videos/march_videos.dart';
 
 class MarchsDetailsView extends StatelessWidget {
   const MarchsDetailsView({
@@ -26,7 +27,7 @@ class MarchsDetailsView extends StatelessWidget {
             SizedBox(height: 10),
             CustomExpansionPanel(headerText: 'Mas Informacion', expandedText: ''),
             SizedBox(height: 20),
-            Placeholder()
+            MarchVideo(youtubeId: "4BF20CiOHpg",name: "Marcha Real",)
           ],
         ));
   }
