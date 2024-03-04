@@ -1,15 +1,16 @@
+import 'package:director_app_tfg/config/helpers/youtube_id_formats_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
 class MarchVideo extends StatefulWidget {
 
-  final String youtubeId;
+  final String youtubeLink;
   final String name;
 
   const MarchVideo({
     super.key,  
-    required this.youtubeId, 
+    required this.youtubeLink, 
     required this.name 
   });
 
@@ -20,13 +21,15 @@ class MarchVideo extends StatefulWidget {
 class _YouTubeVideoPlayerState extends State<MarchVideo> {
 
   late YoutubePlayerController _controller;  
+  late String youtubeId; 
 
   @override
   void initState() {
     super.initState();
+    youtubeId = YoutubeIdFormats().getYoutubeId(widget.youtubeLink);
     
     _controller = YoutubePlayerController(
-      initialVideoId: widget.youtubeId,
+      initialVideoId: youtubeId,
       flags: const YoutubePlayerFlags(
         hideThumbnail: true,
         showLiveFullscreenButton: false,

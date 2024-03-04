@@ -27,7 +27,7 @@ class MarchsDetailsView extends StatelessWidget {
             SizedBox(height: 10),
             CustomExpansionPanel(headerText: 'Mas Informacion', expandedText: ''),
             SizedBox(height: 20),
-            MarchVideo(youtubeId: "4BF20CiOHpg",name: "Marcha Real",)
+            MarchVideo(youtubeLink: "https://www.youtube.com/watch?v=4BF20CiOHpg",name: "Marcha Real",)
           ],
         ));
   }
