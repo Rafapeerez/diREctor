@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:director_app_tfg/presentation/views/holy_week_screen.dart';
+import 'package:director_app_tfg/presentation/views/holy_week_view.dart';
 
 class HolyWeekScreen extends StatelessWidget {
   static const String name = 'holyweek-screen';

@@ -1,6 +1,5 @@
-import 'package:director_app_tfg/presentation/views/menu_view.dart';
 import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,12 +8,8 @@ class MarchsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: const MenuView(),
+    return CustomScaffold(
       body: ListView(
         children: const [
           _CustomMarch(

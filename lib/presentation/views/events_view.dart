@@ -1,5 +1,4 @@
-import 'package:director_app_tfg/presentation/views/menu_view.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 
@@ -8,13 +7,9 @@ class EventsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: const MenuView(),
-      body: const SingleChildScrollView(
+    return const CustomScaffold(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             CustomCard(title: 'Concierto', isAttendingEvent:true, description: 'Av. Almogávares (junto al hotel)', route: 'events-screen'),

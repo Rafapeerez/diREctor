@@ -4,4 +4,6 @@ export 'package:director_app_tfg/presentation/screens/events_screen.dart';
 export 'package:director_app_tfg/presentation/screens/holy_week_screen.dart';
 export 'package:director_app_tfg/presentation/screens/marchs_screen.dart';
 export 'package:director_app_tfg/presentation/screens/march_details_screen.dart';
+export 'package:director_app_tfg/presentation/screens/events_details_screen.dart';
+
 

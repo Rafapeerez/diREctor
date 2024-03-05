@@ -1,6 +1,4 @@
-import 'package:director_app_tfg/presentation/views/menu_view.dart';
-import 'package:director_app_tfg/presentation/views/profile_view.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_appbar.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 
@@ -9,14 +7,9 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: const MenuView(),
-      endDrawer: const ProfileView(),
-      body: const SingleChildScrollView(
+    return const CustomScaffold(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             CustomCard(title: 'Eventos', image:'lib/config/assets/images/Eventos.jpg', description: 'Salidas Procesionales y Conciertos', route: '/home-screen/events-screen'),
