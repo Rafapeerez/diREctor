@@ -11,16 +11,16 @@ class HolyWeekView extends StatelessWidget {
     return CustomScaffold(
       body: ListView(
           children: const [
-            CustomCard(title: 'Jueves de Pasión', image:'lib/config/assets/images/JuevesPasion.jpg', route: '/home-screen/events-screen'),
-            CustomCard(title: 'Sábado de Pasión',   image:'lib/config/assets/images/SabadoPasion.jpg', route: '/home-screen/holyweek-screen'),
-            CustomCard(title: 'Domingo de Ramos', image:'lib/config/assets/images/DomingoRamos.jpg', route: 'rules-screen'),
-            CustomCard(title: 'Lunes Santo', image: 'lib/config/assets/images/LunesSanto.jpeg', route: 'march-screen'),
-            CustomCard(title: 'Martes Santo', image:'lib/config/assets/images/Descanso.png', route: 'rules-screen'),
-            CustomCard(title: 'Miércoles Santo', image:'lib/config/assets/images/MiercolesSanto.jpg', route: 'rules-screen'),
-            CustomCard(title: 'Jueves Santo', image:'lib/config/assets/images/JuevesSanto.jpg', route: 'rules-screen'),
-            CustomCard(title: 'Viernes Santo', image:'lib/config/assets/images/ViernesSanto.jpg', route: 'rules-screen'),
-            CustomCard(title: 'Sábado Santo', image:'lib/config/assets/images/Descanso.png', route: 'rules-screen'),
-            CustomCard(title: 'Domingo de Resurrección', image:'lib/config/assets/images/DomingoResurreccion.jpeg', route: 'rules-screen'),
+            CustomCard(title: 'Jueves de Pasión', image:'lib/config/assets/images/JuevesPasion.jpg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Sábado de Pasión',   image:'lib/config/assets/images/SabadoPasion.jpg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Domingo de Ramos', image:'lib/config/assets/images/DomingoRamos.jpg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Lunes Santo', image: 'lib/config/assets/images/LunesSanto.jpeg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Martes Santo', image:'lib/config/assets/images/Descanso.png', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Miércoles Santo', image:'lib/config/assets/images/MiercolesSanto.jpg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Jueves Santo', image:'lib/config/assets/images/JuevesSanto.jpg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Viernes Santo', image:'lib/config/assets/images/ViernesSanto.jpg', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Sábado Santo', image:'lib/config/assets/images/Descanso.png', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Domingo de Resurrección', image:'lib/config/assets/images/DomingoResurreccion.jpeg', route: '/home-screen/events-screen/eventsdetails-screen'),
             SizedBox(height: 10)
           ],
         ),

@@ -29,36 +29,55 @@ class _CustomExpansionPanelState extends State<CustomExpansionPanel> {
     return SingleChildScrollView(
       child: GestureDetector(
         onTap: () => toggleExapanded(),
-        child: ExpansionPanelList(
-          expansionCallback: (panelIndex, isExpanded) {
-            setState(() {
-              _isExpanded = !_isExpanded;
-            });
-          },
+        child: Column(
           children: [
-            ExpansionPanel(
-              headerBuilder: (context, isExpanded) {
-                return Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    widget.headerText,
-                    style: const TextStyle(
-                      fontSize: 25,
+            ExpansionPanelList(
+              expandedHeaderPadding: EdgeInsets.zero,
+              expansionCallback: (panelIndex, isExpanded) {
+                setState(() {
+                  _isExpanded = !_isExpanded;
+                });
+              },
+              children: [
+                ExpansionPanel(
+                  headerBuilder: (context, isExpanded) {
+                    return Padding(
+                      padding:  const EdgeInsets.fromLTRB(8, 4, 8, 2), 
+                      child: Text(
+                        widget.headerText,
+                        style: const TextStyle(
+                          fontSize: 25,
+                        ),
+                      ),
+                    );
+                  }, 
+                  body: Padding(
+                    padding:  const EdgeInsets.fromLTRB(8, 4, 8, 8), 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: widget.expandedText
+                        .split('-')
+                        .where((line) => line.trim().isNotEmpty)
+                        .map((line) => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                line.trim(), 
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )).toList(), 
                     ),
                   ),
-                );
-              }, 
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.expandedText,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
+                  isExpanded: _isExpanded,
                 ),
-              ),
-              isExpanded: _isExpanded,
+              ],
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

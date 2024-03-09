@@ -11,10 +11,10 @@ class CustomCard extends StatelessWidget {
   const CustomCard({
     super.key,
     required this.title,
+    required this.route,
     this.description = "",
     this.image = "",
-    this.isAttendingEvent= false,
-    required this.route
+    this.isAttendingEvent = false,
   });
 
   @override

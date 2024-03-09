@@ -17,11 +17,9 @@ class MarchsDetailsView extends StatelessWidget {
             _CustomTitleSection(title: 'Marcha Real', number: 1),
             SizedBox(height: 10),
             CustomExpansionPanel(headerText: 'Autor', expandedText: 'Pacheco'),
-            SizedBox(height: 10),
             CustomExpansionPanel(headerText: 'Historia', expandedText: ''),
+            CustomExpansionPanel(headerText: 'Más Información', expandedText: ''),
             SizedBox(height: 10),
-            CustomExpansionPanel(headerText: 'Mas Informacion', expandedText: ''),
-            SizedBox(height: 20),
             MarchVideo(youtubeLink: "https://www.youtube.com/watch?v=4BF20CiOHpg",name: "Marcha Real",)
           ],
         ));
