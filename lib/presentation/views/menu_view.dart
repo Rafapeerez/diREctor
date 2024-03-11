@@ -33,11 +33,6 @@ class MenuView extends StatelessWidget {
             ),
           ),
           const CustomListTile(
-            option: "Inicio",
-            icon: Icon(Icons.home, size: 30),
-            route: '/home-screen'
-          ),
-          const CustomListTile(
             option: "Historia",
             icon: Icon(Icons.history_edu_outlined, size: 30),
             route: '/history-screen'

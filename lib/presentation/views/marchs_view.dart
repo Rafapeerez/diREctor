@@ -1,5 +1,4 @@
 import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
-import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,8 +8,7 @@ class MarchsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return CustomScaffold(
-      body: ListView(
+    return ListView(
         children: const [
           _CustomMarch(
             name: "Marcha Real", 
@@ -25,7 +23,6 @@ class MarchsView extends StatelessWidget {
             letter: "C",
           ),
         ],
-      ),
     );
   }
 }
@@ -40,7 +37,7 @@ class _CustomMarch extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.go("/home-screen/marchs-screen/marchdetails-screen");
+        context.go("/home/2/marchdetails-screen");
       },
       child: Column(
         children: [

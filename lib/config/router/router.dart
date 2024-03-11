@@ -3,49 +3,32 @@ import 'package:go_router/go_router.dart';
 
 import '../../presentation/screens/screens.dart';
 
-final GoRouter appRouter = GoRouter(
+final appRouter = GoRouter(
+  initialLocation: '/', 
   routes: [
     GoRoute(
       path: '/',
       name: LogInScreen.name,
       builder: (BuildContext context, GoRouterState state) => const LogInScreen(),
+    ),
+    GoRoute(
+      path: '/home/:page',
+      name: HomeScreen.name,
+      builder: (context, state) {
+        final String pageIndex = state.pathParameters['page'] ?? '0';
+        return HomeScreen( pageIndex: int.parse(pageIndex) );
+      },
       routes: [
         GoRoute(
-          path: 'home-screen',
-          name: HomeScreen.name,
-          builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
-          routes: [
-            GoRoute(
-              path: 'events-screen',
-              name: EventsScreen.name,
-              builder: (BuildContext context, GoRouterState state) => const EventsScreen(),
-              routes: [
-                GoRoute(
-                  path: "eventsdetails-screen",
-                  name: EventsDetailsScreen.name,
-                  builder: (BuildContext context, GoRouterState state) => const EventsDetailsScreen(),
-                )
-              ]
-            ),
-            GoRoute(
-              path: 'holyweek-screen',
-              name: HolyWeekScreen.name,
-              builder: (BuildContext context, GoRouterState state) => const HolyWeekScreen(),
-            ),
-            GoRoute(
-              path: 'marchs-screen',
-              name: MarchsScreen.name,
-              builder: (BuildContext context, GoRouterState state) => const MarchsScreen(),
-              routes: [
-                GoRoute(
-                  path: 'marchdetails-screen',
-                  name: MarchDetailsScreen.name,
-                  builder: (BuildContext context, GoRouterState state) => const MarchDetailsScreen()
-                )
-              ]
-            ),
-          ]
+          path: "eventsdetails-screen",
+          name: EventsDetailsScreen.name,
+          builder: (BuildContext context, GoRouterState state) => const EventsDetailsScreen(),
         ),
+        GoRoute(
+          path: 'marchdetails-screen',
+          name: MarchDetailsScreen.name,
+          builder: (BuildContext context, GoRouterState state) => const MarchDetailsScreen()
+        )
       ]
     ),
   ]

@@ -1,4 +1,3 @@
-import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +7,7 @@ class EventsDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return const CustomScaffold(
-      body: SingleChildScrollView(
+    return const SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -61,7 +59,6 @@ class EventsDetailsView extends StatelessWidget {
             SizedBox(height: 20)
           ],
         ),
-      ),
     );
   }
 }

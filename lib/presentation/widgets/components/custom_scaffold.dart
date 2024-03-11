@@ -1,14 +1,19 @@
 import 'package:director_app_tfg/presentation/views/menu_view.dart';
 import 'package:director_app_tfg/presentation/views/profile_view.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_appbar.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;
+  final Widget bottomNavigationBar;
+  final bool hasArrowBack;
 
   const CustomScaffold({
     super.key,
     required this.body,
+    required this.hasArrowBack, 
+    required this.bottomNavigationBar
   });
 
   @override
@@ -17,10 +22,14 @@ class CustomScaffold extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: const MenuView(),
+      appBar: CustomAppBar(
+        scaffoldKey: scaffoldKey,
+        hasArrowBack: hasArrowBack,
+      ),
+      drawer: hasArrowBack ? null : const MenuView(), 
       endDrawer: const ProfileView(),
       body: body,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

@@ -21,7 +21,7 @@ class LogInView extends StatelessWidget {
             _LogInButton(),
             FilledButton(
               child: const Text('mOCK'),
-              onPressed: () => context.go('/home-screen') 
+              onPressed: () => context.go('/home/0') 
             )
           ],
         )

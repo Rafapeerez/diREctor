@@ -1,4 +1,3 @@
-import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:director_app_tfg/presentation/widgets/videos/march_videos.dart';
@@ -11,18 +10,17 @@ class MarchsDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return CustomScaffold(
-        body: ListView(
-          children: const [
-            _CustomTitleSection(title: 'Marcha Real', number: 1),
-            SizedBox(height: 10),
-            CustomExpansionPanel(headerText: 'Autor', expandedText: 'Pacheco'),
-            CustomExpansionPanel(headerText: 'Historia', expandedText: ''),
-            CustomExpansionPanel(headerText: 'Más Información', expandedText: ''),
-            SizedBox(height: 10),
-            MarchVideo(youtubeLink: "https://www.youtube.com/watch?v=4BF20CiOHpg",name: "Marcha Real",)
-          ],
-        ));
+    return ListView(
+        children: const [
+          _CustomTitleSection(title: 'Marcha Real', number: 1),
+          SizedBox(height: 10),
+          CustomExpansionPanel(headerText: 'Autor', expandedText: 'Pacheco'),
+          CustomExpansionPanel(headerText: 'Historia', expandedText: ''),
+          CustomExpansionPanel(headerText: 'Más Información', expandedText: ''),
+          SizedBox(height: 10),
+          MarchVideo(youtubeLink: "https://www.youtube.com/watch?v=4BF20CiOHpg",name: "Marcha Real",)
+        ],
+    );
   }
 }
 

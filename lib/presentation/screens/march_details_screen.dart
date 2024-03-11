@@ -1,4 +1,6 @@
 import 'package:director_app_tfg/presentation/views/marchs_details_view.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_bottom_navigationbar.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class MarchDetailsScreen extends StatelessWidget {
@@ -7,6 +9,10 @@ class MarchDetailsScreen extends StatelessWidget {
   static const String name = "marchdetails-screen";
   @override
   Widget build(BuildContext context) {
-    return const MarchsDetailsView();
+    return const CustomScaffold(
+      hasArrowBack: true,
+      body: MarchsDetailsView(), 
+      bottomNavigationBar: CustomBottomNavigationBar( currentIndex: 2 )
+    );
   }
 }

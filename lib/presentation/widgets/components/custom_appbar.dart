@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final bool hasArrowBack;
 
   const CustomAppBar({
     super.key, 
-    required this.scaffoldKey
+    required this.scaffoldKey, 
+    required this.hasArrowBack
   });
 
   @override
@@ -24,7 +26,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: 5,
       title: Row(
         children: [
-          IconButton(
+          hasArrowBack ? 
+            IconButton(
+              icon: const Icon(Icons.arrow_back, size: 40, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+            ) 
+          : IconButton(
             icon: const Icon(Icons.menu, size: 40, color: Colors.white),
             onPressed: () {
               scaffoldKey.currentState!.openDrawer();
