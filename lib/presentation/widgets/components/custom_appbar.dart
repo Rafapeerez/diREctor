@@ -28,17 +28,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           hasArrowBack ? 
             IconButton(
-              icon: const Icon(Icons.arrow_back, size: 40, color: Colors.white),
+              icon: const Icon(
+                Icons.arrow_back, 
+                size: 40, 
+                color: Colors.white
+              ),
               onPressed: () {
                 Navigator.pop(context);
               }
             ) 
           : IconButton(
-            icon: const Icon(Icons.menu, size: 40, color: Colors.white),
-            onPressed: () {
-              scaffoldKey.currentState!.openDrawer();
-            }
-          ),
+              icon: const Icon(
+                Icons.menu, 
+                size: 40, 
+                color: Colors.white
+              ),
+              onPressed: () {
+                scaffoldKey.currentState!.openDrawer();
+              }
+            ),
           const SizedBox(width: 20),
           const Flexible(
             child: Text(
@@ -54,7 +62,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 20),
           IconButton(
-            icon: const Icon(Icons.account_circle_outlined, size: 40, color: Colors.white),
+            icon: const Icon(
+              Icons.account_circle_outlined, 
+              size: 40, 
+              color: Colors.white
+            ),
             onPressed: () {
               scaffoldKey.currentState!.openEndDrawer(); // Abre el endDrawer
             }
