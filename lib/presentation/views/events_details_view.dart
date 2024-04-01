@@ -9,9 +9,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class EventsDetailsView extends StatefulWidget {
   const EventsDetailsView({super.key});
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 15,
+  static const CameraPosition _position = CameraPosition(
+    target: LatLng(37.879773062359, -4.778913767228612),
+    zoom: 14,
   );
 
   @override
@@ -45,9 +45,15 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
               height: 200,
               child: GoogleMap(
                 mapType: MapType.normal,
-                initialCameraPosition: EventsDetailsView._kGooglePlex,
+                initialCameraPosition: EventsDetailsView._position,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
+                },
+                markers: {
+                  const Marker(
+                    markerId: MarkerId('marker_1'),
+                    position: LatLng(37.879773062359, -4.778913767228612),
+                  ),
                 },
               ),
             ),
