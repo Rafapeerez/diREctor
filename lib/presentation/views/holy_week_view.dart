@@ -13,7 +13,7 @@ class HolyWeekView extends StatelessWidget {
             CustomCard(title: 'Sábado de Pasión',   image:'lib/config/assets/images/SabadoPasion.jpg', route: '/home/1/eventsdetails-screen'),
             CustomCard(title: 'Domingo de Ramos', image:'lib/config/assets/images/DomingoRamos.jpg', route: '/home/1/eventsdetails-screen'),
             CustomCard(title: 'Lunes Santo', image: 'lib/config/assets/images/LunesSanto.jpeg', route: '/home/1/eventsdetails-screen'),
-            CustomCard(title: 'Martes Santo', image:'lib/config/assets/images/Descanso.png', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Martes Santo', image:'lib/config/assets/images/Descanso.png', route: '/home/1/eventsdetails-screen'),
             CustomCard(title: 'Miércoles Santo', image:'lib/config/assets/images/MiercolesSanto.jpg', route: '/home/1/eventsdetails-screen'),
             CustomCard(title: 'Jueves Santo', image:'lib/config/assets/images/JuevesSanto.jpg', route: '/home/1/eventsdetails-screen'),
             CustomCard(title: 'Viernes Santo', image:'lib/config/assets/images/ViernesSanto.jpg', route: '/home/1/eventsdetails-screen'),

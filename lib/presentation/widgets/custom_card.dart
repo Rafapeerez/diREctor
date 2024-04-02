@@ -81,7 +81,7 @@ class _DecitionAttendingButton extends StatelessWidget {
           style: const ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(Colors.green),
           ),
-          child: const Text('Asisto'),
+          child: const Text("Asisto"),
         )
       ],
     );

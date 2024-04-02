@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
 
 
   final viewRoutes = const <Widget>[
-    EventsView(), // <----- 
+    EventsView(), // <----- 0
     HolyWeekView(),
     MarchsView()
   ];

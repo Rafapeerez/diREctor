@@ -11,7 +11,7 @@ class EventsView extends StatelessWidget {
         child: Column(
           children: [
             CustomCard(title: 'Concierto', isAttendingEvent:true, description: 'Av. Almogávares (junto al hotel)', route: '/home/0/eventsdetails-screen'),
-            CustomCard(title: 'Salida Procesional', isAttendingEvent:true, description: 'Av. Carlos III (junto a la heladeria)', route: '/home-screen/events-screen/eventsdetails-screen'),
+            CustomCard(title: 'Salida Procesional', isAttendingEvent:true, description: 'Av. Carlos III (junto a la heladeria)', route: '/home/0/eventsdetails-screen'),
           ],
         ),
     );
