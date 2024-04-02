@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "10592877910",
+    "project_id": "director-2024",
+    "storage_bucket": "director-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10592877910:android:172d3f86de0a8c79b1aaf7",
+        "android_client_info": {
+          "package_name": "com.redencion.director_app_tfg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn8O-09P1bRX7D57hEGANSdGxKZiAJTx4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
