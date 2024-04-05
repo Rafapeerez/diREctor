@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;
-  final Widget bottomNavigationBar;
+  final Widget? bottomNavigationBar;
   final bool hasArrowBack;
+  final bool hasMenuAndProfileDisable;
 
   const CustomScaffold({
     super.key,
     required this.body,
-    required this.hasArrowBack, 
-    required this.bottomNavigationBar
+    this.hasArrowBack = false, 
+    this.bottomNavigationBar,
+    this.hasMenuAndProfileDisable = false
   });
 
   @override
@@ -26,8 +28,8 @@ class CustomScaffold extends StatelessWidget {
         scaffoldKey: scaffoldKey,
         hasArrowBack: hasArrowBack,
       ),
-      drawer: hasArrowBack ? null : const MenuView(), 
-      endDrawer: const ProfileView(),
+      drawer: hasArrowBack || hasMenuAndProfileDisable ? null : const MenuView(), 
+      endDrawer: hasMenuAndProfileDisable ? null : const ProfileView(),
       body: body,
       bottomNavigationBar: bottomNavigationBar,
     );

@@ -12,6 +12,11 @@ final appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) => const LogInScreen(),
     ),
     GoRoute(
+      path: '/waiting-screen',
+      name: WaitingScreen.name,
+      builder: (BuildContext context, GoRouterState state) => const WaitingScreen(),
+    ),
+    GoRoute(
       path: '/home/:page',
       name: HomeScreen.name,
       builder: (context, state) {

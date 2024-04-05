@@ -61,7 +61,7 @@ class _LogInButton extends StatelessWidget {
       onPressed: () async {
         User? user = await googleServices.signInWithGoogle();
         if(context.mounted && user != null){
-          context.go('/home/0');
+          context.go('/waiting-screen');
         }  
       },   
       style: ElevatedButton.styleFrom(

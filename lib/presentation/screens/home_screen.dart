@@ -24,7 +24,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      hasArrowBack: false,
       body: IndexedStack( // <---- Save screens slides status
         index: pageIndex,
         children: viewRoutes
