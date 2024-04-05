@@ -51,11 +51,13 @@ class _CustomListTileState extends State<CustomListTile> {
                 : const SizedBox()
             ]
           ),
-          onTap: widget.route == ""
-            ? () {}
+          onTap: widget.route == "" && widget.hasSwitch == false
+            ? () {
+              
+            }
             : () {
-                context.pop();
-                context.go(widget.route);
+              context.pop();
+              context.go(widget.route);
             },
         ),
       const Divider()

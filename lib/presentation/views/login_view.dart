@@ -1,3 +1,5 @@
+import 'package:director_app_tfg/infrastructure/services/google_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,6 +34,8 @@ class LogInView extends StatelessWidget {
 
 class _LogInButton extends StatelessWidget {
 
+  final GoogleServices googleServices = GoogleServices();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -42,11 +46,24 @@ class _LogInButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(3),
         child: Container(
           color: Colors.white,
-          child: Image.asset('lib/config/assets/images/SignInGoogle.png', width: size.width * 0.1)
+          child: Image.asset(
+            'lib/config/assets/images/SignInGoogle.png', 
+            width: size.width * 0.1
+          )
         ),
       ), 
-      label: const Text('Inicia sesión con Google', style: TextStyle(color: Colors.white),),
-      onPressed: () => {},   
+      label: const Text(
+        'Inicia sesión con Google', 
+        style: TextStyle(
+            color: Colors.white
+          )
+        ),
+      onPressed: () async {
+        User? user = await googleServices.signInWithGoogle();
+        if(context.mounted && user != null){
+          context.go('/home/0');
+        }  
+      },   
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.fromLTRB(3, 3, 12, 3),
         backgroundColor: colors.primary,
