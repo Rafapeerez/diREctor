@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "243492492145-1inf4580oj9jmvlf8lr579gegj7e79b1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.redencion.director_app_tfg",
+            "certificate_hash": "e1329aecdbd896cf71a465ead392d9c9089bc255"
+          }
+        },
+        {
           "client_id": "243492492145-2odv20ia3100daf4becalq3ehv3e2g1a.apps.googleusercontent.com",
           "client_type": 3
         }
