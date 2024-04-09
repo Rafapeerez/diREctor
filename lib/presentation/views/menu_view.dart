@@ -48,7 +48,8 @@ class MenuView extends StatelessWidget {
           ),
           const CustomListTile(
             option: "Cerrar Sesión",
-            icon: Icon(Icons.logout_outlined, size: 30)
+            icon: Icon(Icons.logout_outlined, size: 30),
+            route: '/'
           ),
         ],
       ),
