@@ -1,0 +1,4 @@
+enum EventTypeEnum{
+  concierto,
+  salidaProcesional,
+}
