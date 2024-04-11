@@ -1,7 +1,5 @@
-import 'package:director_app_tfg/config/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class CustomListTile extends StatefulWidget {
   final String option;
@@ -26,7 +24,7 @@ class _CustomListTileState extends State<CustomListTile> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<AppTheme>(context);
+    // final theme = context.read(appThemeProvider);
     final colors = Theme.of(context).colorScheme;
 
     return Column(
@@ -45,7 +43,6 @@ class _CustomListTileState extends State<CustomListTile> {
                     setState(() {
                       isDark = value;
                     });
-                    theme.setTheme(value);
                   },
                 )
                 : const SizedBox()

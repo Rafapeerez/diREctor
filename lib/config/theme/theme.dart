@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
 
-class AppTheme with ChangeNotifier {
-  final ThemeData _lightTheme = ThemeData.light().copyWith(
-    primaryColor: const Color.fromRGBO(118, 151, 229, 1),
-    colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(118, 151, 229, 1))
-  );
 
-  final ThemeData _darkTheme = ThemeData.dark().copyWith(
-    primaryColor: const Color.fromRGBO(118, 151, 229, 1),
-    colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(118, 151, 229, 1)),
-  );
+class AppTheme {
+  final int selectedColor;
+  final bool isDarkMode;
 
-  ThemeData _currentTheme = ThemeData.light().copyWith(
-    colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(118, 151, 229, 1))
-  );
-  
-  AppTheme() {
-    _currentTheme = _currentTheme.copyWith(
-
-      brightness: Brightness.light, 
-    );
-  }
+  AppTheme({
+    this.selectedColor = 0,
+    this.isDarkMode = false,
+  });
 
   ThemeData getTheme() {
-    return _currentTheme;
+    return ThemeData(
+        useMaterial3: true,
+        brightness: isDarkMode ? Brightness.dark : Brightness.light,
+        colorSchemeSeed: const Color.fromRGBO(118, 151, 229, 1),
+        appBarTheme: const AppBarTheme(
+          centerTitle: false,
+        ));
   }
 
-  void setTheme(bool isDark) {
-    _currentTheme = isDark ? _darkTheme : _lightTheme;
-    notifyListeners();
-  }
+  //Importante para tener las propiedades final y el estado inmutable. MUY UTIL
+  AppTheme copyWith({
+      int? selectedColor, 
+      bool? isDarkMode
+    }) => AppTheme(
+      selectedColor: this.selectedColor,
+      isDarkMode: isDarkMode ?? this.isDarkMode
+    );
 }

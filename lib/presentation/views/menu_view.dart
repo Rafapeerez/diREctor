@@ -38,11 +38,6 @@ class MenuView extends StatelessWidget {
             route: '/history-screen'
           ),
           const CustomListTile(
-            option: "Modo Nocturno",
-            icon: Icon(Icons.brightness_medium_outlined, size: 30),
-            hasSwitch: true,
-          ),
-          const CustomListTile(
             option: "Reglas",
             icon: Icon(Icons.file_copy_outlined, size: 30)
           ),
