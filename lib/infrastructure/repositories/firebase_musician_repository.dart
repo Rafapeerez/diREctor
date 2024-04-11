@@ -1,4 +1,4 @@
-import 'package:director_app_tfg/domain/entities/musician.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/repositories/musician_repository.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_musician_datasource_impl.dart';
 

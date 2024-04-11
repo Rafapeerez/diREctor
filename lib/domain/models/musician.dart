@@ -32,27 +32,15 @@ class Musician {
   }) {
     final uuid = const Uuid().v4();
     return Musician(
-        id: uuid,
-        name: name,
-        email: email,
-        surname: surname,
-        phoneNumber: phoneNumber,
-        instrument: instrument,
-        isAllowed: isAllowed,
-        isAdmin: isAdmin);
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'surname': surname,
-      'phoneNumber': phoneNumber,
-      'instrument': instrument,
-      'isAllowed': isAllowed,
-      'isAdmin': isAdmin,
-    };
+      id: uuid,
+      name: name,
+      email: email,
+      surname: surname,
+      phoneNumber: phoneNumber,
+      instrument: instrument,
+      isAllowed: isAllowed,
+      isAdmin: isAdmin
+    );
   }
 
 }

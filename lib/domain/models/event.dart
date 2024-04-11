@@ -1,6 +1,6 @@
 
-import 'package:director_app_tfg/domain/entities/enums/event_type_enum.dart';
-import 'package:director_app_tfg/domain/entities/musician.dart';
+import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:uuid/uuid.dart';
 
 class Event {

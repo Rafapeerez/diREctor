@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:director_app_tfg/domain/entities/musician.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/usecases/musician/save_musician_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_musician_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_musician_repository.dart';

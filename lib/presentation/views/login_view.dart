@@ -1,4 +1,4 @@
-import 'package:director_app_tfg/domain/entities/musician.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/infrastructure/services/google_services.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
