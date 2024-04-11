@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/usecases/musician/save_musician_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_musician_datasource_impl.dart';
@@ -7,7 +5,7 @@ import 'package:director_app_tfg/infrastructure/repositories/firebase_musician_r
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref) {
-  return MusicianProvider(SaveMusicianUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource(FirebaseFirestore.instance))));
+  return MusicianProvider(SaveMusicianUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource())));
 });
 
 class MusicianProvider extends StateNotifier<Musician?> {

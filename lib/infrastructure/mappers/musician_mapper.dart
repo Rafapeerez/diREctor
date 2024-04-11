@@ -4,7 +4,6 @@ import 'package:director_app_tfg/infrastructure/entities/musician_db.dart';
 
 class MusicianMapper {
   static Musician musicianToDomain(MusicianDB musicianDB) => Musician(
-    id: musicianDB.id, 
     email: musicianDB.email, 
     name: musicianDB.name, 
     surname: musicianDB.surname, 
@@ -13,7 +12,6 @@ class MusicianMapper {
   );
 
   static MusicianDB musicianToEntity(Musician musician) => MusicianDB(
-    id: musician.id, 
     email: musician.email, 
     name: musician.name, 
     surname: musician.surname, 

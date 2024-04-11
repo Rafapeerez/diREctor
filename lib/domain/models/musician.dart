@@ -1,7 +1,4 @@
-import 'package:uuid/uuid.dart';
-
 class Musician {
-  final String id;
   final String email;
   final String name;
   final String surname;
@@ -11,7 +8,6 @@ class Musician {
   final bool isAdmin;
 
   Musician({
-    required this.id,
     required this.email,
     required this.name,
     required this.surname,
@@ -30,9 +26,7 @@ class Musician {
     required bool isAllowed,
     required bool isAdmin
   }) {
-    final uuid = const Uuid().v4();
     return Musician(
-      id: uuid,
       name: name,
       email: email,
       surname: surname,

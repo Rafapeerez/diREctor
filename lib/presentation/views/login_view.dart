@@ -73,7 +73,6 @@ class _LogInButton extends ConsumerWidget {
             isAllowed: false, 
             isAdmin: false
           );
-          print("holaaaaaaaaa " + musician.toString());
           try {
             await musicianProv.saveMusician(musician);
           } catch (e) {}
