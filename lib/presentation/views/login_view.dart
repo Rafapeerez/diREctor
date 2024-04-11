@@ -24,10 +24,6 @@ class LogInView extends StatelessWidget {
             Image.asset('lib/config/assets/images/icon.png'),
             const SizedBox(height: 60),
             _LogInButton(),
-            FilledButton(
-              child: const Text('mOCK'),
-              onPressed: () => context.go('/home/0') 
-            )
           ],
         )
       ])
@@ -46,7 +42,7 @@ class _LogInButton extends ConsumerWidget {
 
     final musicianProv = ref.read(musicianProvider.notifier);
 
-    return ElevatedButton.icon(
+    return FilledButton.icon(
       icon: ClipRRect(
         borderRadius: BorderRadius.circular(3),
         child: Container(
@@ -60,23 +56,36 @@ class _LogInButton extends ConsumerWidget {
       label: const Text(
         'Inicia sesión con Google', 
         style: TextStyle(
-            color: Colors.white
-          )
-        ),
+          color: Colors.white
+        )
+      ),
       onPressed: () async {
         User? user = await googleServices.signInWithGoogle();
         if(context.mounted && user != null){
-          final musician = Musician.create(
-            email: user.email ?? '', 
-            name: user.displayName ?? "", 
-            surname: "prueab", 
-            isAllowed: false, 
-            isAdmin: false
-          );
-          try {
-            await musicianProv.saveMusician(musician);
-          } catch (e) {}
-          context.go('/waiting-screen');
+          await musicianProv.getMusicianById(user.email ?? '');
+          final musician = ref.watch(musicianProvider);
+
+          if (musician != null ){
+            if (musician.isAllowed == true){
+              context.go("/home/0");
+            }
+            else{
+              context.go('/waiting-screen');
+            }
+          }
+          else{
+            final createdMusician = Musician.create(
+              email: user.email ?? '', 
+              name: user.displayName ?? "", 
+              surname: "prueab", 
+              isAllowed: false, 
+              isAdmin: false
+            );
+            try {
+              await musicianProv.saveMusician(createdMusician);
+            } catch (e) {}
+            context.go('/waiting-screen');
+          }
         }  
       },   
       style: ElevatedButton.styleFrom(

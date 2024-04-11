@@ -28,4 +28,16 @@ class MusicianDB {
       'isAdmin': isAdmin,
     };
   }
+
+  static MusicianDB fromMap(Map<String, dynamic> map) {
+    return MusicianDB(
+      email: map['email'],
+      name: map['name'],
+      surname: map['surname'],
+      phoneNumber: map['phoneNumber'],
+      instrument: map['instrument'],
+      isAllowed: map['isAllowed'],
+      isAdmin: map['isAdmin'],
+    );
+  }
 }
