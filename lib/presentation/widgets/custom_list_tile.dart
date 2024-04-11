@@ -1,7 +1,9 @@
+import 'package:director_app_tfg/presentation/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class CustomListTile extends StatefulWidget {
+class CustomListTile extends ConsumerStatefulWidget {
   final String option;
   final Icon icon;
   final String route;
@@ -14,17 +16,16 @@ class CustomListTile extends StatefulWidget {
     this.route = "",
     this.hasSwitch = false
   });
-
+  
   @override
-  State<CustomListTile> createState() => _CustomListTileState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CustomListTileState();
 }
 
-class _CustomListTileState extends State<CustomListTile> {
-  bool isDark = false;
+class _CustomListTileState extends ConsumerState<CustomListTile> {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = context.read(appThemeProvider);
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
     final colors = Theme.of(context).colorScheme;
 
     return Column(
@@ -36,14 +37,11 @@ class _CustomListTileState extends State<CustomListTile> {
               const SizedBox(width: 20),
               Text(widget.option),
               const Spacer(),
-              widget.hasSwitch == true ? Switch(
-                  value: isDark,
+              widget.hasSwitch == true 
+                ? Switch(
+                  value: isDarkMode,
                   activeColor: colors.primary,
-                  onChanged: (bool value) {
-                    setState(() {
-                      isDark = value;
-                    });
-                  },
+                  onChanged: (value) => ref.read(themeNotifierProvider.notifier).toggleDarkMode(),
                 )
                 : const SizedBox()
             ]
