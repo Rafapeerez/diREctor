@@ -8,7 +8,7 @@ class ProfileView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
-    final user = ref.watch(userProvider);
+    final userState = ref.watch(userProvider);
     
     return Drawer(
       child: Column(
@@ -47,20 +47,19 @@ class ProfileView extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  if (user != null && user.photoURL != null)
+                  if (userState.user != null && userState.user?.photoURL != null)
                     CircleAvatar(
                       radius: 80,
-                      backgroundImage: NetworkImage(user.photoURL!),
+                      backgroundImage: NetworkImage(userState.user!.photoURL!),
                     ),
                 ],
               ),
             ),
           ),
-          const _TextField(title: 'Nombre', value: 'Rafael Emilio Perez Lopez'),
-          const _TextField(title: 'Email', value: 'i02perl@uco.es'),
-          const _TextField(title: 'Instrumento', value: 'Trompeta'),
-          const _TextField(title: 'Teléfono', value: '-'),
-          const _TextField(title: 'Cumpleaños', value: '30/08/2002'),
+          _TextField(title: 'Nombre', value: userState.user!.displayName),
+          _TextField(title: 'Email', value: userState.user!.email),
+          _TextField(title: 'Instrumento', value: userState.instrument),
+          _TextField(title: 'Teléfono', value: userState.user!.phoneNumber),
         ],
       ),
     );
@@ -70,7 +69,7 @@ class ProfileView extends ConsumerWidget {
 class _TextField extends StatelessWidget {
   
   final String title;
-  final String value;
+  final String? value;
 
   const _TextField({
     required this.title, 
@@ -95,7 +94,7 @@ class _TextField extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            value, 
+            value ?? "-", 
             style: const TextStyle(
               fontSize: 14,
             )

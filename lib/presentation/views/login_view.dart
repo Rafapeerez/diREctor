@@ -63,20 +63,21 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
           ),
           label: const Text(
             'Inicia sesión con Google',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white
+            ),
           ),
           onPressed: () async {
             setState(() {
               _isLoading = true;
             });
-
             User? user = await widget.googleServices.signInWithGoogle();
             if (context.mounted && user != null) {
-              ref.read(userProvider.notifier).state = user;
               await musicianProv.getMusicianById(user.email ?? '');
               final musician = ref.watch(musicianProvider);
               if (musician != null) {
                 if (musician.isAllowed == true) {
+                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument ?? "-");
                   context.go("/home/0");
                 } else {
                   context.go('/waiting-screen');
@@ -89,9 +90,7 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
                   isAllowed: false,
                   isAdmin: false,
                 );
-                try {
-                  await musicianProv.saveMusician(createdMusician);
-                } catch (e) {}
+                await musicianProv.saveMusician(createdMusician);
                 context.go('/waiting-screen');
               }
             }
