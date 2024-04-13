@@ -48,4 +48,26 @@ Future<Musician> saveMusician(Musician musician) async {
       throw Exception('Error al obtener el músico: $e');
     }
   }
+  
+  @override
+  Future<Stream<Musician>> getAllMusicians() async{
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    final snapshot = await usersCollection.get();
+
+    if (snapshot.size != 0) {
+      try {
+        final musiciansList = snapshot.docs.map((doc) {
+          final MusicianDB musicianDb = MusicianDB.fromMap(doc.data() as Map<String, dynamic>);
+          return MusicianMapper.musicianToDomain(musicianDb);
+        }).toList();
+
+        return Stream.fromIterable(musiciansList);
+      } catch (e) {
+        throw Exception('Error al obtener los usuarios: $e');
+      }
+    } 
+    else{
+      return const Stream.empty();
+    }
+  }
 }

@@ -25,6 +25,11 @@ final appRouter = GoRouter(
       },
       routes: [
         GoRoute(
+          path: 'userlist-screen',
+          name: UserListScreen.name,
+          builder: (BuildContext context, GoRouterState state) => const UserListScreen(),
+        ),
+        GoRoute(
           path: "eventsdetails-screen",
           name: EventsDetailsScreen.name,
           builder: (BuildContext context, GoRouterState state) => const EventsDetailsScreen(),

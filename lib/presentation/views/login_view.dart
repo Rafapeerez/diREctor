@@ -77,7 +77,7 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
               final musician = ref.watch(musicianProvider);
               if (musician != null) {
                 if (musician.isAllowed == true) {
-                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument!);
+                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument?? "");
                   context.go("/home/0");
                 } else {
                   context.go('/waiting-screen');

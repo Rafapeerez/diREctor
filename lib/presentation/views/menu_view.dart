@@ -57,7 +57,9 @@ class MenuView extends ConsumerWidget {
             CustomListTile(
               option: "Peticiones de entrada",
               icon: const Icon(Icons.add_circle_outline_rounded, size: 30),
-              onTap: (){},
+              onTap: () {
+                context.go("/home/0/userlist-screen");
+              }
             ),
           
           CustomListTile(

@@ -15,4 +15,9 @@ class FirebaseMusicianRepository extends MusicianRepository {
   Future<Musician?> getMusicianByEmail(String email) {
     return datasource.getMusicianByEmail(email);
   }
+
+  @override
+  Future<Stream<Musician>> getAllMusicians() {
+    return datasource.getAllMusicians();
+  }
 }
