@@ -1,19 +1,18 @@
 import 'package:director_app_tfg/presentation/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class CustomListTile extends ConsumerStatefulWidget {
   final String option;
   final Icon icon;
-  final String route;
+  final VoidCallback onTap;
   final bool hasSwitch;
 
   const CustomListTile({
     super.key,
     required this.option,
     required this.icon,
-    this.route = "",
+    required this.onTap,
     this.hasSwitch = false
   });
   
@@ -46,14 +45,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
                 : const SizedBox()
             ]
           ),
-          onTap: widget.route == "" && widget.hasSwitch == false
-            ? () {
-              
-            }
-            : () {
-              context.pop();
-              context.go(widget.route);
-            },
+          onTap: widget.onTap 
         ),
       const Divider()
     ]);

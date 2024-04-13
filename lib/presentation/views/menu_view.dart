@@ -1,5 +1,7 @@
+import 'package:director_app_tfg/infrastructure/services/google_services.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MenuView extends StatelessWidget {
   const MenuView({super.key});
@@ -32,24 +34,29 @@ class MenuView extends StatelessWidget {
               ),
             ),
           ),
-          const CustomListTile(
+          CustomListTile(
             option: "Historia",
-            icon: Icon(Icons.history_edu_outlined, size: 30),
-            route: '/history-screen'
+            icon: const Icon(Icons.history_edu_outlined, size: 30),
+            onTap: (){},
           ),
-          const CustomListTile(
+          CustomListTile(
             option: "Modo Nocturno",
-            icon: Icon(Icons.brightness_medium_outlined, size: 30),
+            icon: const Icon(Icons.brightness_medium_outlined, size: 30),
             hasSwitch: true,
+            onTap: (){},
           ),
-          const CustomListTile(
+          CustomListTile(
             option: "Reglas",
-            icon: Icon(Icons.file_copy_outlined, size: 30)
+            icon: const Icon(Icons.file_copy_outlined, size: 30),
+            onTap: (){},
           ),
-          const CustomListTile(
+          CustomListTile(
             option: "Cerrar Sesión",
-            icon: Icon(Icons.logout_outlined, size: 30),
-            route: '/'
+            icon: const Icon(Icons.logout_outlined, size: 30),
+            onTap: () async {
+              await GoogleServices.signOut();
+              context.go("/");
+            }
           ),
         ],
       ),

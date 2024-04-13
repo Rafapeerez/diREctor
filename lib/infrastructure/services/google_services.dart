@@ -29,7 +29,6 @@ class GoogleServices {
     return user;
   }
 
-  //TODO: Sign Out
   static Future<void> signOut() async{
     _authInstance.signOut();
     _googleSignIn.signOut();

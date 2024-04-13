@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/infrastructure/services/google_services.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,71 +31,90 @@ class LogInView extends StatelessWidget {
     );
   }
 }
-
-class _LogInButton extends ConsumerWidget {
-
+class _LogInButton extends ConsumerStatefulWidget {
   final GoogleServices googleServices = GoogleServices();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _LogInButtonState createState() => _LogInButtonState();
+}
+
+class _LogInButtonState extends ConsumerState<_LogInButton> {
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final colors = Theme.of(context).colorScheme;
-
     final musicianProv = ref.read(musicianProvider.notifier);
 
-    return FilledButton.icon(
-      icon: ClipRRect(
-        borderRadius: BorderRadius.circular(3),
-        child: Container(
-          color: Colors.white,
-          child: Image.asset(
-            'lib/config/assets/images/SignInGoogle.png', 
-            width: size.width * 0.1
-          )
-        ),
-      ), 
-      label: const Text(
-        'Inicia sesión con Google', 
-        style: TextStyle(
-          color: Colors.white
-        )
-      ),
-      onPressed: () async {
-        User? user = await googleServices.signInWithGoogle();
-        if(context.mounted && user != null){
-          await musicianProv.getMusicianById(user.email ?? '');
-          final musician = ref.watch(musicianProvider);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        FilledButton.icon(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: Container(
+              color: Colors.white,
+              child: Image.asset(
+                'lib/config/assets/images/SignInGoogle.png',
+                width: size.width * 0.1,
+              ),
+            ),
+          ),
+          label: const Text(
+            'Inicia sesión con Google',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () async {
+            setState(() {
+              _isLoading = true;
+            });
 
-          if (musician != null ){
-            if (musician.isAllowed == true){
-              context.go("/home/0");
+            User? user = await widget.googleServices.signInWithGoogle();
+            if (context.mounted && user != null) {
+              ref.read(userProvider.notifier).state = user;
+              await musicianProv.getMusicianById(user.email ?? '');
+              final musician = ref.watch(musicianProvider);
+              if (musician != null) {
+                if (musician.isAllowed == true) {
+                  context.go("/home/0");
+                } else {
+                  context.go('/waiting-screen');
+                }
+              } else {
+                final createdMusician = Musician.create(
+                  email: user.email ?? '',
+                  name: user.displayName ?? "",
+                  surname: "prueab",
+                  isAllowed: false,
+                  isAdmin: false,
+                );
+                try {
+                  await musicianProv.saveMusician(createdMusician);
+                } catch (e) {}
+                context.go('/waiting-screen');
+              }
             }
-            else{
-              context.go('/waiting-screen');
-            }
-          }
-          else{
-            final createdMusician = Musician.create(
-              email: user.email ?? '', 
-              name: user.displayName ?? "", 
-              surname: "prueab", 
-              isAllowed: false, 
-              isAdmin: false
-            );
-            try {
-              await musicianProv.saveMusician(createdMusician);
-            } catch (e) {}
-            context.go('/waiting-screen');
-          }
-        }  
-      },   
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.fromLTRB(3, 3, 12, 3),
-        backgroundColor: colors.primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.0),
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.fromLTRB(3, 3, 12, 3),
+            backgroundColor: colors.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0),
+            ),
+          ),
         ),
-      ), 
+        if (_isLoading) 
+          const Column(
+            children: [
+              SizedBox(height: 16.0),
+              CircularProgressIndicator(strokeWidth: 3)
+            ],
+          )
+      ],
     );
   }
 }

@@ -1,12 +1,15 @@
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends ConsumerWidget {
   const ProfileView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
-
+    final user = ref.watch(userProvider);
+    
     return Drawer(
       child: Column(
         children: [
@@ -25,9 +28,9 @@ class ProfileView extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Column(
+              child: Column(
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Text(
                         'Perfil',
@@ -43,12 +46,12 @@ class ProfileView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  Icon(
-                    Icons.account_circle_outlined,
-                    size: 150,
-                    color: Colors.white,
-                  )
+                  const SizedBox(height: 20),
+                  if (user != null && user.photoURL != null)
+                    CircleAvatar(
+                      radius: 80,
+                      backgroundImage: NetworkImage(user.photoURL!),
+                    ),
                 ],
               ),
             ),
