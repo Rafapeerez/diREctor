@@ -1,7 +1,6 @@
 class Musician {
   final String email;
   final String name;
-  final String surname;
   final String? phoneNumber;
   final String? instrument;
   final bool isAllowed;
@@ -10,7 +9,6 @@ class Musician {
   Musician({
     required this.email,
     required this.name,
-    required this.surname,
     this.phoneNumber,
     this.instrument,
     required this.isAllowed,
@@ -20,7 +18,6 @@ class Musician {
   factory Musician.create({
     required String email,
     required String name,
-    required String surname,
     String? phoneNumber,
     String? instrument,
     required bool isAllowed,
@@ -29,7 +26,6 @@ class Musician {
     return Musician(
       name: name,
       email: email,
-      surname: surname,
       phoneNumber: phoneNumber,
       instrument: instrument,
       isAllowed: isAllowed,

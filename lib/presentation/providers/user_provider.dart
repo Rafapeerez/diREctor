@@ -7,9 +7,9 @@ final userProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
 });
 
 class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier() : super(const UserState(user: null, isAdmin: false, instrument: "-"));
+  UserNotifier() : super(const UserState(user: null, isAdmin: false, instrument: ""));
 
-  void signIn(User? user, bool isAdmin, String instrument){
+  void signIn(User? user, bool isAdmin, String? instrument){
     state = state.copyWith(
       user: user,
       isAdmin: isAdmin,

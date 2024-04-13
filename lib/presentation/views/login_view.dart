@@ -73,20 +73,19 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
             });
             User? user = await widget.googleServices.signInWithGoogle();
             if (context.mounted && user != null) {
-              await musicianProv.getMusicianById(user.email ?? '');
+              await musicianProv.getMusicianById(user.email!);
               final musician = ref.watch(musicianProvider);
               if (musician != null) {
                 if (musician.isAllowed == true) {
-                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument ?? "-");
+                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument!);
                   context.go("/home/0");
                 } else {
                   context.go('/waiting-screen');
                 }
               } else {
                 final createdMusician = Musician.create(
-                  email: user.email ?? '',
+                  email: user.email!,
                   name: user.displayName ?? "",
-                  surname: "prueab",
                   isAllowed: false,
                   isAdmin: false,
                 );

@@ -18,7 +18,6 @@ Future<Musician> saveMusician(Musician musician) async {
       Musician(
         email: 'fisrtmusician',
         name: 'Fisrt Musician',
-        surname: 'Fisrt Musician',
         isAllowed: false,
         isAdmin: false,
       ),

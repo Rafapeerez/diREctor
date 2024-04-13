@@ -56,7 +56,7 @@ class ProfileView extends ConsumerWidget {
               ),
             ),
           ),
-          _TextField(title: 'Nombre', value: userState.user!.displayName),
+          _TextField(title: 'Nombre Completo', value: userState.user!.displayName),
           _TextField(title: 'Email', value: userState.user!.email),
           _TextField(title: 'Instrumento', value: userState.instrument),
           _TextField(title: 'Teléfono', value: userState.user!.phoneNumber),

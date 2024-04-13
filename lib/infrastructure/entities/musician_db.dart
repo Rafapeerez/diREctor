@@ -1,7 +1,6 @@
 class MusicianDB {
   final String email;
   final String name;
-  final String surname;
   final String? phoneNumber;
   final String? instrument;
   final bool isAllowed;
@@ -10,7 +9,6 @@ class MusicianDB {
   MusicianDB({
     required this.email,
     required this.name,
-    required this.surname,
     this.phoneNumber,
     this.instrument,
     required this.isAllowed,
@@ -21,7 +19,6 @@ class MusicianDB {
     return {
       'name': name,
       'email': email,
-      'surname': surname,
       'phoneNumber': phoneNumber,
       'instrument': instrument,
       'isAllowed': isAllowed,
@@ -33,7 +30,6 @@ class MusicianDB {
     return MusicianDB(
       email: map['email'],
       name: map['name'],
-      surname: map['surname'],
       phoneNumber: map['phoneNumber'],
       instrument: map['instrument'],
       isAllowed: map['isAllowed'],
