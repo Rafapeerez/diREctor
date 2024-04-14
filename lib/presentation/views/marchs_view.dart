@@ -58,6 +58,45 @@ class _MarchsViewState extends State<MarchsView> {
   }
 }
 
+class _CustomMarch extends StatelessWidget {
+  final String name;
+  final String letter;
+
+  const _CustomMarch({required this.name, required this.letter});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.go("/home/2/marchdetails-screen");
+      },
+      child: Column(
+        children: [
+          ListTile(
+            title: Row(
+              children: [
+                CircleLetter(letter: letter),
+                const SizedBox(width: 20),
+                Text(
+                  name,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const Spacer(),
+                const Icon(
+                  Icons.arrow_forward_outlined,
+                  size: 30,
+                )
+              ],
+            ),
+          ),
+          const Divider()
+        ],
+      ),
+    );
+  }
+}
+
 class _FilterBottomSheet extends StatefulWidget {
   @override
   _FilterBottomSheetState createState() => _FilterBottomSheetState();
@@ -126,45 +165,6 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CustomMarch extends StatelessWidget {
-  final String name;
-  final String letter;
-
-  const _CustomMarch({required this.name, required this.letter});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.go("/home/2/marchdetails-screen");
-      },
-      child: Column(
-        children: [
-          ListTile(
-            title: Row(
-              children: [
-                CircleLetter(letter: letter),
-                const SizedBox(width: 20),
-                Text(
-                  name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                const Spacer(),
-                const Icon(
-                  Icons.arrow_forward_outlined,
-                  size: 30,
-                )
-              ],
-            ),
-          ),
-          const Divider()
         ],
       ),
     );

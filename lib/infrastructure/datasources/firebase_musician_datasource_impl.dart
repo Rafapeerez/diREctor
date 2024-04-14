@@ -89,4 +89,18 @@ class FirebaseMusicianDatasource implements MusicianRepository {
       return List.empty();
     }
   }
+  
+  @override
+  Future<Musician?> updateMusician(Musician musician) async {
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    final query = usersCollection.doc(musician.email);
+
+    try {
+      await query.set(MusicianMapper.musicianToEntity(musician).toMap(), SetOptions(merge: true));
+
+      return musician;
+    } catch (e) {
+      throw Exception('Error al actualizar el usuario: $e');
+    }
+  }
 }

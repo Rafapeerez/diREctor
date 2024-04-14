@@ -1,16 +1,16 @@
 class Musician {
   final String email;
   final String name;
-  final String? phoneNumber;
-  final String? instrument;
+  final String phoneNumber;
+  final String instrument;
   final bool isAllowed;
   final bool isAdmin;
 
   Musician({
     required this.email,
     required this.name,
-    this.phoneNumber,
-    this.instrument,
+    this.phoneNumber = "",
+    this.instrument = "",
     required this.isAllowed,
     required this.isAdmin
   });
@@ -18,8 +18,8 @@ class Musician {
   factory Musician.create({
     required String email,
     required String name,
-    String? phoneNumber,
-    String? instrument,
+    String phoneNumber = "",
+    String instrument = "",
     required bool isAllowed,
     required bool isAdmin
   }) {
@@ -32,5 +32,4 @@ class Musician {
       isAdmin: isAdmin
     );
   }
-
 }

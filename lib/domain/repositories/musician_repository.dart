@@ -8,4 +8,6 @@ abstract class MusicianRepository {
   Future<List<Musician>> getAllMusicians();
 
   Future<List<Musician>> getNotAllowedMusicians();
+
+  Future<Musician?> updateMusician(Musician musician);
 }

@@ -25,4 +25,9 @@ class FirebaseMusicianRepository extends MusicianRepository {
   Future<List<Musician>> getNotAllowedMusicians() {
     return datasource.getNotAllowedMusicians();
   }
+
+  @override
+  Future<Musician?> updateMusician(Musician musician) {
+    return datasource.updateMusician(musician); 
+  }
 }

@@ -3,6 +3,7 @@ import 'package:director_app_tfg/domain/usecases/musician/get_all_musicians_usec
 import 'package:director_app_tfg/domain/usecases/musician/get_musician_by_id_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_not_allowed_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/save_musician_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/musician/update_musician_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_musician_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_musician_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,10 @@ final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref
   
   final getMusicianByIdUseCase = GetMusicianByIdUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
 
-  return MusicianProvider(saveMusicianUseCase, getMusicianByIdUseCase);
+  final updateMusicianUseCase = UpdateMusicianUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+
+
+  return MusicianProvider(saveMusicianUseCase, getMusicianByIdUseCase, updateMusicianUseCase);
 });
 
 final musiciansProvider = StateNotifierProvider<MusiciansProvider, List<Musician>>((ref) {
@@ -27,10 +31,12 @@ class MusicianProvider extends StateNotifier<Musician?> {
   
   final SaveMusicianUseCase _saveMusicianUseCase;
   final GetMusicianByIdUseCase _getMusicianByIdUseCase;
+  final UpdateMusicianUseCase _updateMusicianUseCase;
 
   MusicianProvider(
     this._saveMusicianUseCase, 
     this._getMusicianByIdUseCase,
+    this._updateMusicianUseCase
   ) : super(null);
 
   Future<void> saveMusician(Musician musician) async {
@@ -41,6 +47,11 @@ class MusicianProvider extends StateNotifier<Musician?> {
   Future<void> getMusicianById(String email) async {
     Musician? musician = await _getMusicianByIdUseCase.execute(email);
     state = musician;
+  }
+
+  Future<void> updateMusician(Musician musician) async {
+    Musician? musicianUpdated = await _updateMusicianUseCase.execute(musician);
+    state = musicianUpdated;
   }
 }
 
