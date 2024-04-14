@@ -6,4 +6,6 @@ abstract class MusicianRepository {
   Future<Musician?> getMusicianByEmail(String email);
 
   Future<List<Musician>> getAllMusicians();
+
+  Future<List<Musician>> getNotAllowedMusicians();
 }

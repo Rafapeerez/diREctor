@@ -14,7 +14,7 @@ class UserListViewState extends ConsumerState<UserListView> {
   @override
   void initState() {
     super.initState();
-    ref.read(musiciansProvider.notifier).getAllMusicians();
+    ref.read(musiciansProvider.notifier).getNotAllowedMusicians();
   }
 
   @override
@@ -28,25 +28,41 @@ class UserListViewState extends ConsumerState<UserListView> {
           final musician = musicians[index];
           return Column(
             children: [
-              ListTile(
-                title: Row(
-                  children: [
-                    Text(
-                      musician.name,
-                      style: const TextStyle(
-                        fontSize: 22
+              Tooltip(
+                message: musician.name,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.fromLTRB(8,2,2,2),
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          musician.name,
+                          style: const TextStyle(
+                            fontSize: 22,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      icon: Icon(
-                        Icons.check_circle_outline_outlined,
-                        size: 32,
-                        color: Colors.green[700],
+                      const SizedBox(width: 10),
+                      IconButton(
+                        icon: Icon(
+                          Icons.check_circle_outline_outlined,
+                          size: 32,
+                          color: Colors.green[700],
+                        ),
+                        onPressed: (){},
                       ),
-                      onPressed: (){},
-                    ),
-                  ],
+                      IconButton(
+                        icon: Icon(
+                          Icons.cancel_outlined,
+                          size: 32,
+                          color: Colors.red[700],
+                        ),
+                        onPressed: (){},
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const Divider(),

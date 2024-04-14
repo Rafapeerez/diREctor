@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_all_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_musician_by_id_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/musician/get_not_allowed_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/save_musician_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_musician_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_musician_repository.dart';
@@ -15,9 +16,10 @@ final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref
 });
 
 final musiciansProvider = StateNotifierProvider<MusiciansProvider, List<Musician>>((ref) {
-  final  getAllMusiciansUseCase = GetAllMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  final getAllMusiciansUseCase = GetAllMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  final getNotAllowedMusiciansUseCase = GetNotAllowedMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
 
-  return MusiciansProvider(getAllMusiciansUseCase);
+  return MusiciansProvider(getAllMusiciansUseCase, getNotAllowedMusiciansUseCase);
 });
 
 
@@ -44,14 +46,21 @@ class MusicianProvider extends StateNotifier<Musician?> {
 
 class MusiciansProvider extends StateNotifier<List<Musician>>{
   final GetAllMusiciansUseCase _getAllMusiciansUseCase;
+  final GetNotAllowedMusiciansUseCase _getNotAllowedMusiciansUseCase;
 
   MusiciansProvider(
-    this._getAllMusiciansUseCase
+    this._getAllMusiciansUseCase,
+    this._getNotAllowedMusiciansUseCase
   ) : super(List.empty());
 
 
   Future<void> getAllMusicians() async {
     List<Musician> musicianssList = await _getAllMusiciansUseCase.execute();
+    state = musicianssList; 
+  }
+
+  Future<void> getNotAllowedMusicians() async {
+    List<Musician> musicianssList = await _getNotAllowedMusiciansUseCase.execute();
     state = musicianssList; 
   }
 }

@@ -63,4 +63,30 @@ class FirebaseMusicianDatasource implements MusicianRepository {
       return List.empty();
     }
   }
+  
+  @override
+  Future<List<Musician>> getNotAllowedMusicians() async{
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    
+    // Query
+    Query query = usersCollection.where("isAllowed", isEqualTo: false);
+
+    final snapshot = await query.get();
+
+    if (snapshot.size != 0) {
+      try {
+        final musiciansList = snapshot.docs.map((doc) {
+          final MusicianDB musicianDb = MusicianDB.fromMap(doc.data() as Map<String, dynamic>);
+          return MusicianMapper.musicianToDomain(musicianDb);
+        }).toList();
+
+        return musiciansList;
+      } catch (e) {
+        throw Exception('Error al obtener los usuarios que no tienen permisos: $e');
+      }
+    } 
+    else{
+      return List.empty();
+    }
+  }
 }
