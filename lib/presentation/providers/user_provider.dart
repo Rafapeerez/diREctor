@@ -7,9 +7,9 @@ final userProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
 });
 
 class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier() : super(const UserState(user: null, isAdmin: false, instrument: ""));
+  UserNotifier() : super(const UserState(user: null, isAdmin: false, instrument: "-"));
 
-  void signIn(User? user, bool isAdmin, String? instrument){
+  void signIn(User? user, bool isAdmin, String instrument){
     state = state.copyWith(
       user: user,
       isAdmin: isAdmin,
@@ -22,7 +22,7 @@ class UserState extends Equatable{
 
   final User? user;
   final bool isAdmin;
-  final String? instrument;
+  final String instrument;
 
   const UserState({
     required this.user,
@@ -33,7 +33,7 @@ class UserState extends Equatable{
   copyWith({
     required User? user,
     required bool isAdmin,
-    required String? instrument
+    required String instrument
   }) => UserState(    
     user: user,
     isAdmin: isAdmin,

@@ -72,6 +72,7 @@ class UserListViewState extends ConsumerState<UserListView> {
                                         isAllowed: true, 
                                         isAdmin: false
                                       ));
+                                      await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
                                       context.pop();
                                     },
                                     child: const Text('Trompeta'),

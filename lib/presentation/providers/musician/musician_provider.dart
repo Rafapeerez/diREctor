@@ -15,7 +15,6 @@ final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref
 
   final updateMusicianUseCase = UpdateMusicianUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
 
-
   return MusicianProvider(saveMusicianUseCase, getMusicianByIdUseCase, updateMusicianUseCase);
 });
 
@@ -73,5 +72,11 @@ class MusiciansProvider extends StateNotifier<List<Musician>>{
   Future<void> getNotAllowedMusicians() async {
     List<Musician> musicianssList = await _getNotAllowedMusiciansUseCase.execute();
     state = musicianssList; 
+  }
+
+  Future<void> updateNotAllowedList(Musician musician) async {
+    List<Musician> updatedList = [...state];
+    updatedList.removeWhere((m) => m.email == musician.email);
+    state = updatedList;
   }
 }
