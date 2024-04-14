@@ -60,8 +60,7 @@ class MenuView extends ConsumerWidget {
               onTap: () {
                 context.go("/home/0/userlist-screen");
               }
-            ),
-          
+            ),  
           CustomListTile(
             option: "Cerrar Sesión",
             icon: const Icon(Icons.logout_outlined, size: 30),

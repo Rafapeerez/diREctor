@@ -5,5 +5,5 @@ abstract class MusicianRepository {
 
   Future<Musician?> getMusicianByEmail(String email);
 
-  Future<Stream<Musician>> getAllMusicians();
+  Future<List<Musician>> getAllMusicians();
 }

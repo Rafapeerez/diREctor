@@ -14,7 +14,7 @@ final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref
   return MusicianProvider(saveMusicianUseCase, getMusicianByIdUseCase);
 });
 
-final musiciansProvider = StateNotifierProvider<MusiciansProvider, Stream<Musician>>((ref) {
+final musiciansProvider = StateNotifierProvider<MusiciansProvider, List<Musician>>((ref) {
   final  getAllMusiciansUseCase = GetAllMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
 
   return MusiciansProvider(getAllMusiciansUseCase);
@@ -42,16 +42,16 @@ class MusicianProvider extends StateNotifier<Musician?> {
   }
 }
 
-class MusiciansProvider extends StateNotifier<Stream<Musician>>{
+class MusiciansProvider extends StateNotifier<List<Musician>>{
   final GetAllMusiciansUseCase _getAllMusiciansUseCase;
 
   MusiciansProvider(
     this._getAllMusiciansUseCase
-  ) : super(const Stream.empty());
+  ) : super(List.empty());
 
 
   Future<void> getAllMusicians() async {
-    Stream<Musician> musiciasStream = await _getAllMusiciansUseCase.execute();
-    state = musiciasStream; 
+    List<Musician> musicianssList = await _getAllMusiciansUseCase.execute();
+    state = musicianssList; 
   }
 }

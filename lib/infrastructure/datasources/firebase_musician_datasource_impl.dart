@@ -6,32 +6,25 @@ import 'package:director_app_tfg/infrastructure/mappers/musician_mapper.dart';
 import '../../domain/models/musician.dart';
 
 class FirebaseMusicianDatasource implements MusicianRepository {
-  
-@override
-Future<Musician> saveMusician(Musician musician) async {
-  final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
-  final snapshot = await usersCollection.get();
 
-  if (snapshot.size == 0) {
-    // Collection no exist, create an example 
-    final exampleData = MusicianMapper.musicianToEntity(
-      Musician(
-        email: 'fisrtmusician',
-        name: 'Fisrt Musician',
-        isAllowed: false,
-        isAdmin: false,
-      ),
-    ).toMap();
-    await usersCollection.add(exampleData);
+  @override
+  Future<Musician> saveMusician(Musician musician) async {
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    
+    try {
+      final collectionSnapshot = await usersCollection.get();
+      if (collectionSnapshot.size == 0) {
+        // Collection NO exist
+        await usersCollection.doc(musician.email).set(MusicianMapper.musicianToEntity(musician).toMap());
+      } else {
+        // Collection exist
+        await usersCollection.doc(musician.email).set(MusicianMapper.musicianToEntity(musician).toMap());
+      }
+      return musician;
+    } catch (e) {
+      throw Exception('Error al guardar el usuario: $e');
+    }
   }
-
-  try {
-    await usersCollection.doc(musician.email).set(MusicianMapper.musicianToEntity(musician).toMap());
-    return musician;
-  } catch (e) {
-    throw Exception('Error al guardar el usuario: $e');
-  }
-}
 
   @override
   Future<Musician?> getMusicianByEmail(String email) async {
@@ -50,7 +43,7 @@ Future<Musician> saveMusician(Musician musician) async {
   }
   
   @override
-  Future<Stream<Musician>> getAllMusicians() async{
+  Future<List<Musician>> getAllMusicians() async{
     final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
     final snapshot = await usersCollection.get();
 
@@ -61,13 +54,13 @@ Future<Musician> saveMusician(Musician musician) async {
           return MusicianMapper.musicianToDomain(musicianDb);
         }).toList();
 
-        return Stream.fromIterable(musiciansList);
+        return musiciansList;
       } catch (e) {
         throw Exception('Error al obtener los usuarios: $e');
       }
     } 
     else{
-      return const Stream.empty();
+      return List.empty();
     }
   }
 }
