@@ -39,6 +39,12 @@ final appRouter = GoRouter(
           name: MarchDetailsScreen.name,
           builder: (BuildContext context, GoRouterState state) => const MarchDetailsScreen(),
         ),
+
+        GoRoute(
+          path: 'pdfviewer-screen',
+          name: PdfViewerScreen.name,
+          builder: (BuildContext context, GoRouterState state) => const PdfViewerScreen(),
+        ),
       ]
     ),
   ]

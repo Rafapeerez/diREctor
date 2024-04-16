@@ -51,7 +51,9 @@ class MenuView extends ConsumerWidget {
           CustomListTile(
             option: "Reglas",
             icon: const Icon(Icons.file_copy_outlined, size: 30),
-            onTap: (){},
+            onTap: () {
+              context.go("/home/0/pdfviewer-screen");
+            },
           ),
           if (userState.isAdmin)
             CustomListTile(
