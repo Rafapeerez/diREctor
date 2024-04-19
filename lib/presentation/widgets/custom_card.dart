@@ -31,7 +31,6 @@ class CustomCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               image != "" ? Image.asset( image ) :  Container( color: Colors.grey.shade700, height: 60 ),
-              // image != "" ? FadeInImage.assetNetwork( placeholder: 'assets/giphy.gif', image: AssetImage(image)) :  Container( color: Colors.grey.shade700, height: 60 ),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),

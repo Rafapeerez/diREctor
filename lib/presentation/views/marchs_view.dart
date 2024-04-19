@@ -1,4 +1,5 @@
 import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
+import 'package:director_app_tfg/presentation/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,16 +43,11 @@ class _MarchsViewState extends State<MarchsView> {
             ),
           ],
         ),
-        Positioned(
-          bottom: MediaQuery.of(context).size.height * 0.02,
-          right: MediaQuery.of(context).size.width * 0.05,
-          child: FloatingActionButton(
-            onPressed: () {
-              _showFilterBottomSheet();
-            },
-            shape: const CircleBorder(),
-            child: const Icon(Icons.filter_alt),
-          )
+        CustomElevatedButton(
+          icon: Icons.filter_alt_rounded,
+          onPressed: () {
+            _showFilterBottomSheet();
+          },
         )
       ]
     );

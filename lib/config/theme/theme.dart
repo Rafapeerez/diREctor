@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+const Color BUTTONS_COLOR = Color.fromRGBO(230, 238, 255, 1.0);
 
 class AppTheme {
   final int selectedColor;
@@ -21,11 +22,7 @@ class AppTheme {
   }
 
   //Importante para tener las propiedades final y el estado inmutable. MUY UTIL
-  AppTheme copyWith({
-      int? selectedColor, 
-      bool? isDarkMode
-    }) => AppTheme(
+  AppTheme copyWith({int? selectedColor, bool? isDarkMode}) => AppTheme(
       selectedColor: this.selectedColor,
-      isDarkMode: isDarkMode ?? this.isDarkMode
-    );
+      isDarkMode: isDarkMode ?? this.isDarkMode);
 }
