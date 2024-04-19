@@ -18,14 +18,6 @@ final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref
   return MusicianProvider(saveMusicianUseCase, getMusicianByIdUseCase, updateMusicianUseCase);
 });
 
-final musiciansProvider = StateNotifierProvider<MusiciansProvider, List<Musician>>((ref) {
-  final getAllMusiciansUseCase = GetAllMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
-  final getNotAllowedMusiciansUseCase = GetNotAllowedMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
-
-  return MusiciansProvider(getAllMusiciansUseCase, getNotAllowedMusiciansUseCase);
-});
-
-
 class MusicianProvider extends StateNotifier<Musician?> {
   
   final SaveMusicianUseCase _saveMusicianUseCase;
@@ -53,6 +45,16 @@ class MusicianProvider extends StateNotifier<Musician?> {
     state = musicianUpdated;
   }
 }
+
+
+//LIST
+
+final musiciansProvider = StateNotifierProvider<MusiciansProvider, List<Musician>>((ref) {
+  final getAllMusiciansUseCase = GetAllMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  final getNotAllowedMusiciansUseCase = GetNotAllowedMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+
+  return MusiciansProvider(getAllMusiciansUseCase, getNotAllowedMusiciansUseCase);
+});
 
 class MusiciansProvider extends StateNotifier<List<Musician>>{
   final GetAllMusiciansUseCase _getAllMusiciansUseCase;

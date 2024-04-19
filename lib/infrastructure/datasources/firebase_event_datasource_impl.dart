@@ -5,25 +5,22 @@ import 'package:director_app_tfg/infrastructure/entities/event_db.dart';
 import 'package:director_app_tfg/infrastructure/mappers/event_mapper.dart';
 
 class FirebaseEventDatasource implements EventRepository {
-  
   @override
   Future<List<Event>> getAllEvents() async {
-    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('eventos');
-    final snapshot = await usersCollection.get();
+    final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
+    final snapshot = await eventsCollection.get();
 
     if (snapshot.size != 0) {
       try {
-        final musiciansList = snapshot.docs.map((doc) {
+        final eventsList = snapshot.docs.map((doc) {
           final EventDB eventDB = EventDB.fromMap(doc.data() as Map<String, dynamic>);
           return EventMapper.eventToDomain(eventDB);
         }).toList();
-
-        return musiciansList;
+        return eventsList;
       } catch (e) {
         throw Exception('Error al obtener los eventos: $e');
       }
-    } 
-    else{
+    } else {
       return List.empty();
     }
   }
@@ -35,9 +32,27 @@ class FirebaseEventDatasource implements EventRepository {
   }
 
   @override
-  Future<Event> saveEvent(Event event) {
-    // TODO: implement saveEvent
-    throw UnimplementedError();
+  Future<Event> saveEvent(Event event) async {
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('eventos');
+
+    try {
+      final collectionSnapshot = await usersCollection.get();
+      if (collectionSnapshot.size == 0) {
+        // Collection NO exist
+        await usersCollection
+            .doc(event.id)
+            .set(EventMapper.eventToEntity(event).toMap());
+      } else {
+        // Collection exist
+        await usersCollection
+            .doc(event.id)
+            .set(EventMapper.eventToEntity(event).toMap());
+      }
+      return event;
+    } catch (e) {
+      throw Exception('Error al guardar el evento: $e');
+    }
   }
 
   @override
@@ -45,5 +60,4 @@ class FirebaseEventDatasource implements EventRepository {
     // TODO: implement updateEvent
     throw UnimplementedError();
   }
-
 }

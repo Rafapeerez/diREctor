@@ -10,7 +10,7 @@ class Event {
   final DateTime date;
   final String location;
   final List<March> repertoire;
-  final Duration? duration;
+  final Duration duration;
   final List<Musician> attendance;
   final String moreInformation;
 
@@ -19,20 +19,20 @@ class Event {
     required this.type,
     required this.date,
     required this.location,
-    this.repertoire = const [],
-    this.duration,
-    this.attendance = const [],
-    this.moreInformation = ""
+    this.repertoire = const [ ],
+    this.duration = Duration.zero,
+    this.attendance = const [ ],
+    this.moreInformation = " "
   });
 
   factory Event.create({
     required EventTypeEnum type,
     required DateTime date,
     required String location,
-    List<March> repertoire = const [],
-    Duration? duration,
-    List<Musician> attendance = const [],
-    String moreInformation = ""
+    List<March> repertoire = const [ ],
+    Duration duration = Duration.zero,
+    List<Musician> attendance = const [ ],
+    String moreInformation = " "
   }) {
     final uuid = const Uuid().v4();
     return Event(

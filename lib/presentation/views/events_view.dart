@@ -1,3 +1,5 @@
+import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
+import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_card.dart';
@@ -21,6 +23,7 @@ class EventsViewState extends ConsumerState<EventsView> {
 
   @override
   Widget build(BuildContext context) {
+    final eventsProv = ref.read(eventProvider.notifier);
     final events = ref.watch(eventsProvider);
     final userState = ref.watch(userProvider);
 
@@ -34,24 +37,17 @@ class EventsViewState extends ConsumerState<EventsView> {
               return Column(
                 children: [
                   CustomCard(
-                    title: event.type.toString(), 
+                    title: event.type.displayName, 
+                    isAttendingEvent: true,
+                    description: event.location,
                     route: '/home/0/eventsdetails-screen'
                   )
                 ],
               );
             },
           ),
-          // if (userState.isAdmin)
-          //   Positioned(
-          //     bottom: MediaQuery.of(context).size.height * 0.02,
-          //     right: MediaQuery.of(context).size.width * 0.05,
-          //     child: FloatingActionButton(
-          //       onPressed: () {
-          //       },
-          //       shape: const CircleBorder(),
-          //       child: const Icon(Icons.add),
-          //     )
-          //   )
+          if (userState.isAdmin)
+            _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
         ]
       )
       : Stack(
@@ -66,11 +62,35 @@ class EventsViewState extends ConsumerState<EventsView> {
               ),
             ),
             if (userState.isAdmin)
-              CustomElevatedButton(
-                icon: Icons.add, 
-                onPressed: (){}
-              )
+              _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
           ] 
       );
+  }
+}
+
+class _CustomElevatedButton extends StatelessWidget {
+  const _CustomElevatedButton({
+    required this.eventsProv,
+    required this.ref,
+  });
+
+  final EventProvider eventsProv;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomElevatedButton(
+      icon: Icons.add, 
+      onPressed: () async {
+        Event event = Event.create(
+          type: EventTypeEnum.concierto, 
+          date: DateTime.now(), 
+          location: "Puente Romano de Cordoba"
+        );
+    
+        await eventsProv.saveEvent(event);
+        await ref.watch(eventsProvider.notifier).updateEventsList(event);
+      }
+    );
   }
 }

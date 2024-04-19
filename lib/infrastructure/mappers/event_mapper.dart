@@ -1,3 +1,4 @@
+import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/infrastructure/entities/event_db.dart';
@@ -6,17 +7,27 @@ import 'package:director_app_tfg/infrastructure/mappers/musician_mapper.dart';
 
 class EventMapper {
   static Event eventToDomain(EventDB eventDB) {
-    List<Musician> attendance = eventDB.attendance.map(
-      (musicianDB) => MusicianMapper.musicianToDomain(musicianDB)
-    ).toList();
+    List<Musician> attendance = [];
+    if (eventDB.attendance != null) {
+      attendance = eventDB.attendance!.map(
+        (musicianDB) => MusicianMapper.musicianToDomain(musicianDB)
+      ).toList();
+    }
+
+    EventTypeEnum type;
+    if (eventDB.type == "concierto") {
+      type = EventTypeEnum.concierto;
+    } else {
+      type = EventTypeEnum.salidaProcesional;
+    }
 
     return Event(
       id: eventDB.id, 
-      type: eventDB.type, 
+      type: type, 
       date: eventDB.date, 
       location: eventDB.location,
-      repertoire: eventDB.repertoire,
-      duration: eventDB.duration,
+      repertoire: eventDB.repertoire ?? [],
+      duration: Duration( hours: eventDB.duration ),
       attendance: attendance,
       moreInformation: eventDB.moreInformation
     );
@@ -29,11 +40,11 @@ class EventMapper {
     
     return EventDB(
       id: event.id, 
-      type: event.type, 
+      type: event.type.name, 
       date: event.date, 
       location: event.location,
       repertoire: event.repertoire,
-      duration: event.duration,
+      duration: event.duration.inHours,
       attendance: attendance,
       moreInformation: event.moreInformation
     );
