@@ -1,11 +1,23 @@
 import 'package:director_app_tfg/domain/models/event.dart';
+import 'package:director_app_tfg/domain/repositories/event_repository.dart';
+import 'package:director_app_tfg/domain/usecases/event/delete_event_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/get_all_events_usecacase.dart';
 import 'package:director_app_tfg/domain/usecases/event/save_event_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_event_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_event_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final eventRepositoryProvider = Provider<EventRepository>((ref) {
+  return FirebaseEventRepository(FirebaseEventDatasource());
+});
+
 final selectedEventIdProvider = StateProvider<String>((ref) => "");
+
+final deleteEventUseCaseProvider = Provider((ref) {
+  final eventRepository = ref.read(eventRepositoryProvider);
+  return DeleteEventUseCase(eventRepository);
+});
+
 
 //EVENT
 
@@ -53,6 +65,12 @@ class EventsProvider extends StateNotifier<List<Event>> {
     } else {
       updatedList.add(event); 
     }
+    state = updatedList;
+  }
+
+  Future<void> updateEventsListAfterDelete(String eventId) async {
+    List<Event> updatedList = [...state];
+    updatedList.removeWhere((event) => event.id == eventId);
     state = updatedList;
   }
 }

@@ -8,4 +8,6 @@ abstract class EventRepository {
   Future<Event> getEventById(String id);
 
   Future<Event> updateEvent(Event event);
+
+  Future<void> deleteEvent(String eventId);
 }

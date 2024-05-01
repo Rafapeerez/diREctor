@@ -33,21 +33,16 @@ class FirebaseEventDatasource implements EventRepository {
 
   @override
   Future<Event> saveEvent(Event event) async {
-    final CollectionReference usersCollection =
-        FirebaseFirestore.instance.collection('eventos');
+    final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
 
     try {
-      final collectionSnapshot = await usersCollection.get();
+      final collectionSnapshot = await eventsCollection.get();
       if (collectionSnapshot.size == 0) {
         // Collection NO exist
-        await usersCollection
-            .doc(event.id)
-            .set(EventMapper.eventToEntity(event).toMap());
+        await eventsCollection.doc(event.id).set(EventMapper.eventToEntity(event).toMap());
       } else {
         // Collection exist
-        await usersCollection
-            .doc(event.id)
-            .set(EventMapper.eventToEntity(event).toMap());
+        await eventsCollection.doc(event.id).set(EventMapper.eventToEntity(event).toMap());
       }
       return event;
     } catch (e) {
@@ -59,5 +54,19 @@ class FirebaseEventDatasource implements EventRepository {
   Future<Event> updateEvent(Event event) {
     // TODO: implement updateEvent
     throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> deleteEvent(String eventId) async {
+    final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
+    final snapshot = await eventsCollection.get();
+    
+    if ( snapshot.size != 0 ) {
+      try{
+        await eventsCollection.doc(eventId).delete();
+      } catch (e) {
+        throw Exception('Error al eliminar el evento: $e');
+      }
+    }
   }
 }

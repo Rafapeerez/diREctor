@@ -226,22 +226,22 @@ class EventsFormState extends ConsumerState<EventsForm> {
               children: [
                 //CANCEL BUTTON
                 OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text("Cancelar")),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancelar")
+                ),
                 const Spacer(flex: 1),
       
                 //SUBMIT BUTTON
                 FilledButton(
                   onPressed: () async {
                     Event event = Event.create(
-                        type: EventTypeEnum.concierto,
-                        date: DateTime.now(),
-                        location: "Puente Romano de Cordoba");
+                      type: EventTypeEnum.concierto,
+                      date: DateTime.now(),
+                      location: "Puente Romano de Cordoba"
+                    );
       
                     await widget.eventsProv.saveEvent(event);
-                    await ref
-                        .watch(eventsProvider.notifier)
-                        .updateEventsList(event);
+                    await ref.watch(eventsProvider.notifier).updateEventsList(event);
                     Navigator.of(context).pop();
                   },
                   child: const Text("Enviar"),

@@ -25,4 +25,9 @@ class FirebaseEventRepository extends EventRepository {
   Future<Event> updateEvent(Event event) {
     return datasource.updateEvent(event);
   }
+
+  @override
+  Future<void> deleteEvent(String eventId) {
+    return datasource.deleteEvent(eventId);
+  }
 }

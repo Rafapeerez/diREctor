@@ -5,6 +5,7 @@ import 'package:director_app_tfg/presentation/providers/event/event_provider.dar
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -23,8 +24,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
     zoom: 14,
   );
 
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
 
   Set<Marker> _markers = {};
   String _errorMessage = "";
@@ -37,8 +37,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 
   Future<void> _addMarkerFromAddress() async {
     try {
-      LatLng coordinates = await GeolocalitationFromDirection()
-          .getLatLngFromAddress("Puente Romano de Cordoba");
+      LatLng coordinates = await GeolocalitationFromDirection().getLatLngFromAddress("Puente Romano de Cordoba");
 
       Marker marker = Marker(
         markerId: const MarkerId('marker_1'),
@@ -51,8 +50,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage =
-            "Error: No se encontraron coordenadas para la dirección proporcionada";
+        _errorMessage = "Error: No se encontraron coordenadas para la dirección proporcionada";
       });
     }
   }
@@ -140,20 +138,27 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   }
 }
 
-class _PopUpMenuButton extends StatelessWidget {
+class _PopUpMenuButton extends ConsumerWidget {
 
   final String eventSelected;
-
+  
   const _PopUpMenuButton({
     required this.eventSelected,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final deleteEventUseCase = ref.watch(deleteEventUseCaseProvider);
+
     return PopupMenuButton<String>(
-      onSelected: (String choice) {
+      onSelected: (String choice) async {
         if (choice == 'Editar') {
-        } else if (choice == 'Eliminar') {}
+
+        } else if (choice == 'Eliminar') {
+          await deleteEventUseCase.execute(eventSelected);
+          await ref.watch(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected);
+          context.go("/home/0");
+        }
       },
       itemBuilder: (BuildContext context) => const <PopupMenuEntry<String>>[
         PopupMenuItem<String>(
