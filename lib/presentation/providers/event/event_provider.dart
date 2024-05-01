@@ -5,9 +5,12 @@ import 'package:director_app_tfg/infrastructure/datasources/firebase_event_datas
 import 'package:director_app_tfg/infrastructure/repositories/firebase_event_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final selectedEventIdProvider = StateProvider<String>((ref) => "");
+
+//EVENT
+
 final eventProvider = StateNotifierProvider<EventProvider, Event?>((ref) {
-  final saveEventUseCase =
-      SaveEventUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
+  final saveEventUseCase = SaveEventUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
 
   return EventProvider(saveEventUseCase);
 });
@@ -27,10 +30,8 @@ class EventProvider extends StateNotifier<Event?> {
 
 //LIST
 
-final eventsProvider =
-    StateNotifierProvider<EventsProvider, List<Event>>((ref) {
-  final getAllEventsUseCase =
-      GetAllEventsUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
+final eventsProvider = StateNotifierProvider<EventsProvider, List<Event>>((ref) {
+  final getAllEventsUseCase = GetAllEventsUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
 
   return EventsProvider(getAllEventsUseCase);
 });

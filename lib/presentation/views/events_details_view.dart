@@ -1,25 +1,30 @@
 import 'dart:async';
 
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
+import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class EventsDetailsView extends StatefulWidget {
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
+
+class EventsDetailsView extends ConsumerStatefulWidget {
   const EventsDetailsView({super.key});
 
   @override
-  State<EventsDetailsView> createState() => _EventsDetailsViewState();
+  EventsDetailsViewState createState() => EventsDetailsViewState();
 }
 
-class _EventsDetailsViewState extends State<EventsDetailsView> {
+class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   static const CameraPosition _position = CameraPosition(
     target: LatLng(37.879773062359, -4.778913767228612),
     zoom: 14,
   );
-  
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
 
   Set<Marker> _markers = {};
   String _errorMessage = "";
@@ -32,7 +37,8 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
 
   Future<void> _addMarkerFromAddress() async {
     try {
-      LatLng coordinates = await GeolocalitationFromDirection().getLatLngFromAddress("Puente Romano de Cordoba");
+      LatLng coordinates = await GeolocalitationFromDirection()
+          .getLatLngFromAddress("Puente Romano de Cordoba");
 
       Marker marker = Marker(
         markerId: const MarkerId('marker_1'),
@@ -41,37 +47,45 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
 
       setState(() {
         _markers = {marker};
-        _errorMessage="";
+        _errorMessage = "";
       });
     } catch (e) {
       setState(() {
-        _errorMessage = "Error: No se encontraron coordenadas para la dirección proporcionada";
+        _errorMessage =
+            "Error: No se encontraron coordenadas para la dirección proporcionada";
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final String eventSelected = ref.read(selectedEventIdProvider.notifier).state;
+
+    final userState = ref.watch(userProvider);
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Concierto",
                   style: TextStyle(
                     fontSize: 25,
                   ),
                 ),
+                const Spacer(flex: 1),
+                if (userState.isAdmin) 
+                  _PopUpMenuButton(eventSelected: eventSelected),
               ],
             ),
           ),
 
           //MAP
-          if(_errorMessage.isNotEmpty)
+          if (_errorMessage.isNotEmpty)
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
@@ -80,17 +94,15 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
               ),
             ),
           SizedBox(
-            height: 200,
-            child:GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: _position,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              markers: _markers,
-            )
-          ),
-
+              height: 200,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _position,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+                markers: _markers,
+              )),
 
           //DIRECTION
           const Padding(
@@ -118,16 +130,42 @@ class _EventsDetailsViewState extends State<EventsDetailsView> {
             expandedText: "Día 8 de Marzo a las 18:00",
           ),
           const CustomExpansionPanel(
-            headerText: "Repertorio",
-            expandedText: "- Marcha Real - Orando al Padre"
-          ),
-          const CustomExpansionPanel(
-            headerText: "Notas", 
-            expandedText: ""
-          ),
+              headerText: "Repertorio",
+              expandedText: "- Marcha Real - Orando al Padre"),
+          const CustomExpansionPanel(headerText: "Notas", expandedText: ""),
           const SizedBox(height: 20)
         ],
       ),
+    );
+  }
+}
+
+class _PopUpMenuButton extends StatelessWidget {
+
+  final String eventSelected;
+
+  const _PopUpMenuButton({
+    required this.eventSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      onSelected: (String choice) {
+        if (choice == 'Editar') {
+        } else if (choice == 'Eliminar') {}
+      },
+      itemBuilder: (BuildContext context) => const <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: 'Editar',
+          child: Text('Editar'),
+        ),
+        PopupMenuItem<String>(
+          value: 'Eliminar',
+          child: Text('Eliminar'),
+        ),
+      ],
+      icon: const Icon(Icons.more_vert),
     );
   }
 }

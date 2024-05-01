@@ -15,7 +15,7 @@ class EventMapper {
     }
 
     EventTypeEnum type;
-    if (eventDB.type == "concierto") {
+    if (eventDB.type == "Concierto") {
       type = EventTypeEnum.concierto;
     } else {
       type = EventTypeEnum.salidaProcesional;
@@ -40,7 +40,7 @@ class EventMapper {
     
     return EventDB(
       id: event.id, 
-      type: event.type.name, 
+      type: event.type.displayName, 
       date: event.date, 
       location: event.location,
       repertoire: event.repertoire,
