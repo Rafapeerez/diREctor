@@ -1,3 +1,4 @@
+import 'package:director_app_tfg/config/helpers/capitalize_string_helper.dart';
 import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
@@ -28,37 +29,40 @@ class EventsViewState extends ConsumerState<EventsView> {
     final userState = ref.watch(userProvider);
 
     return events.isNotEmpty
-        ? Stack(children: [
-            ListView.builder(
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final event = events[index];
-                return Column(
-                  children: [
-                    CustomCard(
-                      eventID: event.id,
-                      title: event.type.displayName,
-                      isAttendingEvent: true,
-                      description: event.location,
-                      route: '/home/0/eventsdetails-screen'
-                    )
-                  ],
-                );
-              },
-            ),
-            if (userState.isAdmin)
-              _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
-          ])
-        : Stack(children: [
-            const Center(
-              child: Text(
-                "No hay eventos",
-                style: TextStyle(color: Colors.grey, fontSize: 22),
+        ? Stack(
+            children: [
+              ListView.builder(
+                itemCount: events.length,
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  return Column(
+                    children: [
+                      CustomCard(
+                          eventID: event.id,
+                          title: event.type.displayName,
+                          isAttendingEvent: true,
+                          description: event.location,
+                          route: '/home/0/eventsdetails-screen')
+                    ],
+                  );
+                },
               ),
-            ),
             if (userState.isAdmin)
               _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
-          ]);
+            ]
+          )
+        : Stack(
+            children: [
+              const Center(
+                child: Text(
+                  "No hay eventos",
+                  style: TextStyle(color: Colors.grey, fontSize: 22),
+                ),
+              ),
+              if (userState.isAdmin)
+                _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
+            ]
+          );
   }
 }
 
@@ -74,18 +78,19 @@ class _CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomElevatedButton(
-        icon: Icons.add,
-        onPressed: () async {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Convocatoria'),
-                content: EventsForm(eventsProv: eventsProv),
-              );
-            },
-          );
-        });
+      icon: Icons.add,
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Convocatoria'),
+              content: EventsForm(eventsProv: eventsProv),
+            );
+          },
+        );
+      }
+    );
   }
 }
 
@@ -102,6 +107,9 @@ class EventsFormState extends ConsumerState<EventsForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime _selectedDate = DateTime.now();
   EventTypeEnum _type = EventTypeEnum.concierto;
+  Duration _duration = const Duration();
+  String _location = "";
+  String _moreInfo = "";
 
   List<String> options = ['Concierto', 'Salida Procesional'];
 
@@ -116,17 +124,6 @@ class EventsFormState extends ConsumerState<EventsForm> {
             //TYPE
             DropdownButtonFormField<String>(
               value: _type.displayName,
-              onChanged: (String? newValue) {
-                if (newValue! == "concierto") {
-                  setState(() {
-                    _type = EventTypeEnum.concierto;
-                  });
-                } else {
-                  setState(() {
-                    _type = EventTypeEnum.salidaProcesional;
-                  });
-                }
-              },
               items: options.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -142,55 +139,74 @@ class EventsFormState extends ConsumerState<EventsForm> {
                 }
                 return null;
               },
+              onChanged: (String? newValue) {
+                if (newValue! == "concierto") {
+                  setState(() {
+                    _type = EventTypeEnum.concierto;
+                  });
+                } else {
+                  setState(() {
+                    _type = EventTypeEnum.salidaProcesional;
+                  });
+                }
+              },
             ),
-      
+
             //LOCATION
             TextFormField(
-              decoration:
-                  const InputDecoration(labelText: 'Ingresa una dirección'),
+              decoration: const InputDecoration(
+                labelText: 'Ingresa una dirección',
+              ),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor ingresa una dirección';
                 }
-                return value;
+                return null;
               },
-              onSaved: (value) {},
+              onChanged: (value) => setState(() => _location = CapitalizeString().capitalizeString(value))
             ),
             const SizedBox(height: 16),
-      
+
             //DURATION
             TextFormField(
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Ingresa la duración'),
+              decoration: const InputDecoration(
+                labelText: 'Ingresa la duración (horas)',
+              ),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor ingresa la duración';
                 }
-                return value;
+                return null; // Retorna null si el valor es válido
               },
-              onSaved: (value) {},
+              onChanged: (value) {
+                setState(() {
+                  try {
+                    final hours = int.parse(value);
+                    setState(() {
+                      _duration = Duration(hours: hours);
+                    });
+                  } catch (e) {
+                    setState(() {
+                      _duration = Duration.zero;
+                    });
+                  }
+                });
+              },
             ),
             const SizedBox(height: 16),
-      
+
             //MORE INFO
             TextFormField(
-              decoration:
-                  const InputDecoration(labelText: 'Añadir nota (opcional)'),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "";
-                }
-                return value;
-              },
-              onSaved: (value) {},
+              decoration: const InputDecoration(labelText: 'Añadir nota (opcional)'),
+              onChanged: (value) => setState(() => _moreInfo = value),
             ),
             const SizedBox(height: 16),
-      
+
             //DATE
             ListTile(
               title: const Text("Ingresa una fecha: "),
-              subtitle: Text(
-                  "Dia ${_selectedDate.day} del ${_selectedDate.month} a las ${_selectedDate.hour}:${_selectedDate.minute}"),
+              subtitle: Text("Dia ${_selectedDate.day} del ${_selectedDate.month} a las ${_selectedDate.hour}:${_selectedDate.minute}"),
               trailing: const Icon(Icons.calendar_today),
               onTap: () async {
                 final pickedDate = await showDatePicker(
@@ -218,9 +234,8 @@ class EventsFormState extends ConsumerState<EventsForm> {
                 }
               },
             ),
-      
             const SizedBox(height: 16),
-      
+
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -230,19 +245,22 @@ class EventsFormState extends ConsumerState<EventsForm> {
                   child: const Text("Cancelar")
                 ),
                 const Spacer(flex: 1),
-      
+
                 //SUBMIT BUTTON
                 FilledButton(
                   onPressed: () async {
-                    Event event = Event.create(
-                      type: EventTypeEnum.concierto,
-                      date: DateTime.now(),
-                      location: "Puente Romano de Cordoba"
-                    );
-      
-                    await widget.eventsProv.saveEvent(event);
-                    await ref.watch(eventsProvider.notifier).updateEventsList(event);
-                    Navigator.of(context).pop();
+                    if (_formKey.currentState!.validate()) {
+                      Event event = Event.create(
+                        type: _type, 
+                        date: _selectedDate, 
+                        location: _location,
+                        duration: _duration,
+                        moreInformation: _moreInfo
+                      );
+                      await widget.eventsProv.saveEvent(event);
+                      await ref.watch(eventsProvider.notifier).updateEventsList(event);
+                      Navigator.of(context).pop();
+                    }                  
                   },
                   child: const Text("Enviar"),
                 )
