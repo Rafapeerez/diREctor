@@ -25,6 +25,16 @@ class Event {
     this.moreInformation = " "
   });
 
+  Event.empty()
+        : id = "",
+          type = EventTypeEnum.concierto,
+          date = DateTime.now(),
+          location = "",
+          repertoire = const [ ],
+          duration = Duration.zero,
+          attendance = const [ ],
+          moreInformation = " ";
+
   factory Event.create({
     required EventTypeEnum type,
     required DateTime date,

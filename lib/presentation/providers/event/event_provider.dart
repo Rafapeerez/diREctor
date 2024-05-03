@@ -7,17 +7,16 @@ import 'package:director_app_tfg/infrastructure/datasources/firebase_event_datas
 import 'package:director_app_tfg/infrastructure/repositories/firebase_event_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final selectedEventProvider = StateProvider<Event>((ref) => Event.empty());
+
 final eventRepositoryProvider = Provider<EventRepository>((ref) {
   return FirebaseEventRepository(FirebaseEventDatasource());
 });
-
-final selectedEventIdProvider = StateProvider<String>((ref) => "");
 
 final deleteEventUseCaseProvider = Provider((ref) {
   final eventRepository = ref.read(eventRepositoryProvider);
   return DeleteEventUseCase(eventRepository);
 });
-
 
 //EVENT
 

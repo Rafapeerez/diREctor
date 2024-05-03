@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
+import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final String eventSelected = ref.read(selectedEventIdProvider.notifier).state;
+    final Event eventSelected = ref.read(selectedEventProvider.notifier).state;
 
     final userState = ref.watch(userProvider);
 
@@ -128,8 +129,9 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             expandedText: "Día 8 de Marzo a las 18:00",
           ),
           const CustomExpansionPanel(
-              headerText: "Repertorio",
-              expandedText: "- Marcha Real - Orando al Padre"),
+            headerText: "Repertorio",
+            expandedText: "- Marcha Real - Orando al Padre"
+          ),
           const CustomExpansionPanel(headerText: "Notas", expandedText: ""),
           const SizedBox(height: 20)
         ],
@@ -140,7 +142,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 
 class _PopUpMenuButton extends ConsumerWidget {
 
-  final String eventSelected;
+  final Event eventSelected;
   
   const _PopUpMenuButton({
     required this.eventSelected,
@@ -155,8 +157,8 @@ class _PopUpMenuButton extends ConsumerWidget {
         if (choice == 'Editar') {
 
         } else if (choice == 'Eliminar') {
-          await deleteEventUseCase.execute(eventSelected);
-          await ref.watch(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected);
+          await deleteEventUseCase.execute(eventSelected.id);
+          await ref.watch(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected.id);
           context.go("/home/0");
         }
       },

@@ -38,11 +38,10 @@ class EventsViewState extends ConsumerState<EventsView> {
                   return Column(
                     children: [
                       CustomCard(
-                          eventID: event.id,
-                          title: event.type.displayName,
-                          isAttendingEvent: true,
-                          description: event.location,
-                          route: '/home/0/eventsdetails-screen')
+                        event: event,
+                        isAttendingEvent: true,
+                        route: '/home/0/eventsdetails-screen'
+                      )
                     ],
                   );
                 },
