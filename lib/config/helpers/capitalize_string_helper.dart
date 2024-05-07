@@ -1,4 +1,4 @@
-class CapitalizeString {
+class CapitalizeString {  
   String capitalizeString(String value) {  
     if (value.isEmpty) {
       return value;

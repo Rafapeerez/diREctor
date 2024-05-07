@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:director_app_tfg/config/helpers/date_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
@@ -20,25 +21,39 @@ class EventsDetailsView extends ConsumerStatefulWidget {
 }
 
 class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
-  static const CameraPosition _position = CameraPosition(
-    target: LatLng(37.879773062359, -4.778913767228612),
-    zoom: 14,
-  );
-
+  
+  // CameraPosition _position = CameraPosition(
+  //   target: LatLng(37.879773062359, -4.778913767228612),
+  //   zoom: 14,
+  // );
+  CameraPosition? _position;
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  late final Event eventSelected;
 
   Set<Marker> _markers = {};
   String _errorMessage = "";
 
   @override
   void initState() {
-    super.initState();
-    _addMarkerFromAddress();
+    super.initState();  
+    _initEventSelected(); 
   }
 
-  Future<void> _addMarkerFromAddress() async {
+  void _initEventSelected() async {
+    eventSelected = ref.read(selectedEventProvider.notifier).state;
+    LatLng targetLatLng = await GeolocalitationFromDirection().getLatLngFromAddress(eventSelected.location);
+    setState(() {
+      _position = CameraPosition(
+        target: targetLatLng,
+        zoom: 15,
+      );
+    });
+    _addMarkerFromAddress(eventSelected.location);
+  }
+
+  Future<void> _addMarkerFromAddress(String location) async {
     try {
-      LatLng coordinates = await GeolocalitationFromDirection().getLatLngFromAddress("Puente Romano de Cordoba");
+      LatLng coordinates = await GeolocalitationFromDirection().getLatLngFromAddress(location);
 
       Marker marker = Marker(
         markerId: const MarkerId('marker_1'),
@@ -58,8 +73,6 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final Event eventSelected = ref.read(selectedEventProvider.notifier).state;
-
     final userState = ref.watch(userProvider);
 
     return SingleChildScrollView(
@@ -70,9 +83,9 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
-                  "Concierto",
-                  style: TextStyle(
+                Text(
+                  eventSelected.type.displayName,
+                  style: const TextStyle(
                     fontSize: 25,
                   ),
                 ),
@@ -92,29 +105,32 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
                 style: const TextStyle(color: Colors.red),
               ),
             ),
-          SizedBox(
+            SizedBox(
               height: 200,
-              child: GoogleMap(
+              child: _position != null ? GoogleMap(
                 mapType: MapType.normal,
-                initialCameraPosition: _position,
+                initialCameraPosition: _position!,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
                 markers: _markers,
-              )),
+              ) : const Center(
+                child: CircularProgressIndicator(), // Muestra un indicador de carga mientras _position es null
+              ),
+            ),
 
           //DIRECTION
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Flexible(
                   child: Text(
-                    "Dirección: Av. Almogávares (junto al hotel)",
+                    eventSelected.location,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
@@ -124,15 +140,18 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
           ),
 
           const SizedBox(height: 5),
-          const CustomExpansionPanel(
+          CustomExpansionPanel(
             headerText: "Día y Hora",
-            expandedText: "Día 8 de Marzo a las 18:00",
+            expandedText: DateToString().dateString(eventSelected.date),
           ),
           const CustomExpansionPanel(
             headerText: "Repertorio",
             expandedText: "- Marcha Real - Orando al Padre"
           ),
-          const CustomExpansionPanel(headerText: "Notas", expandedText: ""),
+          CustomExpansionPanel(
+            headerText: "Notas", 
+            expandedText: eventSelected.moreInformation
+          ),
           const SizedBox(height: 20)
         ],
       ),

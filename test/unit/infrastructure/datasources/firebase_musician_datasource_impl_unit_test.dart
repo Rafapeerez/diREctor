@@ -24,7 +24,7 @@ void main() {
       isAllowed: true,
       isAdmin: false,
     );
-    when(mockFirebaseFirestore.collection('usuario')).thenReturn(musician);
+    // when(mockFirebaseFirestore.collection('usuario')).thenReturn(musician);
 
     // WHEN
     final result = await datasource.saveMusician(musician);
