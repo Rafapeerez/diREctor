@@ -1,17 +1,43 @@
+import 'package:director_app_tfg/config/helpers/capitalize_string_helper.dart';
+import 'package:director_app_tfg/config/helpers/get_first_letter_from_each_word_of_string_helper.dart';
+import 'package:director_app_tfg/domain/models/march.dart';
+import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_elevated_button.dart';
+import 'package:director_app_tfg/presentation/widgets/filter_botton_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class MarchsView extends StatefulWidget {
+class MarchsView extends ConsumerStatefulWidget {
   const MarchsView({super.key});
 
   @override
-  State<MarchsView> createState() => _MarchsViewState();
+  MarchsViewState createState() => MarchsViewState();
 }
 
-class _MarchsViewState extends State<MarchsView> {
-  void _showFilterBottomSheet() {
+class MarchsViewState extends ConsumerState<MarchsView> {  
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(marchsProvider.notifier).getAllMarchs();
+  }
+
+  void showDialogMethod() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text('Marcha'),
+          content: MarchsForm(),
+        );
+      }
+    );
+  }
+
+  void showFilterBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -21,36 +47,88 @@ class _MarchsViewState extends State<MarchsView> {
         ),
       ),
       builder: (BuildContext context) {
-        return _FilterBottomSheet();
+        return FilterBottomSheet();
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ListView(
-          children: const [
-            _CustomMarch(name: "Marcha Real", letter: "MR"),
-            _CustomMarch(
-              name: "Orando al Padre",
-              letter: "OP",
-            ),
-            _CustomMarch(
-              name: "Caenaculum",
-              letter: "C",
-            ),
-          ],
-        ),
-        CustomElevatedButton(
-          icon: Icons.filter_alt_rounded,
-          onPressed: () {
-            _showFilterBottomSheet();
-          },
-        )
-      ]
-    );
+    final userState = ref.watch(userProvider);
+    final marchs = ref.watch(marchsProvider);
+
+    return marchs.isNotEmpty 
+        ? Stack(
+            children: [
+              ListView.builder(
+                itemCount: marchs.length,
+                itemBuilder: (context, index) {
+                  final march = marchs[index];
+                  return Column(
+                    children: [
+                      _CustomMarch(
+                        name: march.name, 
+                        letter: GetFirstLetterFromEachWordOfString.getFirstLetterFromEachWordOfString(march.name)
+                      ),
+                    ],
+                  );
+                },
+              ),
+            if (userState.isAdmin) 
+              CustomElevatedButton(
+                icon: Icons.more_vert,
+                onPressed: () {
+                  final double bottom = MediaQuery.of(context).size.height;
+                  showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(double.infinity, double.infinity, 20, bottom),
+                    items: const [
+                      PopupMenuItem<String>(
+                        value: 'Añadir',
+                        child: Text('Añadir'),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'Filtrar',
+                        child: Text('Filtrar'),
+                      ),
+                    ],
+                    elevation: 8.0,
+                  ).then((choice) {
+                    if (choice != null) {
+                      if (choice == 'Añadir') {
+                        showDialogMethod();
+                      } else if (choice == 'Filtrar') {
+                      }
+                    }
+                  });
+                },
+              )
+            else
+              CustomElevatedButton(
+                icon: Icons.filter_alt_rounded,
+                onPressed: () {
+                  showFilterBottomSheet();
+                },
+              )
+            ]
+          )
+        : Stack(
+            children: [
+              const Center(
+                child: Text(
+                  "No hay marchas",
+                  style: TextStyle(color: Colors.grey, fontSize: 22),
+                ),
+              ),
+              if (userState.isAdmin)
+              CustomElevatedButton(
+                icon: Icons.add,
+                onPressed: () async {
+                  showDialogMethod();
+                },
+              ) 
+            ]
+          );
   }
 }
 
@@ -93,75 +171,109 @@ class _CustomMarch extends StatelessWidget {
   }
 }
 
-class _FilterBottomSheet extends StatefulWidget {
+
+
+class MarchsForm extends ConsumerStatefulWidget {
+
+  const MarchsForm({super.key});
+
   @override
-  _FilterBottomSheetState createState() => _FilterBottomSheetState();
+  EventsFormState createState() => EventsFormState();
 }
 
-class _FilterBottomSheetState extends State<_FilterBottomSheet> {
-  List<String> filterOptions = ['Orden Asc Número', 'Orden Alfabético'];
-  Map<String, bool> selectedOptions = {};
+class EventsFormState extends ConsumerState<MarchsForm> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = "";
+  String _author = "";
+  String _moreInfo = "";
+  String _link = "";
 
-  @override
-  void initState() {
-    super.initState();
-    selectedOptions = filterOptions.asMap().map((key, value) => MapEntry(value, false));
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Wrap(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    final marchsProv = ref.read(marchProvider.notifier);
+
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            //FORM
+            // NAME
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el nombre de la marcha',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el nombre';
+                }
+                return null;
+              },
+              onChanged: (value) => setState(() => _name = CapitalizeString().capitalizeString(value))
+            ),
+            const SizedBox(height: 16),
+
+            // AUTHOR
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el autor',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el autor';
+                }
+                return null; // Retorna null si el valor es válido
+              },
+              onChanged: (value) => setState(() => _author = CapitalizeString().capitalizeString(value))
+            ),
+            const SizedBox(height: 16),
+
+            //LINK
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Añadir link (opcional)'),
+              onChanged: (value) => setState(() => _link = value),
+            ),
+            const SizedBox(height: 16),
+
+            //MORE INFO
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Añadir nota (opcional)'),
+              onChanged: (value) => setState(() => _moreInfo = value),
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text(
-                  'Filtros',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
+                //CANCEL BUTTON
+                OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancelar")
                 ),
-                const SizedBox(height: 16),
-                ...filterOptions.map((option) {
-                  return CheckboxListTile(
-                    title: Text(option),
-                    value: selectedOptions[option] ?? false,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        selectedOptions[option] = value ?? false;
-                      });
-                    },
-                  );
-                }).toList(),
+                const Spacer(flex: 1),
 
-                const SizedBox(height: 16),
-
-                //Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () => Navigator.pop(context), 
-                      child: const Text("Cancelar")
-                    ),
-                    const Spacer(flex: 1),
-                    FilledButton(
-                      onPressed: () {},
-                      child: const Text("Aplicar"),
-                    )
-                  ],
+                //SUBMIT BUTTON
+                FilledButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      March march = March.create(
+                        name: _name, 
+                        author: _author,
+                        link: _link,
+                        moreInformation: _moreInfo
+                      );
+                      await marchsProv.saveMarch(march);
+                      await ref.watch(marchsProvider.notifier).updateMarchsList(march);
+                      Navigator.of(context).pop();
+                    }                  
+                  },
+                  child: const Text("Enviar"),
                 )
               ],
-            ),
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

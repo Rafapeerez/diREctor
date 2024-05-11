@@ -38,11 +38,6 @@ class MenuView extends ConsumerWidget {
             ),
           ),
           CustomListTile(
-            option: "Historia",
-            icon: const Icon(Icons.history_edu_outlined, size: 30),
-            onTap: (){},
-          ),
-          CustomListTile(
             option: "Modo Nocturno",
             icon: const Icon(Icons.brightness_medium_outlined, size: 30),
             hasSwitch: true,

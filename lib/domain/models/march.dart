@@ -4,21 +4,28 @@ class March {
   final String id;
   final String name;
   final String author;
-  final String? history;
+  final String? link;
   final String? moreInformation;
 
   March({
     required this.id,
     required this.name,
     required this.author,
-    this.history,
+    this.link,
     this.moreInformation
   });
+
+  March.empty()
+    : id = "",
+      name = "",
+      author = "",
+      link = "",
+      moreInformation = "";
 
   factory March.create({
     required String name,
     required String author,
-    String? history,
+    String? link,
     String? moreInformation
   }){
     final uuid = const Uuid().v4();
@@ -26,7 +33,7 @@ class March {
       id: uuid,
       name: name,
       author: author,
-      history: history,
+      link: link,
       moreInformation: moreInformation
     );      
   }

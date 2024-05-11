@@ -23,10 +23,6 @@ class EventsDetailsView extends ConsumerStatefulWidget {
 
 class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   
-  // CameraPosition _position = CameraPosition(
-  //   target: LatLng(37.879773062359, -4.778913767228612),
-  //   zoom: 14,
-  // );
   CameraPosition? _position;
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   late final Event eventSelected;
