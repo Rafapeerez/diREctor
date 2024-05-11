@@ -27,14 +27,18 @@ class EventsViewState extends ConsumerState<EventsView> {
     final eventsProv = ref.read(eventProvider.notifier);
     final events = ref.watch(eventsProvider);
     final userState = ref.watch(userProvider);
+    final bool hasFutureEvents = events.any((event) => event.date.isAfter(DateTime.now()));
 
-    return events.isNotEmpty
+    return events.isNotEmpty && hasFutureEvents
         ? Stack(
             children: [
               ListView.builder(
                 itemCount: events.length,
                 itemBuilder: (context, index) {
                   final event = events[index];
+                  if (event.date.isBefore(DateTime.now())) {
+                    return const SizedBox();
+                  }
                   return Column(
                     children: [
                       CustomCard(

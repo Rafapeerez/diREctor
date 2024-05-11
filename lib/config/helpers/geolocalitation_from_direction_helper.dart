@@ -12,7 +12,7 @@ class GeolocalitationFromDirection {
         throw Exception('No se encontraron coordenadas para la dirección proporcionada');
       }
     } catch (e) {
-      rethrow;
+      throw Exception('No se encontraron coordenadas para la dirección proporcionada');
     }
   }
 }

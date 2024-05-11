@@ -1,5 +1,7 @@
 import 'package:director_app_tfg/domain/models/event.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/repositories/event_repository.dart';
+import 'package:director_app_tfg/domain/usecases/event/confirm_attendance_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/delete_event_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/get_all_events_usecacase.dart';
 import 'package:director_app_tfg/domain/usecases/event/save_event_usecase.dart';
@@ -22,19 +24,27 @@ final deleteEventUseCaseProvider = Provider((ref) {
 
 final eventProvider = StateNotifierProvider<EventProvider, Event?>((ref) {
   final saveEventUseCase = SaveEventUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
+  final confirmAttendanceUseCase = ConfirmAttendanceUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
 
-  return EventProvider(saveEventUseCase);
+  return EventProvider(saveEventUseCase, confirmAttendanceUseCase);
 });
 
 class EventProvider extends StateNotifier<Event?> {
   final SaveEventUseCase _saveEventUseCase;
+  final ConfirmAttendanceUseCase _confirmAttendanceUseCase;
 
   EventProvider(
     this._saveEventUseCase,
+    this._confirmAttendanceUseCase,
   ) : super(null);
 
   Future<void> saveEvent(Event event) async {
     await _saveEventUseCase.execute(event);
+    state = event;
+  }
+
+  Future<void> confirmAttendance(Musician musician, Event event) async {
+    await _confirmAttendanceUseCase.execute(musician, event);
     state = event;
   }
 }

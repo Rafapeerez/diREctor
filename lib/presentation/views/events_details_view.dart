@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:director_app_tfg/config/helpers/date_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +75,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
+    final attendanceProv = ref.watch(eventProvider.notifier);
 
     return SingleChildScrollView(
       child: Column(
@@ -115,7 +117,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
                 },
                 markers: _markers,
               ) : const Center(
-                child: CircularProgressIndicator(), // Muestra un indicador de carga mientras _position es null
+                child: CircularProgressIndicator(),
               ),
             ),
 
@@ -152,7 +154,33 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             headerText: "Notas", 
             expandedText: eventSelected.moreInformation
           ),
-          const SizedBox(height: 20)
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: FilledButton(
+                  onPressed: () async {
+                    if (userState.user != null) {
+                      Musician musician = Musician.create(
+                        email: userState.user!.email!, 
+                        name: userState.user!.displayName!,
+                        isAllowed: true, 
+                        isAdmin: userState.isAdmin, 
+                        instrument: userState.instrument
+                      );
+                      await attendanceProv.confirmAttendance(musician, eventSelected);
+                    }
+                  },
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.green),
+                  ),
+                  child: const Text("Asisto"),
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );

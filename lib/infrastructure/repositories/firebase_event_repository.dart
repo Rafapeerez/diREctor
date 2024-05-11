@@ -1,4 +1,5 @@
 import 'package:director_app_tfg/domain/models/event.dart';
+import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/repositories/event_repository.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_event_datasource_impl.dart';
 
@@ -29,5 +30,10 @@ class FirebaseEventRepository extends EventRepository {
   @override
   Future<void> deleteEvent(String eventId) {
     return datasource.deleteEvent(eventId);
+  }
+
+  @override
+  Future<Event> confirmAttendance(Musician musician, Event event) {
+    return datasource.confirmAttendance(musician, event);
   }
 }
