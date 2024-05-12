@@ -1,5 +1,6 @@
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/domain/repositories/march_repository.dart';
+import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_order_by_name_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_order_by_number_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/march/save_march_usecase.dart';
@@ -44,17 +45,21 @@ class MarchProvider extends StateNotifier<March?> {
 final marchsProvider = StateNotifierProvider<MarchsProvider, List<March>>((ref) {
   final getAllMarchsUseCase = GetAllMarchsUseCase(FirebaseMarchRepository(FirebaseMarchDatasource()));
   final getAllMarchsOrderByNumberUseCase = GetAllMarchsOrderByNumberUseCase(FirebaseMarchRepository(FirebaseMarchDatasource()));
+  final getAllMarchsOrderByNameUseCase = GetAllMarchsOrderByNameUseCase(FirebaseMarchRepository(FirebaseMarchDatasource()));
 
-  return MarchsProvider(getAllMarchsUseCase, getAllMarchsOrderByNumberUseCase);
+
+  return MarchsProvider(getAllMarchsUseCase, getAllMarchsOrderByNumberUseCase, getAllMarchsOrderByNameUseCase);
 });
 
 class MarchsProvider extends StateNotifier<List<March>> {
   final GetAllMarchsUseCase _getAllMarchsUseCase;
   final GetAllMarchsOrderByNumberUseCase _getAllMarchsOrderByNumberUseCase;
+  final GetAllMarchsOrderByNameUseCase _getAllMarchsOrderByNameUseCase;
 
   MarchsProvider(
     this._getAllMarchsUseCase,
-    this._getAllMarchsOrderByNumberUseCase
+    this._getAllMarchsOrderByNumberUseCase,
+    this._getAllMarchsOrderByNameUseCase
   ) : super(List.empty());
 
   Future<void> getAllMarchs() async {
@@ -64,6 +69,11 @@ class MarchsProvider extends StateNotifier<List<March>> {
 
   Future<void> getAllMarchsOrderByNumber() async {
     List<March> marchsList = await _getAllMarchsOrderByNumberUseCase.execute();
+    state = marchsList;
+  }
+
+  Future<void> getAllMarchsOrderByName() async {
+    List<March> marchsList = await _getAllMarchsOrderByNameUseCase.execute();
     state = marchsList;
   }
 

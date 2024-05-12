@@ -1,4 +1,3 @@
-
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +28,7 @@ class FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final marchsProv = ref.read(marchsProvider.notifier);
-    
+
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -60,7 +59,7 @@ class FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                   );
                 }).toList(),
                 const SizedBox(height: 16),
-                
+
                 //Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -71,9 +70,12 @@ class FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                     ),
                     const Spacer(flex: 1),
                     FilledButton(
-                      onPressed: ()  async {
-                        if (selectedOption == "Orden Asc Número"){
+                      onPressed: () async {
+                        if (selectedOption == "Orden Asc Número") {
                           await marchsProv.getAllMarchsOrderByNumber();
+                          Navigator.pop(context);
+                        } else {
+                          await marchsProv.getAllMarchsOrderByName();
                           Navigator.pop(context);
                         }
                       },
