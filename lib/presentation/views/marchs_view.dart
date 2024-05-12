@@ -61,7 +61,8 @@ class MarchsViewState extends ConsumerState<MarchsView> {
     final marchs = ref.watch(marchsProvider);
 
     return marchs.isNotEmpty
-        ? Stack(children: [
+        ? Stack(
+          children: [
             ListView.builder(
               itemCount: marchs.length,
               itemBuilder: (context, index) {
@@ -69,9 +70,9 @@ class MarchsViewState extends ConsumerState<MarchsView> {
                 return Column(
                   children: [
                     _CustomMarch(
-                        name: march.name,
-                        letter: GetFirstLetterFromEachWordOfString
-                            .getFirstLetterFromEachWordOfString(march.name)),
+                      march: march,
+                      letter: GetFirstLetterFromEachWordOfString.getFirstLetterFromEachWordOfString(march.name)
+                    ),
                   ],
                 );
               },
@@ -80,18 +81,12 @@ class MarchsViewState extends ConsumerState<MarchsView> {
               CustomElevatedButton(
                 icon: Icons.more_vert,
                 onPressed: () {
-                  final RenderBox button =
-                      context.findRenderObject() as RenderBox;
-                  final Offset buttonPosition =
-                      button.localToGlobal(Offset.zero);
-
-                  final double screenHeight =
-                      MediaQuery.of(context).size.height;
+                  final RenderBox button = context.findRenderObject() as RenderBox;
+                  final Offset buttonPosition = button.localToGlobal(Offset.zero);
+                  final double screenHeight = MediaQuery.of(context).size.height;
                   final double screenWidth = MediaQuery.of(context).size.width;
-
                   final double dx = screenWidth - buttonPosition.dx;
                   final double dy = screenHeight - buttonPosition.dy - 150;
-
                   showMenu(
                     context: context,
                     position: RelativeRect.fromLTRB(dx, dy, 20, 0),
@@ -124,8 +119,10 @@ class MarchsViewState extends ConsumerState<MarchsView> {
                   showFilterBottomSheet();
                 },
               )
-          ])
-        : Stack(children: [
+          ]
+        )
+        : Stack(
+          children: [
             const Center(
               child: Text(
                 "No hay marchas",
@@ -139,20 +136,28 @@ class MarchsViewState extends ConsumerState<MarchsView> {
                   showDialogMethod();
                 },
               )
-          ]);
+          ]
+        );
   }
 }
 
-class _CustomMarch extends StatelessWidget {
-  final String name;
+class _CustomMarch extends ConsumerWidget {
+  final March march;
   final String letter;
 
-  const _CustomMarch({required this.name, required this.letter});
+  const _CustomMarch({
+    required this.march, 
+    required this.letter
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final selectedMarchProv = ref.read(selectedMarchProvider.notifier);
+
     return GestureDetector(
       onTap: () {
+        selectedMarchProv.state = march;
         context.go("/home/2/marchdetails-screen");
       },
       child: Column(
@@ -163,7 +168,7 @@ class _CustomMarch extends StatelessWidget {
                 CircleLetter(letter: letter),
                 const SizedBox(width: 20),
                 Text(
-                  name,
+                  march.name,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 20),
                 ),
@@ -209,55 +214,56 @@ class EventsFormState extends ConsumerState<MarchsForm> {
             //FORM
             // NUMBER
             TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Ingresa el número de la marcha',
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor ingresa el número';
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el número de la marcha',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el número';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                setState(() {
+                  if (value.isNotEmpty) {
+                    _number = int.tryParse(value) ?? _number;
+                  } else {
+                    _number = 0;
                   }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isNotEmpty) {
-                      _number = int.tryParse(value) ?? _number;
-                    } else {
-                      _number = 0;
-                    }
-                  });
-                }),
+                });
+              }
+            ),
             const SizedBox(height: 16),
 
             // NAME
             TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Ingresa el nombre de la marcha',
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor ingresa el nombre';
-                  }
-                  return null;
-                },
-                onChanged: (value) => setState(
-                    () => _name = CapitalizeString().capitalizeString(value))),
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el nombre de la marcha',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el nombre';
+                }
+                return null;
+              },
+              onChanged: (value) => setState(() => _name = CapitalizeString().capitalizeString(value))
+            ),
             const SizedBox(height: 16),
 
             // AUTHOR
             TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Ingresa el autor',
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor ingresa el autor';
-                  }
-                  return null; // Retorna null si el valor es válido
-                },
-                onChanged: (value) => setState(() =>
-                    _author = CapitalizeString().capitalizeString(value))),
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el autor',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el autor';
+                }
+                return null;
+              },
+              onChanged: (value) => setState(() => _author = CapitalizeString().capitalizeString(value))
+            ),
             const SizedBox(height: 16),
 
             //LINK
@@ -270,8 +276,7 @@ class EventsFormState extends ConsumerState<MarchsForm> {
 
             //MORE INFO
             TextFormField(
-              decoration:
-                  const InputDecoration(labelText: 'Añadir nota (opcional)'),
+              decoration: const InputDecoration(labelText: 'Añadir nota (opcional)'),
               onChanged: (value) => setState(() => _moreInfo = value),
             ),
             const SizedBox(height: 16),
@@ -279,10 +284,12 @@ class EventsFormState extends ConsumerState<MarchsForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+
                 //CANCEL BUTTON
                 OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text("Cancelar")),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancelar")
+                ),
                 const Spacer(flex: 1),
 
                 //SUBMIT BUTTON
@@ -290,15 +297,14 @@ class EventsFormState extends ConsumerState<MarchsForm> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       March march = March.create(
-                          name: _name,
-                          author: _author,
-                          number: _number,
-                          link: _link,
-                          moreInformation: _moreInfo);
+                        name: _name,
+                        author: _author,
+                        number: _number,
+                        link: _link,
+                        moreInformation: _moreInfo
+                      );
                       await marchsProv.saveMarch(march);
-                      await ref
-                          .watch(marchsProvider.notifier)
-                          .updateMarchsList(march);
+                      await ref.watch(marchsProvider.notifier).updateMarchsList(march);
                       Navigator.of(context).pop();
                     }
                   },

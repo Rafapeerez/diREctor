@@ -1,25 +1,28 @@
+import 'package:director_app_tfg/domain/models/march.dart';
+import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:director_app_tfg/presentation/widgets/videos/march_videos.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MarchsDetailsView extends StatelessWidget {
+class MarchsDetailsView extends ConsumerWidget {
   const MarchsDetailsView({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    March march = ref.read(selectedMarchProvider.notifier).state;
 
     return ListView(
-        children: const [
-          _CustomTitleSection(title: 'Marcha Real', number: 1),
-          SizedBox(height: 10),
-          CustomExpansionPanel(headerText: 'Autor', expandedText: 'Pacheco'),
-          CustomExpansionPanel(headerText: 'Historia', expandedText: ''),
-          CustomExpansionPanel(headerText: 'Más Información', expandedText: ''),
-          SizedBox(height: 10),
-          MarchVideo(youtubeLink: "https://www.youtube.com/watch?v=4BF20CiOHpg",name: "Marcha Real",)
-        ],
+      children: [
+        _CustomTitleSection(title: march.name, number: march.number),
+        const SizedBox(height: 10),
+        CustomExpansionPanel(headerText: 'Autor', expandedText: march.author),
+        CustomExpansionPanel(headerText: 'Más Información', expandedText: march.moreInformation ?? ""),
+        const SizedBox(height: 10),
+        MarchVideo(youtubeLink: march.link ?? "",name: march.name)
+      ],
     );
   }
 }
