@@ -78,16 +78,24 @@ class MarchsViewState extends ConsumerState<MarchsView> {
               CustomElevatedButton(
                 icon: Icons.more_vert,
                 onPressed: () {
-                  final double bottom = MediaQuery.of(context).size.height;
+                  final RenderBox button = context.findRenderObject() as RenderBox;
+                  final Offset buttonPosition = button.localToGlobal(Offset.zero);
+
+                  final double screenHeight = MediaQuery.of(context).size.height;
+                  final double screenWidth = MediaQuery.of(context).size.width;
+
+                  final double dx = screenWidth - buttonPosition.dx;
+                  final double dy = screenHeight - buttonPosition.dy - 150;
+
                   showMenu(
                     context: context,
-                    position: RelativeRect.fromLTRB(double.infinity, double.infinity, 20, bottom),
+                    position: RelativeRect.fromLTRB(dx, dy, 20, 0),
                     items: const [
-                      PopupMenuItem<String>(
+                      PopupMenuItem(
                         value: 'Añadir',
                         child: Text('Añadir'),
                       ),
-                      PopupMenuItem<String>(
+                      PopupMenuItem(
                         value: 'Filtrar',
                         child: Text('Filtrar'),
                       ),
@@ -98,6 +106,7 @@ class MarchsViewState extends ConsumerState<MarchsView> {
                       if (choice == 'Añadir') {
                         showDialogMethod();
                       } else if (choice == 'Filtrar') {
+                        // Handle 'Filtrar' choice
                       }
                     }
                   });
