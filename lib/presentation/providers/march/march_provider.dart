@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/domain/repositories/march_repository.dart';
-import 'package:director_app_tfg/domain/usecases/march/get_all_events_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_order_by_number_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/march/save_march_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_march_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_march_repository.dart';
@@ -42,17 +43,27 @@ class MarchProvider extends StateNotifier<March?> {
 
 final marchsProvider = StateNotifierProvider<MarchsProvider, List<March>>((ref) {
   final getAllMarchsUseCase = GetAllMarchsUseCase(FirebaseMarchRepository(FirebaseMarchDatasource()));
+  final getAllMarchsOrderByNumberUseCase = GetAllMarchsOrderByNumberUseCase(FirebaseMarchRepository(FirebaseMarchDatasource()));
 
-  return MarchsProvider(getAllMarchsUseCase);
+  return MarchsProvider(getAllMarchsUseCase, getAllMarchsOrderByNumberUseCase);
 });
 
 class MarchsProvider extends StateNotifier<List<March>> {
   final GetAllMarchsUseCase _getAllMarchsUseCase;
+  final GetAllMarchsOrderByNumberUseCase _getAllMarchsOrderByNumberUseCase;
 
-  MarchsProvider(this._getAllMarchsUseCase) : super(List.empty());
+  MarchsProvider(
+    this._getAllMarchsUseCase,
+    this._getAllMarchsOrderByNumberUseCase
+  ) : super(List.empty());
 
   Future<void> getAllMarchs() async {
     List<March> marchsList = await _getAllMarchsUseCase.execute();
+    state = marchsList;
+  }
+
+  Future<void> getAllMarchsOrderByNumber() async {
+    List<March> marchsList = await _getAllMarchsOrderByNumberUseCase.execute();
     state = marchsList;
   }
 

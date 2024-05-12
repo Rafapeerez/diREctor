@@ -4,6 +4,7 @@ class March {
   final String id;
   final String name;
   final String author;
+  final int number;
   final String? link;
   final String? moreInformation;
 
@@ -11,6 +12,7 @@ class March {
     required this.id,
     required this.name,
     required this.author,
+    required this.number,
     this.link,
     this.moreInformation
   });
@@ -19,12 +21,14 @@ class March {
     : id = "",
       name = "",
       author = "",
+      number = 0,
       link = "",
       moreInformation = "";
 
   factory March.create({
     required String name,
     required String author,
+    required int number,
     String? link,
     String? moreInformation
   }){
@@ -33,6 +37,7 @@ class March {
       id: uuid,
       name: name,
       author: author,
+      number: number,
       link: link,
       moreInformation: moreInformation
     );      

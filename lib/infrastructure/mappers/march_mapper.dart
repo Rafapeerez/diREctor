@@ -7,6 +7,7 @@ class MarchMapper {
       id: marchDB.id,
       name: marchDB.name, 
       author: marchDB.author,
+      number: marchDB.number,
       link: marchDB.link,
       moreInformation: marchDB.moreInformation
     );
@@ -17,6 +18,7 @@ class MarchMapper {
       id: march.id, 
       name: march.name, 
       author: march.author,
+      number: march.number,
       link: march.link,
       moreInformation: march.moreInformation
     );

@@ -34,8 +34,7 @@ class FirebaseMarchDatasource implements MarchRepository {
       if (collectionSnapshot.size == 0) {
         await marchCollection.doc(march.id).set(MarchMapper.marchToEntity(march).toMap());
       } else {
-        // Collection exist
-        await marchCollection.doc(marchCollection.id).set(MarchMapper.marchToEntity(march).toMap());
+        await marchCollection.doc(march.id).set(MarchMapper.marchToEntity(march).toMap());
       }
       return march;
     } catch (e) {

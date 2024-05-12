@@ -1,34 +1,35 @@
 
+import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FilterBottomSheet extends StatefulWidget {
+class FilterBottomSheet extends ConsumerStatefulWidget {
+  const FilterBottomSheet({super.key});
+
   @override
   FilterBottomSheetState createState() => FilterBottomSheetState();
 }
 
-class FilterBottomSheetState extends State<FilterBottomSheet> {
+class FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   List<String> filterOptions = ['Orden Asc Número', 'Orden Alfabético'];
-  Map<String, bool> selectedOptions = {};
+  String? selectedOption;
 
   @override
   void initState() {
     super.initState();
-    selectedOptions = filterOptions.asMap().map((key, value) => MapEntry(value, false));
+    selectedOption = filterOptions.first;
   }
 
-  void _toggleOption(String option, bool? value) {
+  void _toggleOption(String option) {
     setState(() {
-      selectedOptions[option] = value ?? false;
-      for (String otherOption in filterOptions) {
-        if (otherOption != option) {
-          selectedOptions[otherOption] = !value!;
-        }
-      }
+      selectedOption = option;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final marchsProv = ref.read(marchsProvider.notifier);
+    
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -49,15 +50,17 @@ class FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 const SizedBox(height: 16),
                 ...filterOptions.map((option) {
-                  return CheckboxListTile(
+                  return RadioListTile<String>(
                     title: Text(option),
-                    value: selectedOptions[option] ?? false,
-                    onChanged: (bool? value) {
-                      _toggleOption(option, value);
+                    value: option,
+                    groupValue: selectedOption,
+                    onChanged: (value) {
+                      _toggleOption(value!);
                     },
                   );
                 }).toList(),
                 const SizedBox(height: 16),
+                
                 //Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -68,7 +71,12 @@ class FilterBottomSheetState extends State<FilterBottomSheet> {
                     ),
                     const Spacer(flex: 1),
                     FilledButton(
-                      onPressed: () {},
+                      onPressed: ()  async {
+                        if (selectedOption == "Orden Asc Número"){
+                          await marchsProv.getAllMarchsOrderByNumber();
+                          Navigator.pop(context);
+                        }
+                      },
                       child: const Text("Aplicar"),
                     )
                   ],

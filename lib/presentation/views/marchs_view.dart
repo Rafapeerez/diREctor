@@ -47,7 +47,7 @@ class MarchsViewState extends ConsumerState<MarchsView> {
         ),
       ),
       builder: (BuildContext context) {
-        return FilterBottomSheet();
+        return const FilterBottomSheet();
       },
     );
   }
@@ -106,7 +106,7 @@ class MarchsViewState extends ConsumerState<MarchsView> {
                       if (choice == 'Añadir') {
                         showDialogMethod();
                       } else if (choice == 'Filtrar') {
-                        // Handle 'Filtrar' choice
+                        showFilterBottomSheet();
                       }
                     }
                   });
@@ -194,6 +194,7 @@ class EventsFormState extends ConsumerState<MarchsForm> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
   String _author = "";
+  int _number = 0;
   String _moreInfo = "";
   String _link = "";
 
@@ -208,6 +209,30 @@ class EventsFormState extends ConsumerState<MarchsForm> {
         child: Column(
           children: [
             //FORM
+            // NUMBER
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el número de la marcha',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el número';
+                }
+                return null;
+              },
+            onChanged: (value) {
+                setState(() {
+                  if (value.isNotEmpty) {
+                    _number = int.tryParse(value) ?? _number;
+                  } else {
+                    _number = 0;
+                  }
+                });
+              }
+            ),
+            const SizedBox(height: 16),
+
             // NAME
             TextFormField(
               decoration: const InputDecoration(
@@ -269,6 +294,7 @@ class EventsFormState extends ConsumerState<MarchsForm> {
                       March march = March.create(
                         name: _name, 
                         author: _author,
+                        number: _number,
                         link: _link,
                         moreInformation: _moreInfo
                       );
