@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class CustomCard extends ConsumerStatefulWidget {
+class CustomEventCard extends ConsumerStatefulWidget {
   final Event event;
-  final String image;
   final bool isAttendingEvent;
   final String route;
 
-  const CustomCard({
+  const CustomEventCard({
     super.key,
     required this.event,
     required this.route,
-    this.image = "",
     this.isAttendingEvent = false,
   });
 
@@ -23,7 +21,7 @@ class CustomCard extends ConsumerStatefulWidget {
   CustomCardState createState() => CustomCardState();
 }
 
-class CustomCardState extends ConsumerState<CustomCard> {
+class CustomCardState extends ConsumerState<CustomEventCard> {
   @override
   Widget build(BuildContext context) {
     final selectedEventProv = ref.read(selectedEventProvider.notifier);
@@ -44,12 +42,10 @@ class CustomCardState extends ConsumerState<CustomCard> {
           borderRadius: BorderRadius.circular(30),
           child: Column(
             children: [
-              widget.image != ""
-                ? Image.asset(widget.image)
-                : Container(
-                  color: Colors.grey.shade700, 
-                  height: 60
-                ),
+              Container(
+                color: Colors.grey.shade700, 
+                height: 60
+              ),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),

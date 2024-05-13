@@ -26,14 +26,14 @@ class Event {
   });
 
   Event.empty()
-        : id = "",
-          type = EventTypeEnum.concierto,
-          date = DateTime.now(),
-          location = "",
-          repertoire = const [ ],
-          duration = Duration.zero,
-          attendance = const [ ],
-          moreInformation = " ";
+    : id = "",
+      type = EventTypeEnum.concierto,
+      date = DateTime.now(),
+      location = "",
+      repertoire = const [ ],
+      duration = Duration.zero,
+      attendance = const [ ],
+      moreInformation = " ";
 
   factory Event.create({
     required EventTypeEnum type,

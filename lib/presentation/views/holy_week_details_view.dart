@@ -1,31 +1,28 @@
 import 'dart:async';
 
 import 'package:director_app_tfg/config/helpers/date_to_string_helper.dart';
+import 'package:director_app_tfg/config/helpers/duration_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
-import 'package:director_app_tfg/domain/models/event.dart';
-import 'package:director_app_tfg/domain/models/musician.dart';
-import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
+import 'package:director_app_tfg/domain/models/holy_week_event.dart';
+import 'package:director_app_tfg/presentation/providers/event/holy_week_event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:director_app_tfg/presentation/providers/user_provider.dart';
-
-class EventsDetailsView extends ConsumerStatefulWidget {
-  const EventsDetailsView({super.key});
+class HolyWeekDetailsView extends ConsumerStatefulWidget {
+  const HolyWeekDetailsView({super.key});
 
   @override
   EventsDetailsViewState createState() => EventsDetailsViewState();
 }
 
-class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
+class EventsDetailsViewState extends ConsumerState<HolyWeekDetailsView> {
   
   CameraPosition? _position;
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
-  late final Event eventSelected;
+  late final HolyWeekEvent? holyWeekEventSelected;
 
   Set<Marker> _markers = {};
   String _errorMessage = "";
@@ -37,15 +34,17 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   }
 
   void _initEventSelected() async {
-    eventSelected = ref.read(selectedEventProvider.notifier).state;
-    LatLng targetLatLng = await GeolocalitationFromDirection().getLatLngFromAddress(eventSelected.location);
+    holyWeekEventSelected = ref.read(selectedHolyWeekEventProvider.notifier).state;
+    LatLng targetLatLng = await GeolocalitationFromDirection().getLatLngFromAddress(holyWeekEventSelected?.location ?? "");
     setState(() {
       _position = CameraPosition(
         target: targetLatLng,
         zoom: 15,
       );
     });
-    _addMarkerFromAddress(eventSelected.location);
+    if (holyWeekEventSelected?.location != "") {
+      _addMarkerFromAddress(holyWeekEventSelected!.location);
+    }
   }
 
   Future<void> _addMarkerFromAddress(String location) async {
@@ -70,9 +69,6 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userProvider);
-    final attendanceProv = ref.watch(eventProvider.notifier);
-
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -82,14 +78,13 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  eventSelected.type.displayName,
+                  holyWeekEventSelected?.name.displayName ?? "Descanso",
                   style: const TextStyle(
                     fontSize: 25,
                   ),
                 ),
                 const Spacer(flex: 1),
-                if (userState.isAdmin) 
-                  _PopUpMenuButton(eventSelected: eventSelected),
+
               ],
             ),
           ),
@@ -125,7 +120,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
               children: [
                 Flexible(
                   child: Text(
-                    eventSelected.location,
+                    holyWeekEventSelected?.location ?? "Descanso",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -141,82 +136,23 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
           CustomExpansionPanel(
             isExpanded: true,
             headerText: "Día y Hora",
-            expandedText: DateToString().dateString(eventSelected.date),
+            expandedText: holyWeekEventSelected?.date != null
+              ? DateToString().dateString(holyWeekEventSelected!.date)
+              : "Descanso"
           ),
-          const CustomExpansionPanel(
-            headerText: "Repertorio",
-            expandedText: "- Marcha Real - Orando al Padre"
+
+          CustomExpansionPanel(
+            headerText: "Duración", 
+            expandedText: DurationToString.durationToString(holyWeekEventSelected?.duration ?? Duration.zero)
           ),
+
           CustomExpansionPanel(
             headerText: "Notas", 
-            expandedText: eventSelected.moreInformation
+            expandedText: holyWeekEventSelected?.moreInformation ?? ""
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: FilledButton(
-                  onPressed: () async {
-                    if (userState.user != null) {
-                      Musician musician = Musician.create(
-                        email: userState.user!.email!, 
-                        name: userState.user!.displayName!,
-                        isAllowed: true, 
-                        isAdmin: userState.isAdmin, 
-                        instrument: userState.instrument
-                      );
-                      await attendanceProv.confirmAttendance(musician, eventSelected);
-                    }
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.green),
-                  ),
-                  child: const Text("Asisto"),
-                ),
-              )
-            ],
-          ),
         ],
       ),
-    );
-  }
-}
-
-class _PopUpMenuButton extends ConsumerWidget {
-
-  final Event eventSelected;
-  
-  const _PopUpMenuButton({
-    required this.eventSelected,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final deleteEventUseCase = ref.watch(deleteEventUseCaseProvider);
-
-    return PopupMenuButton<String>(
-      onSelected: (String choice) async {
-        if (choice == 'Editar') {
-
-        } else if (choice == 'Eliminar') {
-          await deleteEventUseCase.execute(eventSelected.id);
-          await ref.watch(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected.id);
-          context.go("/home/0");
-        }
-      },
-      itemBuilder: (BuildContext context) => const <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
-          value: 'Editar',
-          child: Text('Editar'),
-        ),
-        PopupMenuItem<String>(
-          value: 'Eliminar',
-          child: Text('Eliminar'),
-        ),
-      ],
-      icon: const Icon(Icons.more_vert),
     );
   }
 }

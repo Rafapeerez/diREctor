@@ -3,7 +3,7 @@ import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_card.dart';
+import 'package:director_app_tfg/presentation/widgets/custom_event_card.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +41,7 @@ class EventsViewState extends ConsumerState<EventsView> {
                   }
                   return Column(
                     children: [
-                      CustomCard(
+                      CustomEventCard(
                         event: event,
                         isAttendingEvent: true,
                         route: '/home/0/eventsdetails-screen'

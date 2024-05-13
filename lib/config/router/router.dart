@@ -35,6 +35,11 @@ final appRouter = GoRouter(
           builder: (BuildContext context, GoRouterState state) => const EventsDetailsScreen(),
         ),
         GoRoute(
+          path: "holyweekdetails-screen",
+          name: HolyWeekDetailsScreen.name,
+          builder: (BuildContext context, GoRouterState state) => const HolyWeekDetailsScreen(),
+        ),
+        GoRoute(
           path: 'marchdetails-screen',
           name: MarchDetailsScreen.name,
           builder: (BuildContext context, GoRouterState state) => const MarchDetailsScreen(),

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomExpansionPanel extends StatefulWidget {
   final String headerText;
   final String expandedText;
+  final bool isExpanded;
 
   const CustomExpansionPanel({
     super.key,
     required this.headerText,
     required this.expandedText,
+    this.isExpanded = false
   });
 
   @override
@@ -16,7 +18,13 @@ class CustomExpansionPanel extends StatefulWidget {
 
 class _CustomExpansionPanelState extends State<CustomExpansionPanel> {
 
-  bool _isExpanded = false;
+  late bool _isExpanded;
+
+  @override
+  void initState() {
+    super.initState();
+    _isExpanded = widget.isExpanded;
+  }
 
   void toggleExapanded() {
     setState(() {
