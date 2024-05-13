@@ -18,14 +18,11 @@ class MarchsView extends ConsumerStatefulWidget {
 }
 
 class MarchsViewState extends ConsumerState<MarchsView> {
+
   @override
   void initState() {
     super.initState();
-    if (ref.read(marchsProvider.notifier).state == null) {
-      ref.read(marchsProvider.notifier).getAllMarchs();
-    } else {
-      ref.read(marchsProvider.notifier).state;
-    }
+    ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
   }
 
   void showDialogMethod() {

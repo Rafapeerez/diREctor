@@ -10,7 +10,7 @@ class FilterBottomSheet extends ConsumerStatefulWidget {
 }
 
 class FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
-  List<String> filterOptions = ['Orden Asc Número', 'Orden Alfabético'];
+  List<String> filterOptions = ['Orden Alfabético', 'Orden Asc Número'];
   String? selectedOption;
 
   @override
