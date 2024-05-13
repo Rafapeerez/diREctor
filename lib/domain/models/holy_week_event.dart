@@ -13,16 +13,16 @@ class HolyWeekEvent extends Event {
     required super.date, 
     required super.location,
     super.duration = Duration.zero,
-    super.moreInformation = " "
+    super.moreInformation = ""
   });
 
   HolyWeekEvent.empty()
     : name = HolyWeekNameEnum.juevesPasion,
       super(
-        id: '',
+        id: "",
         type: EventTypeEnum.salidaProcesional,
         date: DateTime.now(),
-        location: '',
+        location: "",
       );
 
   factory HolyWeekEvent.create({
@@ -30,7 +30,7 @@ class HolyWeekEvent extends Event {
     required DateTime date,
     required String location,
     Duration duration = Duration.zero,
-    String moreInformation = " "
+    String moreInformation = ""
   }) {
     final uuid = const Uuid().v4();
     return HolyWeekEvent(

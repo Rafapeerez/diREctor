@@ -4,12 +4,14 @@ class CustomExpansionPanel extends StatefulWidget {
   final String headerText;
   final String expandedText;
   final bool isExpanded;
+  final bool isImportant;
 
   const CustomExpansionPanel({
     super.key,
     required this.headerText,
     required this.expandedText,
-    this.isExpanded = false
+    this.isExpanded = false,
+    this.isImportant = false
   });
 
   @override
@@ -19,11 +21,13 @@ class CustomExpansionPanel extends StatefulWidget {
 class _CustomExpansionPanelState extends State<CustomExpansionPanel> {
 
   late bool _isExpanded;
+  bool isImportant = false;
 
   @override
   void initState() {
     super.initState();
     _isExpanded = widget.isExpanded;
+    isImportant = widget.isImportant;
   }
 
   void toggleExapanded() {
@@ -34,6 +38,8 @@ class _CustomExpansionPanelState extends State<CustomExpansionPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return SingleChildScrollView(
       child: GestureDetector(
         onTap: () => toggleExapanded(),
@@ -50,12 +56,23 @@ class _CustomExpansionPanelState extends State<CustomExpansionPanel> {
                 ExpansionPanel(
                   headerBuilder: (context, isExpanded) {
                     return Padding(
-                      padding:  const EdgeInsets.fromLTRB(8, 4, 8, 2), 
-                      child: Text(
-                        widget.headerText,
-                        style: const TextStyle(
-                          fontSize: 25,
-                        ),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 2), 
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.headerText,
+                            style: const TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          const Spacer(),
+                          isImportant
+                          ? Icon(
+                              Icons.circle_notifications,
+                              color: colors.primary,
+                            )
+                          : const SizedBox()
+                        ],
                       ),
                     );
                   }, 

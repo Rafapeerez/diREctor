@@ -148,7 +148,8 @@ class EventsDetailsViewState extends ConsumerState<HolyWeekDetailsView> {
 
           CustomExpansionPanel(
             headerText: "Notas", 
-            expandedText: holyWeekEventSelected?.moreInformation ?? ""
+            expandedText: holyWeekEventSelected?.moreInformation ?? "",
+            isImportant: holyWeekEventSelected?.moreInformation != "" ?? true,
           ),
           const SizedBox(height: 10),
         ],
