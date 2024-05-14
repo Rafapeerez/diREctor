@@ -1,3 +1,4 @@
+import 'package:director_app_tfg/api/firebase_api.dart';
 import 'package:director_app_tfg/config/theme/theme.dart';
 import 'package:director_app_tfg/firebase_options.dart';
 import 'package:director_app_tfg/presentation/providers/theme_provider.dart';
@@ -13,6 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
   runApp(const ProviderScope(child: MainApp()));
 }
 
@@ -21,14 +23,13 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final AppTheme appTheme = ref.watch(themeNotifierProvider);
 
     return MaterialApp.router(
       title: 'Flutter Widgets',
       debugShowCheckedModeBanner: false,
       theme: appTheme.getTheme(),
-      routerConfig: appRouter,
+      routerConfig: appRouter
     );
   }
 }

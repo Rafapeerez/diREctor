@@ -3,8 +3,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../presentation/screens/screens.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 final appRouter = GoRouter(
   initialLocation: '/', 
+  navigatorKey: navigatorKey,
   routes: [
     GoRoute(
       path: '/',
