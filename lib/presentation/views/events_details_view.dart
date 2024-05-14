@@ -7,6 +7,7 @@ import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -72,6 +73,11 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
     final attendanceProv = ref.watch(eventProvider.notifier);
+    
+    if (userState.user!.email != null) {
+      ref.watch(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, eventSelected.id);
+    }
+    bool hasConfirmedAttendance = ref.watch(hasConfirmedAttendanceProv);
 
     return SingleChildScrollView(
       child: Column(
@@ -152,32 +158,50 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             expandedText: eventSelected.moreInformation
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: FilledButton(
-                  onPressed: () async {
-                    if (userState.user != null) {
-                      Musician musician = Musician.create(
-                        email: userState.user!.email!, 
-                        name: userState.user!.displayName!,
-                        isAllowed: true, 
-                        isAdmin: userState.isAdmin, 
-                        instrument: userState.instrument
-                      );
-                      await attendanceProv.confirmAttendance(musician, eventSelected);
-                    }
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.green),
-                  ),
-                  child: const Text("Asisto"),
+
+          !hasConfirmedAttendance 
+            ? Padding(
+              padding: const EdgeInsets.all(10),
+              child: FilledButton(
+                onPressed: () async {
+                  if (userState.user != null) {
+                    Musician musician = Musician.create(
+                      email: userState.user!.email!, 
+                      name: userState.user!.displayName!,
+                      isAllowed: true, 
+                      isAdmin: userState.isAdmin, 
+                      instrument: userState.instrument
+                    );
+                    await attendanceProv.confirmAttendance(musician, eventSelected);
+                    await ref.watch(hasConfirmedAttendanceProv.notifier).updateAttendance(true);
+                  }
+                },
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.green),
                 ),
-              )
-            ],
-          ),
+                child: const Text("Asisto"),
+              ),
+            )
+            : const Padding(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Su confirmación ha sido registrada con éxito. Para cancelar hable con el director.",
+                      maxLines: 2,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.green
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

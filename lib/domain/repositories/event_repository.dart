@@ -13,4 +13,6 @@ abstract class EventRepository {
   Future<void> deleteEvent(String eventId);
 
   Future<Event> confirmAttendance(Musician musician, Event event);
+
+  Future<bool> hasConfirmed(String email, String eventId);
 }

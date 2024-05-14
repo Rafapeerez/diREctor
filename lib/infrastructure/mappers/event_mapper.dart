@@ -1,18 +1,11 @@
 import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
-import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/infrastructure/entities/event_db.dart';
-import 'package:director_app_tfg/infrastructure/entities/musician_db.dart';
-import 'package:director_app_tfg/infrastructure/mappers/musician_mapper.dart';
 
 class EventMapper {
   static Event eventToDomain(EventDB eventDB) {
-    List<Musician> attendance = [];
-    if (eventDB.attendance != null) {
-      attendance = eventDB.attendance!.map(
-        (musicianDB) => MusicianMapper.musicianToDomain(musicianDB)
-      ).toList();
-    }
+    List<String> attendance = [];
+    attendance = eventDB.attendance.map((item) => item.toString()).toList();
 
     EventTypeEnum type;
     if (eventDB.type == "Concierto") {
@@ -34,9 +27,7 @@ class EventMapper {
   } 
 
   static EventDB eventToEntity(Event event){
-    List<MusicianDB> attendance = event.attendance.map(
-      (musician) => MusicianMapper.musicianToEntity(musician)
-    ).toList();
+    List<dynamic> attendance = event.attendance.toList();
     
     return EventDB(
       id: event.id, 

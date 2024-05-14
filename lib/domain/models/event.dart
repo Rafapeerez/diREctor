@@ -1,7 +1,6 @@
 
 import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
-import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:uuid/uuid.dart';
 
 class Event {
@@ -11,7 +10,7 @@ class Event {
   final String location;
   final List<March> repertoire;
   final Duration duration;
-  final List<Musician> attendance;
+  final List<String> attendance;
   final String moreInformation;
 
   Event({
@@ -41,7 +40,7 @@ class Event {
     required String location,
     List<March> repertoire = const [ ],
     Duration duration = Duration.zero,
-    List<Musician> attendance = const [ ],
+    List<String> attendance = const [ ],
     String moreInformation = " "
   }) {
     final uuid = const Uuid().v4();

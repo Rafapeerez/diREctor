@@ -4,7 +4,6 @@ import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/repositories/event_repository.dart';
 import 'package:director_app_tfg/infrastructure/entities/event_db.dart';
 import 'package:director_app_tfg/infrastructure/mappers/event_mapper.dart';
-import 'package:director_app_tfg/infrastructure/mappers/musician_mapper.dart';
 
 class FirebaseEventDatasource implements EventRepository {
   @override
@@ -71,31 +70,47 @@ class FirebaseEventDatasource implements EventRepository {
       }
     }
   }
-  
-      // try {
-    //   final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
-    //   final query = eventsCollection.doc(event.id);
-    //   EventDB eventDB = EventMapper.eventToEntity(event);
-
-    //   eventDB.attendance!.add(MusicianMapper.musicianToEntity(musician));
-    //   Event eventUpdated = EventMapper.eventToDomain(eventDB);
-    //   print(eventUpdated.attendance[0].email + eventUpdated.attendance[0].name + eventUpdated.attendance[0].instrument + eventUpdated.attendance[0].phoneNumber);
-    //   await query.set(EventMapper.eventToEntity(eventUpdated).toMap(), SetOptions(merge: true));
-
-    //   return event;
-    // } catch (e) {
-    //   throw Exception('Error al confirmar la asistencia: $e');
-    // }
 
   @override
-  Future<Event> confirmAttendance(Musician musician, Event event) async {
+  Future<Event> confirmAttendance(Musician musician, Event event) async {    
     try {
-      final DocumentReference docRef = FirebaseFirestore.instance.collection('coleccion').doc(event.id);
-      await docRef.update({"attendance": MusicianMapper.musicianToEntity(musician)});
+      DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(event.id);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(eventRef);
+        if (snapshot.data() != null && snapshot.data() is Map<String, dynamic>) {
+          Map<String, dynamic> eventData = (snapshot.data()! as Map<String, dynamic>);
+          List<dynamic> attendanceList = eventData['attendance'];
+          attendanceList.add(musician.email); 
+          transaction.update(eventRef, {'attendance': attendanceList});
+        }
+      });
+
       return event;
     } catch (e) {
-      print('Error al actualizar el campo: $e');
-      throw Exception('Error al confirmar la asistencia');
+      return Event.empty();
+    }
+  }
+  
+
+  @override
+  Future<bool> hasConfirmed(String email, String eventId) async {
+    try {
+      DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(eventId);
+      DocumentSnapshot snapshot = await eventRef.get();
+      if (snapshot.exists) {
+        Map<String, dynamic>? eventData = snapshot.data() as Map<String, dynamic>?;
+        if (eventData != null && eventData.containsKey('attendance')) {
+          List<dynamic> attendanceList = eventData['attendance'];
+
+          bool isConfirmed = attendanceList.contains(email);
+
+          return isConfirmed;
+        } 
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 

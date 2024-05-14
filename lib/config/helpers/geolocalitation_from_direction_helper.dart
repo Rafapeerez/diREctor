@@ -8,7 +8,8 @@ class GeolocalitationFromDirection {
     if (locations.isNotEmpty) {
       return LatLng(locations[0].latitude, locations[0].longitude);
     } else {
-      throw Exception('No se encontraron coordenadas para la dirección proporcionada');
+      return const LatLng(0, 0);
+      // throw Exception('No se encontraron coordenadas para la dirección proporcionada');
     }
   }
 }

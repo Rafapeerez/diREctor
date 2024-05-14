@@ -4,6 +4,7 @@ import 'package:director_app_tfg/domain/repositories/event_repository.dart';
 import 'package:director_app_tfg/domain/usecases/event/confirm_attendance_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/delete_event_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/get_all_events_usecacase.dart';
+import 'package:director_app_tfg/domain/usecases/event/get_attendance_from_event_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/save_event_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_event_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_event_repository.dart';
@@ -84,5 +85,29 @@ class EventsProvider extends StateNotifier<List<Event>> {
   }
 }
 
+// ATTENDANCE
 
+final hasConfirmedAttendanceProv = StateNotifierProvider<AttendanceProvider, bool>((ref){
+  final getAttendanceFromEventUseCase = GetAttendanceFromEventUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
+  
+  return AttendanceProvider(getAttendanceFromEventUseCase);
+});
+
+class AttendanceProvider extends StateNotifier<bool>{
+  
+  final GetAttendanceFromEventUseCase _getAttendanceFromEventUseCase;
+
+  AttendanceProvider(this._getAttendanceFromEventUseCase) : super(false);
+
+  Future<bool>? hasConfirmed(String email, String eventId) async {
+    bool hasConfirmed = await _getAttendanceFromEventUseCase.execute(email, eventId);
+    state = hasConfirmed;
+    return hasConfirmed;
+  }
+
+  Future<void> updateAttendance (bool hasConfirmed) async {
+    state = hasConfirmed;
+  }
+
+}
 

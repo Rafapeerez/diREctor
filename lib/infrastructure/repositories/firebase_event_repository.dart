@@ -36,4 +36,9 @@ class FirebaseEventRepository extends EventRepository {
   Future<Event> confirmAttendance(Musician musician, Event event) {
     return datasource.confirmAttendance(musician, event);
   }
+
+  @override
+  Future<bool> hasConfirmed(String email, String eventId) {
+    return datasource.hasConfirmed(email, eventId);
+  }
 }
