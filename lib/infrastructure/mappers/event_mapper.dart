@@ -4,9 +4,9 @@ import 'package:director_app_tfg/infrastructure/entities/event_db.dart';
 
 class EventMapper {
   static Event eventToDomain(EventDB eventDB) {
-    List<String> attendance = [];
-    attendance = eventDB.attendance.map((item) => item.toString()).toList();
-
+    List<String> attendance = eventDB.attendance.map((musician) => musician.toString()).toList(); 
+    List<String> repertoire = eventDB.repertoire.map((march) => march.toString()).toList();
+    
     EventTypeEnum type;
     if (eventDB.type == "Concierto") {
       type = EventTypeEnum.concierto;
@@ -19,7 +19,7 @@ class EventMapper {
       type: type, 
       date: eventDB.date, 
       location: eventDB.location,
-      repertoire: eventDB.repertoire ?? [],
+      repertoire: repertoire,
       duration: Duration( hours: eventDB.duration ),
       attendance: attendance,
       moreInformation: eventDB.moreInformation

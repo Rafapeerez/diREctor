@@ -1,6 +1,5 @@
 
 import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
-import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:uuid/uuid.dart';
 
 class Event {
@@ -8,7 +7,7 @@ class Event {
   final EventTypeEnum type;
   final DateTime date;
   final String location;
-  final List<March> repertoire;
+  final List<String> repertoire;
   final Duration duration;
   final List<String> attendance;
   final String moreInformation;
@@ -38,7 +37,7 @@ class Event {
     required EventTypeEnum type,
     required DateTime date,
     required String location,
-    List<March> repertoire = const [ ],
+    List<String> repertoire = const [ ],
     Duration duration = Duration.zero,
     List<String> attendance = const [ ],
     String moreInformation = " "

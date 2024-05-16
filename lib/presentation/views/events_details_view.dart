@@ -6,6 +6,7 @@ import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
+import 'package:director_app_tfg/presentation/widgets/custom_expansion_repertoire.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -148,10 +149,11 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             headerText: "Día y Hora",
             expandedText: DateToString().dateString(eventSelected.date),
           ),
-          const CustomExpansionPanel(
+
+          const CustomExpansionRepertoire(
             headerText: "Repertorio",
-            expandedText: "- Marcha Real - Orando al Padre"
           ),
+
           CustomExpansionPanel(
             headerText: "Notas", 
             expandedText: eventSelected.moreInformation

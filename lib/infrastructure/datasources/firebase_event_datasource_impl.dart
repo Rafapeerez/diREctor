@@ -27,12 +27,6 @@ class FirebaseEventDatasource implements EventRepository {
   }
 
   @override
-  Future<Event> getEventById(String id) {
-    // TODO: implement getEventById
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Event> saveEvent(Event event) async {
     final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
 
@@ -51,12 +45,6 @@ class FirebaseEventDatasource implements EventRepository {
     }
   }
 
-  @override
-  Future<Event> updateEvent(Event event) {
-    // TODO: implement updateEvent
-    throw UnimplementedError();
-  }
-  
   @override
   Future<void> deleteEvent(String eventId) async {
     final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
@@ -111,6 +99,25 @@ class FirebaseEventDatasource implements EventRepository {
       return false;
     } catch (e) {
       return false;
+    }
+  }
+  
+  @override
+  Future<Event> updateRepertoire(List<String> repertoire, Event event) async {
+    try {
+      DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(event.id);
+
+    await eventRef.update({
+      'repertoire': FieldValue.arrayUnion(repertoire) 
+    });
+
+      DocumentSnapshot snapshot = await eventRef.get();
+      Event updatedEvent = EventMapper.eventToDomain(EventDB.fromSnapshot(snapshot));
+
+      return updatedEvent;
+
+    } catch (e) {
+      return Event.empty();
     }
   }
 

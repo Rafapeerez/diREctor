@@ -13,18 +13,8 @@ class FirebaseEventRepository extends EventRepository {
   }
 
   @override
-  Future<Event> getEventById(String id) {
-    return datasource.getEventById(id);
-  }
-
-  @override
   Future<Event> saveEvent(Event event) {
     return datasource.saveEvent(event);
-  }
-
-  @override
-  Future<Event> updateEvent(Event event) {
-    return datasource.updateEvent(event);
   }
 
   @override
@@ -40,5 +30,10 @@ class FirebaseEventRepository extends EventRepository {
   @override
   Future<bool> hasConfirmed(String email, String eventId) {
     return datasource.hasConfirmed(email, eventId);
+  }
+
+  @override
+  Future<Event> updateRepertoire(List<String> repertoire, Event event) {
+    return datasource.updateRepertoire(repertoire, event);
   }
 }

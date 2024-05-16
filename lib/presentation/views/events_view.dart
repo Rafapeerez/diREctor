@@ -11,22 +11,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class EventsView extends ConsumerStatefulWidget {
   const EventsView({super.key});
 
-  // final GlobalKey<EventsViewState> viewKey;
-
   @override
   EventsViewState createState() => EventsViewState();
 }
 
 class EventsViewState extends ConsumerState<EventsView> {
+
+  final Map<String, bool> _hasConfirmedMap = {};
   @override
   void initState() {
     super.initState();
     _checkAndLoadEvents();
   }
 
-  void _checkAndLoadEvents() {
+  void _checkAndLoadEvents() async {
     final eventsNotifier = ref.read(eventsProvider.notifier);
-    if (eventsNotifier.state.isEmpty) {
+    final events = ref.read(eventsProvider);
+    final userState = ref.read(userProvider);
+
+    for (final event in events) {
+      final bool hasConfirmed = await ref.read(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, event.id);
+      setState(() {
+        _hasConfirmedMap[event.id] = hasConfirmed;
+      });
+    }
+  
+    if (events.isEmpty) {
       eventsNotifier.getAllEvents();
     }
   }
@@ -43,8 +53,10 @@ class EventsViewState extends ConsumerState<EventsView> {
             children: [
               ListView.builder(
                 itemCount: events.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (context, index)  {
                   final event = events[index];
+                  final bool hasConfirmed = _hasConfirmedMap[event.id] ?? false;
+
                   if (event.date.isBefore(DateTime.now())) {
                     return const SizedBox();
                   }
@@ -52,6 +64,7 @@ class EventsViewState extends ConsumerState<EventsView> {
                     children: [
                       CustomEventCard(
                         event: event,
+                        hasConfirmed: hasConfirmed,
                         isAttendingEvent: true,
                         route: '/home/0/eventsdetails-screen'
                       )
@@ -248,17 +261,16 @@ class EventsFormState extends ConsumerState<EventsForm> {
             ),
             const SizedBox(height: 16),
 
+            //SUBMIT AND CANCEL BUTTONS
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                //CANCEL BUTTON
                 OutlinedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text("Cancelar")
                 ),
                 const Spacer(flex: 1),
 
-                //SUBMIT BUTTON
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {

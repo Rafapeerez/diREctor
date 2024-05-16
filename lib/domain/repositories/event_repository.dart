@@ -6,13 +6,11 @@ abstract class EventRepository {
 
   Future<List<Event>> getAllEvents();
 
-  Future<Event> getEventById(String id);
-
-  Future<Event> updateEvent(Event event);
-
   Future<void> deleteEvent(String eventId);
 
   Future<Event> confirmAttendance(Musician musician, Event event);
 
   Future<bool> hasConfirmed(String email, String eventId);
+
+  Future<Event> updateRepertoire(List<String> repertoire, Event event);
 }

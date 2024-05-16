@@ -1,6 +1,5 @@
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
-import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,11 +7,13 @@ import 'package:go_router/go_router.dart';
 class CustomEventCard extends ConsumerStatefulWidget {
   final Event event;
   final bool isAttendingEvent;
+  final bool hasConfirmed;
   final String route;
 
   const CustomEventCard({
     super.key,
     required this.event,
+    required this.hasConfirmed,
     required this.route,
     this.isAttendingEvent = false,
   });
@@ -24,10 +25,7 @@ class CustomEventCard extends ConsumerStatefulWidget {
 class CustomCardState extends ConsumerState<CustomEventCard> {
   @override
   Widget build(BuildContext context) {
-    final selectedEventProv = ref.read(selectedEventProvider.notifier);
-    final userState = ref.watch(userProvider);
-    ref.watch(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, widget.event.id);
-    bool hasConfirmed = ref.watch(hasConfirmedAttendanceProv);
+    final selectedEventProv = ref.watch(selectedEventProvider.notifier);
     final colors = Theme.of(context).colorScheme;
 
     return InkWell(
@@ -70,7 +68,7 @@ class CustomCardState extends ConsumerState<CustomEventCard> {
                       ),
                     ),
                     widget.isAttendingEvent
-                      ? hasConfirmed
+                      ? widget.hasConfirmed
                         ? const _DecitionAttendingButton(
                             backgroundColor: Colors.green,
                             text: "Asisto",

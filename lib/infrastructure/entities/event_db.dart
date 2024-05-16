@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:director_app_tfg/domain/models/march.dart';
 
 class EventDB {
   final String id;
   final String type;
   final DateTime date;
   final String location;
-  final List<March>? repertoire;
+  final List<dynamic> repertoire;
   final int duration;
   final List<dynamic> attendance;
   final String moreInformation;
@@ -16,7 +15,7 @@ class EventDB {
     required this.type,
     required this.date,
     required this.location,
-    this.repertoire,
+    this.repertoire = const [],
     this.duration = 0,
     this.attendance = const [],
     this.moreInformation = " "
@@ -28,7 +27,7 @@ class EventDB {
       'type': type,
       'date': date,
       'location': location,
-      'repetoire': repertoire,
+      'repertoire': repertoire,
       'duration': duration,
       'attendance': attendance,
       'moreInformation': moreInformation
@@ -51,6 +50,25 @@ class EventDB {
       duration: map['duration'],
       attendance: map['attendance'],
       moreInformation: map['moreInformation']
+    );
+  }
+
+  factory EventDB.fromSnapshot(DocumentSnapshot snapshot) {
+    Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+    if (data == null) {
+      throw Exception('Data from snapshot is null');
+    }
+
+    return EventDB(
+      id: snapshot.id,
+      type: data['type'] ?? '',
+      date: (data['date'] as Timestamp).toDate(),
+      location: data['location'] ?? '',
+      repertoire: List<dynamic>.from(data['repertoire'] ?? []),
+      duration: data['duration'] ?? 0,
+      attendance: List<dynamic>.from(data['attendance'] ?? []),
+      moreInformation: data['moreInformation'] ?? '',
     );
   }
 }

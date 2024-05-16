@@ -26,8 +26,9 @@ class MarchsViewState extends ConsumerState<MarchsView> {
   }
 
   void _checkAndLoadEvents() {
+    final marchs = ref.read(marchsProvider);
     final marchsNotifier = ref.read(marchsProvider.notifier);
-    if (marchsNotifier.state.isEmpty) {
+    if (marchs.isEmpty) {
       marchsNotifier.getAllMarchsOrderByName();
     }
   }

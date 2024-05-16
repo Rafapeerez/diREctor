@@ -6,6 +6,7 @@ import 'package:director_app_tfg/domain/usecases/event/delete_event_usecase.dart
 import 'package:director_app_tfg/domain/usecases/event/get_all_events_usecacase.dart';
 import 'package:director_app_tfg/domain/usecases/event/get_attendance_from_event_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/event/save_event_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/event/update_repertoire_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_event_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_event_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,17 +27,20 @@ final deleteEventUseCaseProvider = Provider((ref) {
 final eventProvider = StateNotifierProvider<EventProvider, Event?>((ref) {
   final saveEventUseCase = SaveEventUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
   final confirmAttendanceUseCase = ConfirmAttendanceUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
+  final updateRepertoireUseCase = UpdateRepertoireUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
 
-  return EventProvider(saveEventUseCase, confirmAttendanceUseCase);
+  return EventProvider(saveEventUseCase, confirmAttendanceUseCase, updateRepertoireUseCase);
 });
 
 class EventProvider extends StateNotifier<Event?> {
   final SaveEventUseCase _saveEventUseCase;
   final ConfirmAttendanceUseCase _confirmAttendanceUseCase;
+  final UpdateRepertoireUseCase _updateRepertoireUseCase;
 
   EventProvider(
     this._saveEventUseCase,
     this._confirmAttendanceUseCase,
+    this._updateRepertoireUseCase
   ) : super(null);
 
   Future<void> saveEvent(Event event) async {
@@ -47,6 +51,10 @@ class EventProvider extends StateNotifier<Event?> {
   Future<void> confirmAttendance(Musician musician, Event event) async {
     await _confirmAttendanceUseCase.execute(musician, event);
     state = event;
+  }
+
+  Future<Event> updateRepertoire(List<String> repertoire, Event event) async {
+    return await _updateRepertoireUseCase.execute(repertoire, event);
   }
 }
 
@@ -99,7 +107,7 @@ class AttendanceProvider extends StateNotifier<bool>{
 
   AttendanceProvider(this._getAttendanceFromEventUseCase) : super(false);
 
-  Future<bool>? hasConfirmed(String email, String eventId) async {
+  Future<bool> hasConfirmed(String email, String eventId) async {
     bool hasConfirmed = await _getAttendanceFromEventUseCase.execute(email, eventId);
     state = hasConfirmed;
     return hasConfirmed;
