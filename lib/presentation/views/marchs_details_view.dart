@@ -44,8 +44,14 @@ class _CustomTitleSection extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            Text(title, style: const TextStyle(fontSize: 25)),
-            const Spacer(),
+            Expanded(
+              child: Text(
+                title, 
+                overflow: TextOverflow.clip,
+                style: const TextStyle(fontSize: 25)
+              ),
+            ),
+            const SizedBox(width: 20),
             Text(
               "Nº $number",
               style: const TextStyle(fontSize: 25),

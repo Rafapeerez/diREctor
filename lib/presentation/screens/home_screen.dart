@@ -14,7 +14,6 @@ class HomeScreen extends StatelessWidget {
     required this.pageIndex
   });
 
-
   final viewRoutes = const <Widget>[
     EventsView(), // <----- 0
     HolyWeekView(),
@@ -23,6 +22,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return CustomScaffold(
       body: IndexedStack( // <---- Save screens slides status
         index: pageIndex,

@@ -22,7 +22,14 @@ class MarchsViewState extends ConsumerState<MarchsView> {
   @override
   void initState() {
     super.initState();
-    ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
+    _checkAndLoadEvents();
+  }
+
+  void _checkAndLoadEvents() {
+    final marchsNotifier = ref.read(marchsProvider.notifier);
+    if (marchsNotifier.state.isEmpty) {
+      marchsNotifier.getAllMarchsOrderByName();
+    }
   }
 
   void showDialogMethod() {
@@ -164,12 +171,14 @@ class _CustomMarch extends ConsumerWidget {
               children: [
                 CircleLetter(letter: letter),
                 const SizedBox(width: 20),
-                Text(
-                  march.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 20),
+                Expanded(
+                  child: Text(
+                    march.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 20),
+                  ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 20),
                 const Icon(
                   Icons.arrow_forward_outlined,
                   size: 30,

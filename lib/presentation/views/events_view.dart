@@ -11,6 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class EventsView extends ConsumerStatefulWidget {
   const EventsView({super.key});
 
+  // final GlobalKey<EventsViewState> viewKey;
+
   @override
   EventsViewState createState() => EventsViewState();
 }
@@ -19,7 +21,14 @@ class EventsViewState extends ConsumerState<EventsView> {
   @override
   void initState() {
     super.initState();
-    ref.read(eventsProvider.notifier).getAllEvents();
+    _checkAndLoadEvents();
+  }
+
+  void _checkAndLoadEvents() {
+    final eventsNotifier = ref.read(eventsProvider.notifier);
+    if (eventsNotifier.state.isEmpty) {
+      eventsNotifier.getAllEvents();
+    }
   }
 
   @override
