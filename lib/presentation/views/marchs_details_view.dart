@@ -21,7 +21,7 @@ class MarchsDetailsView extends ConsumerWidget {
         CustomExpansionPanel(headerText: 'Autor', expandedText: march.author),
         CustomExpansionPanel(headerText: 'Más Información', expandedText: march.moreInformation ?? ""),
         const SizedBox(height: 10),
-        MarchVideo(youtubeLink: march.link ?? "",name: march.name)
+        MarchVideo(youtubeLink: march.link ?? "", name: march.name)
       ],
     );
   }
