@@ -26,7 +26,8 @@ class CustomCardState extends ConsumerState<CustomEventCard> {
   Widget build(BuildContext context) {
     final selectedEventProv = ref.read(selectedEventProvider.notifier);
     final userState = ref.watch(userProvider);
-    final hasUserVote = selectedEventProv.state.attendance.contains(userState.user);
+    ref.watch(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, widget.event.id);
+    bool hasConfirmed = ref.watch(hasConfirmedAttendanceProv);
     final colors = Theme.of(context).colorScheme;
 
     return InkWell(
@@ -69,17 +70,17 @@ class CustomCardState extends ConsumerState<CustomEventCard> {
                       ),
                     ),
                     widget.isAttendingEvent
-                      ? hasUserVote
-                          ? const _DecitionAttendingButton(
-                              backgroundColor: Colors.green,
-                              text: "Asisto",
-                              textColor: Colors.black,
-                            )
-                          : _DecitionAttendingButton(
-                              backgroundColor: colors.primary,
-                              text: "Vota asistencia...",
-                              textColor: Colors.white,
-                            )
+                      ? hasConfirmed
+                        ? const _DecitionAttendingButton(
+                            backgroundColor: Colors.green,
+                            text: "Asisto",
+                            textColor: Colors.black,
+                          )
+                        : _DecitionAttendingButton(
+                            backgroundColor: colors.primary,
+                            text: "Vota asistencia...",
+                            textColor: Colors.white,
+                          )
                       : const SizedBox(height: 5)
                   ],
                 ),
