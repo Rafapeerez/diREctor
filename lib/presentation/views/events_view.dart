@@ -16,28 +16,30 @@ class EventsView extends ConsumerStatefulWidget {
 }
 
 class EventsViewState extends ConsumerState<EventsView> {
-
   final Map<String, bool> _hasConfirmedMap = {};
+  List<Event> _events = [];
+
   @override
   void initState() {
     super.initState();
-    _checkAndLoadEvents();
+    _loadEvents();
   }
 
-  void _checkAndLoadEvents() async {
+  Future<void> _loadEvents() async {
     final eventsNotifier = ref.read(eventsProvider.notifier);
-    final events = ref.read(eventsProvider);
+    await eventsNotifier.getAllEvents();
+    _events = ref.read(eventsProvider);
+    await _checkConfirmations();
+  }
+
+  Future<void> _checkConfirmations() async {
     final userState = ref.read(userProvider);
 
-    for (final event in events) {
+    for (final event in _events) {
       final bool hasConfirmed = await ref.read(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, event.id);
       setState(() {
         _hasConfirmedMap[event.id] = hasConfirmed;
       });
-    }
-  
-    if (events.isEmpty) {
-      eventsNotifier.getAllEvents();
     }
   }
 
@@ -48,13 +50,13 @@ class EventsViewState extends ConsumerState<EventsView> {
     final userState = ref.watch(userProvider);
     final bool hasFutureEvents = events.any((event) => event.date.isAfter(DateTime.now()));
 
-    return events.isNotEmpty && hasFutureEvents
+    return _events.isNotEmpty && hasFutureEvents
         ? Stack(
             children: [
               ListView.builder(
-                itemCount: events.length,
-                itemBuilder: (context, index)  {
-                  final event = events[index];
+                itemCount: _events.length,
+                itemBuilder: (context, index) {
+                  final event = _events[index];
                   final bool hasConfirmed = _hasConfirmedMap[event.id] ?? false;
 
                   if (event.date.isBefore(DateTime.now())) {
@@ -66,15 +68,14 @@ class EventsViewState extends ConsumerState<EventsView> {
                         event: event,
                         hasConfirmed: hasConfirmed,
                         isAttendingEvent: true,
-                        route: '/home/0/eventsdetails-screen'
+                        route: '/home/0/eventsdetails-screen',
                       )
                     ],
                   );
                 },
               ),
-            if (userState.isAdmin)
-              _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
-            ]
+              if (userState.isAdmin) _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
+            ],
           )
         : Stack(
             children: [
@@ -84,9 +85,8 @@ class EventsViewState extends ConsumerState<EventsView> {
                   style: TextStyle(color: Colors.grey, fontSize: 22),
                 ),
               ),
-              if (userState.isAdmin)
-                _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
-            ]
+              if (userState.isAdmin) _CustomElevatedButton(eventsProv: eventsProv, ref: ref)
+            ],
           );
   }
 }

@@ -24,14 +24,16 @@ class CustomExpansionRepertoireState extends ConsumerState<CustomExpansionRepert
   List<String> selectedMarches = [];
   String _marchName = "";
   List<String> repertoire = [];
+  late TextEditingController _marchController;
 
   @override
   void initState() {
     super.initState();
     _isExpanded = widget.isExpanded;
     repertoire = ref.read(selectedEventProvider.notifier).state.repertoire;
+    _marchController = TextEditingController();
   }
-
+  
   void toggleExapanded() {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -73,123 +75,125 @@ class CustomExpansionRepertoireState extends ConsumerState<CustomExpansionRepert
                 body: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Autocomplete<March>(
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            final marchs = ref.read(marchsProvider);
-                            final filteredMarches = marchs.where((march) => !repertoire.contains(march.name.toLowerCase()) && march.name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
-                            return filteredMarches;
-                          },
-                          displayStringForOption: (March march) => march.name,
-                          onSelected: (option) => _marchName = option.name,
-                          fieldViewBuilder: (BuildContext context,
-                              TextEditingController textEditingController,
-                              FocusNode focusNode,
-                              VoidCallback onFieldSubmitted) {
-                            return TextField(
-                              controller: textEditingController,
-                              focusNode: focusNode,
-                              decoration: const InputDecoration(
-                                labelText: 'Buscar marcha',
-                                border: OutlineInputBorder(),
-                              ),
-                            );
-                          },
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Autocomplete<March>(
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          final marchs = ref.read(marchsProvider);
+                          final filteredMarches = marchs.where((march) => !repertoire.contains(march.name.toLowerCase()) && !selectedMarches.contains(march.name.toLowerCase()) && march.name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                          return filteredMarches;
+                        },
+                        displayStringForOption: (March march) => march.name,
+                        onSelected: (option) {
+                          _marchName = option.name;
+                        },
+                        fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                          _marchController = textEditingController;
+                          return TextField(
+                            controller: textEditingController,
+                            focusNode: focusNode,
+                            decoration: const InputDecoration(
+                              labelText: 'Buscar marcha',
+                              border: OutlineInputBorder(),
+                            ),
+                          );
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FilledButton(
+                            onPressed: () {
+                              if (_marchName != "") {
+                                setState(() {
+                                  selectedMarches.add(_marchName);
+                                });
+                              }
+                            },
+                            child: const Text("Apuntar")
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: selectedMarches.length,
+                        itemBuilder: (context, index) {
+                          final march = selectedMarches[index];
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    march,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      setState(() {
+                                        selectedMarches.removeAt(index);
+                                      });
+                                    },
+                                  )
+                                ],
+                              )
+                            ]
+                          );
+                        },
+                      ),
+                      selectedMarches.isNotEmpty
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             FilledButton(
-                              onPressed: () {
-                                if (_marchName != "") {
-                                  setState(() {
-                                    selectedMarches.add(_marchName);
-                                  });
-                                }
+                              onPressed: () async {
+                                Event updatedEvent = await eventProv.updateRepertoire(selectedMarches, ref.watch(selectedEventProvider.notifier).state);
+                                ref.read(selectedEventProvider.notifier).state = updatedEvent;
+                                setState(() {
+                                  repertoire = updatedEvent.repertoire;
+                                });
+                                setState(() {
+                                  selectedMarches.clear();
+                                });
+                                _marchController.clear();
+                                FocusScope.of(context).unfocus();
                               },
-                              child: const Text("Apuntar")
+                              child: const Text("Guardar"),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 10),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: selectedMarches.length,
-                          itemBuilder: (context, index) {
-                            final march = selectedMarches[index];
-                            return Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      march,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () {
-                                        setState(() {
-                                          selectedMarches.removeAt(index);
-                                        });
-                                      },
-                                    )
-                                  ],
-                                )
-                              ]
-                            );
-                          },
-                        ),
-                        selectedMarches.isNotEmpty
-                          ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        )
+                        : const SizedBox(),
+                      
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: repertoire.length,
+                        itemBuilder: (context, index) {
+                          final march = repertoire[index];
+                          return Column(
                             children: [
-                              FilledButton(
-                                onPressed: () async {
-                                  Event updatedEvent = await eventProv.updateRepertoire(selectedMarches, ref.watch(selectedEventProvider.notifier).state);
-                                  ref.watch(selectedEventProvider.notifier).state = updatedEvent;
-                                  setState(() {
-                                    repertoire = updatedEvent.repertoire;
-                                  });
-                                  setState(() {
-                                    selectedMarches.clear();
-                                  });
-                                },
-                                child: const Text("Guardar"),
-                              ),
-                            ],
-                          )
-                          : const SizedBox(),
-                        
-                        const SizedBox(height: 10),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: repertoire.length,
-                          itemBuilder: (context, index) {
-                            final march = repertoire[index];
-                            return Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      march,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                      ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    march,
+                                    style: const TextStyle(
+                                      fontSize: 20,
                                     ),
-                                  ],
-                                )
-                              ]
-                            );
-                          },
-                        ),
-
-                      ]),
+                                  ),
+                                ],
+                              )
+                            ]
+                          );
+                        },
+                      ),
+                    ]
+                  ),
                 ),
                 isExpanded: _isExpanded,
               ),
