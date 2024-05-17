@@ -2,6 +2,7 @@ import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,6 +44,7 @@ class CustomExpansionRepertoireState extends ConsumerState<CustomExpansionRepert
   @override
   Widget build(BuildContext context) {
     final eventProv = ref.watch(eventProvider.notifier);
+    final userState = ref.watch(userProvider);
 
     return GestureDetector(
       onTap: () => toggleExapanded(),
@@ -77,98 +79,99 @@ class CustomExpansionRepertoireState extends ConsumerState<CustomExpansionRepert
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Autocomplete<March>(
-                        optionsBuilder: (TextEditingValue textEditingValue) {
-                          final marchs = ref.read(marchsProvider);
-                          final filteredMarches = marchs.where((march) => !repertoire.contains(march.name.toLowerCase()) && !selectedMarches.contains(march.name.toLowerCase()) && march.name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
-                          return filteredMarches;
-                        },
-                        displayStringForOption: (March march) => march.name,
-                        onSelected: (option) {
-                          _marchName = option.name;
-                        },
-                        fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
-                          _marchController = textEditingController;
-                          return TextField(
-                            controller: textEditingController,
-                            focusNode: focusNode,
-                            decoration: const InputDecoration(
-                              labelText: 'Buscar marcha',
-                              border: OutlineInputBorder(),
-                            ),
-                          );
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          FilledButton(
-                            onPressed: () {
-                              if (_marchName != "") {
-                                setState(() {
-                                  selectedMarches.add(_marchName);
-                                });
-                              }
-                            },
-                            child: const Text("Apuntar")
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: selectedMarches.length,
-                        itemBuilder: (context, index) {
-                          final march = selectedMarches[index];
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    march,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedMarches.removeAt(index);
-                                      });
-                                    },
-                                  )
-                                ],
-                              )
-                            ]
-                          );
-                        },
-                      ),
-                      selectedMarches.isNotEmpty
-                        ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      if (userState.isAdmin) ...[
+                        Autocomplete<March>(
+                          optionsBuilder: (TextEditingValue textEditingValue) {
+                            final marchs = ref.read(marchsProvider);
+                            final filteredMarches = marchs.where((march) => !repertoire.contains(march.name.toLowerCase()) && !selectedMarches.contains(march.name.toLowerCase()) && march.name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                            return filteredMarches;
+                          },
+                          displayStringForOption: (March march) => march.name,
+                          onSelected: (option) {
+                            _marchName = option.name;
+                          },
+                          fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                            _marchController = textEditingController;
+                            return TextField(
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              decoration: const InputDecoration(
+                                labelText: 'Buscar marcha',
+                                border: OutlineInputBorder(),
+                              ),
+                            );
+                          },
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             FilledButton(
-                              onPressed: () async {
-                                Event updatedEvent = await eventProv.updateRepertoire(selectedMarches, ref.watch(selectedEventProvider.notifier).state);
-                                ref.read(selectedEventProvider.notifier).state = updatedEvent;
-                                setState(() {
-                                  repertoire = updatedEvent.repertoire;
-                                });
-                                setState(() {
-                                  selectedMarches.clear();
-                                });
-                                _marchController.clear();
-                                FocusScope.of(context).unfocus();
+                              onPressed: () {
+                                if (_marchName != "") {
+                                  setState(() {
+                                    selectedMarches.add(_marchName);
+                                  });
+                                }
                               },
-                              child: const Text("Guardar"),
+                              child: const Text("Apuntar")
                             ),
                           ],
-                        )
-                        : const SizedBox(),
-                      
+                        ),
+                        const SizedBox(height: 10),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: selectedMarches.length,
+                          itemBuilder: (context, index) {
+                            final march = selectedMarches[index];
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      march,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        setState(() {
+                                          selectedMarches.removeAt(index);
+                                        });
+                                      },
+                                    )
+                                  ],
+                                )
+                              ]
+                            );
+                          },
+                        ),
+                        selectedMarches.isNotEmpty
+                          ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FilledButton(
+                                onPressed: () async {
+                                  Event updatedEvent = await eventProv.updateRepertoire(selectedMarches, ref.watch(selectedEventProvider.notifier).state);
+                                  ref.read(selectedEventProvider.notifier).state = updatedEvent;
+                                  setState(() {
+                                    repertoire = updatedEvent.repertoire;
+                                  });
+                                  setState(() {
+                                    selectedMarches.clear();
+                                  });
+                                  _marchController.clear();
+                                  FocusScope.of(context).unfocus();
+                                },
+                                child: const Text("Guardar"),
+                              ),
+                            ],
+                          )
+                          : const SizedBox(),
+                      ],
                       const SizedBox(height: 10),
                       ListView.builder(
                         shrinkWrap: true,
