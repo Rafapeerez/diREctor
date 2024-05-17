@@ -13,4 +13,6 @@ abstract class EventRepository {
   Future<bool> hasConfirmed(String email, String eventId);
 
   Future<Event> updateRepertoire(List<String> repertoire, Event event);
+
+  Future<Event> updateEvent(String eventId, Event event);
 }

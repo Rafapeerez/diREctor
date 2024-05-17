@@ -107,14 +107,28 @@ class FirebaseEventDatasource implements EventRepository {
     try {
       DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(event.id);
 
-    await eventRef.update({
-      'repertoire': FieldValue.arrayUnion(repertoire) 
-    });
+      await eventRef.update({
+        'repertoire': FieldValue.arrayUnion(repertoire) 
+      });
 
       DocumentSnapshot snapshot = await eventRef.get();
       Event updatedEvent = EventMapper.eventToDomain(EventDB.fromSnapshot(snapshot));
 
       return updatedEvent;
+
+    } catch (e) {
+      return Event.empty();
+    }
+  }
+  
+  @override
+  Future<Event> updateEvent(String eventId, Event event) async {
+    try {
+      DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(eventId);
+
+      await eventRef.update(EventMapper.eventToEntity(event).toMap());
+
+      return event;
 
     } catch (e) {
       return Event.empty();

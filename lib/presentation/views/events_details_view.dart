@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:director_app_tfg/config/helpers/date_to_string_helper.dart';
+import 'package:director_app_tfg/config/helpers/duration_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_repertoire.dart';
+import 'package:director_app_tfg/presentation/widgets/form_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +54,6 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   Future<void> _addMarkerFromAddress(String location) async {
     try {
       LatLng coordinates = await GeolocalitationFromDirection().getLatLngFromAddress(location);
-
       Marker marker = Marker(
         markerId: const MarkerId('marker_1'),
         position: coordinates,
@@ -150,6 +151,11 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             expandedText: DateToString().dateString(eventSelected.date),
           ),
 
+          CustomExpansionPanel(
+            headerText: "Duración", 
+            expandedText: DurationToString.durationToString(eventSelected.duration)
+          ),
+
           const CustomExpansionRepertoire(
             headerText: "Repertorio",
           ),
@@ -210,9 +216,8 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 }
 
 class _PopUpMenuButton extends ConsumerWidget {
-
   final Event eventSelected;
-  
+
   const _PopUpMenuButton({
     required this.eventSelected,
   });
@@ -224,10 +229,18 @@ class _PopUpMenuButton extends ConsumerWidget {
     return PopupMenuButton<String>(
       onSelected: (String choice) async {
         if (choice == 'Editar') {
-
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Editar Convocatoria'),
+                content: EventsForm(eventSelected: eventSelected),
+              );
+            },
+          );
         } else if (choice == 'Eliminar') {
           await deleteEventUseCase.execute(eventSelected.id);
-          await ref.watch(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected.id);
+          await ref.read(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected.id);
           context.go("/home/0");
         }
       },
