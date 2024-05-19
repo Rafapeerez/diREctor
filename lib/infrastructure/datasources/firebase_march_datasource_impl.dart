@@ -43,9 +43,29 @@ class FirebaseMarchDatasource implements MarchRepository {
   }
 
   @override
-  Future<March> updateMarch(March march) {
-    // TODO: implement updateMarch
-    throw UnimplementedError();
+  Future<March> updateMarch(March march) async {
+    try {
+      DocumentReference marchRef = FirebaseFirestore.instance.collection('marchas').doc(march.id);
+      await marchRef.update(MarchMapper.marchToEntity(march).toMap());
+      return march;
+    } catch (e) {
+      return March.empty();
+    }
   }
 
+  @override
+  Future<void> deleteMarch(String marchId) async {
+    final CollectionReference marchsCollection = FirebaseFirestore.instance.collection('marchas');
+    final snapshot = await marchsCollection.get();
+    
+    if ( snapshot.size != 0 ) {
+      try{
+        await marchsCollection.doc(marchId).delete();
+      } catch (e) {
+        throw Exception('Error al eliminar la marcha: $e');
+      }
+    }
+  }
 }
+
+

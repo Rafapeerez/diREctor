@@ -54,5 +54,27 @@ class Event {
       moreInformation: moreInformation
     );
   }
+
+  factory Event.update({
+    required String uuid,
+    required EventTypeEnum type,
+    required DateTime date,
+    required String location,
+    required List<String> repertoire,
+    required Duration duration,
+    required List<String> attendance,
+    required String moreInformation 
+  }) {
+    return Event(
+      id: uuid,
+      type: type,
+      date: date, 
+      location: location,
+      repertoire: repertoire,
+      duration: duration,
+      attendance: attendance,
+      moreInformation: moreInformation
+    );
+  }
 }
 

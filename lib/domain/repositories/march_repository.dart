@@ -6,4 +6,6 @@ abstract class MarchRepository {
   Future<List<March>> getAllMarchs();
 
   Future<March> updateMarch(March march);
+
+  Future<void> deleteMarch(String marchId);
 }

@@ -1,5 +1,6 @@
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
+import 'package:director_app_tfg/presentation/widgets/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:director_app_tfg/presentation/widgets/videos/march_videos.dart';
@@ -16,7 +17,7 @@ class MarchsDetailsView extends ConsumerWidget {
 
     return ListView(
       children: [
-        _CustomTitleSection(title: march.name, number: march.number),
+        _CustomTitleSection(march: march, number: march.number),
         const SizedBox(height: 10),
         CustomExpansionPanel(headerText: 'Autor', expandedText: march.author),
         CustomExpansionPanel(headerText: 'Más Información', expandedText: march.moreInformation ?? ""),
@@ -28,11 +29,11 @@ class MarchsDetailsView extends ConsumerWidget {
 }
 
 class _CustomTitleSection extends StatelessWidget {
-  final String title;
+  final March march;
   final int number;
 
   const _CustomTitleSection({
-    required this.title, 
+    required this.march, 
     required this.number
   });
 
@@ -41,12 +42,12 @@ class _CustomTitleSection extends StatelessWidget {
     return Material(
       elevation: 5,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(12, 10, 2, 10),
         child: Row(
           children: [
             Expanded(
               child: Text(
-                title, 
+                march.name, 
                 overflow: TextOverflow.clip,
                 style: const TextStyle(fontSize: 25)
               ),
@@ -55,7 +56,8 @@ class _CustomTitleSection extends StatelessWidget {
             Text(
               "Nº $number",
               style: const TextStyle(fontSize: 25),
-            )
+            ),
+            PopUpMenuButton(marchSelected: march)
           ],
         ),
       ),

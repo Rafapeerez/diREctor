@@ -68,14 +68,8 @@ class EventsFormState extends ConsumerState<EventsForm> {
               decoration: const InputDecoration(
                 labelText: 'Selecciona una opción',
               ),
-              validator: (value) {
-                if (value == null) {
-                  return 'Por favor selecciona una opción';
-                }
-                return null;
-              },
               onChanged: (String? newValue) {
-                if (newValue! == "concierto") {
+                if (newValue! == "Concierto") {
                   setState(() {
                     _type = EventTypeEnum.concierto;
                   });
@@ -187,20 +181,29 @@ class EventsFormState extends ConsumerState<EventsForm> {
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Event event = Event.create(
-                        type: _type, 
-                        date: _selectedDate, 
-                        location: _location,
-                        duration: _duration,
-                        moreInformation: _moreInfo
-                      );
-
                       if (widget.eventSelected != null) {
                         // Update existing event
-                        await ref.watch(eventProvider.notifier).updateEvent(widget.eventSelected!.id, event);
+                        Event updatedEvent = Event.update(
+                          uuid: widget.eventSelected!.id, 
+                          type: _type, 
+                          date: _selectedDate, 
+                          location: _location,
+                          attendance: widget.eventSelected!.attendance,
+                          duration: _duration,
+                          moreInformation: _moreInfo,
+                          repertoire: widget.eventSelected!.repertoire 
+                        );
+                        await ref.watch(eventProvider.notifier).updateEvent(widget.eventSelected!.id, updatedEvent);
                         Navigator.of(context).pop();
                       } else {
                         // Save new event
+                        Event event = Event.create(
+                          type: _type, 
+                          date: _selectedDate, 
+                          location: _location,
+                          duration: _duration,
+                          moreInformation: _moreInfo
+                        );
                         await ref.watch(eventProvider.notifier).saveEvent(event);
                         await ref.watch(eventsProvider.notifier).updateEventsList(event);
                       }

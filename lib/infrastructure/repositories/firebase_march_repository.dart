@@ -20,4 +20,9 @@ class FirebaseMarchRepository extends MarchRepository {
   Future<March> updateMarch(March march) {
     return datasource.updateMarch(march);
   }
+
+  @override
+  Future<void> deleteMarch(String marchId) {
+    return datasource.deleteMarch(marchId);
+  }
 }

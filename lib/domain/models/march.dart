@@ -42,6 +42,24 @@ class March {
       moreInformation: moreInformation
     );      
   }
+
+  factory March.update({
+    required String uuid,
+    required String name,
+    required String author,
+    required int number,
+    required String link,
+    required String moreInformation
+  }){
+    return March(
+      id: uuid,
+      name: name,
+      author: author,
+      number: number,
+      link: link,
+      moreInformation: moreInformation
+    );      
+  }
 }
 
 

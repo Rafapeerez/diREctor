@@ -26,7 +26,7 @@ class CircleLetter extends StatelessWidget {
           letter,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 40 * 0.5, // Ajusta el tamaño de la letra según el tamaño del círculo
+            fontSize: 40 * 0.5,
             fontWeight: FontWeight.bold,
           ),
         ),

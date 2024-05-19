@@ -28,7 +28,7 @@ class EventMapper {
 
   static EventDB eventToEntity(Event event){
     List<dynamic> attendance = event.attendance.toList();
-    
+
     return EventDB(
       id: event.id, 
       type: event.type.displayName, 

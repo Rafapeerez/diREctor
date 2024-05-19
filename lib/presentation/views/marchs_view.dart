@@ -1,11 +1,11 @@
-import 'package:director_app_tfg/config/helpers/capitalize_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/get_first_letter_from_each_word_of_string_helper.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_elevated_button.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_elevated_button.dart';
 import 'package:director_app_tfg/presentation/widgets/filter_botton_sheet.dart';
+import 'package:director_app_tfg/presentation/widgets/march/form_march.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -189,138 +189,6 @@ class _CustomMarch extends ConsumerWidget {
           ),
           const Divider()
         ],
-      ),
-    );
-  }
-}
-
-class MarchsForm extends ConsumerStatefulWidget {
-  const MarchsForm({super.key});
-
-  @override
-  EventsFormState createState() => EventsFormState();
-}
-
-class EventsFormState extends ConsumerState<MarchsForm> {
-  final _formKey = GlobalKey<FormState>();
-  String _name = "";
-  String _author = "";
-  int _number = 0;
-  String _moreInfo = "";
-  String _link = "";
-
-  @override
-  Widget build(BuildContext context) {
-    final marchsProv = ref.read(marchProvider.notifier);
-
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            //FORM
-            // NUMBER
-            TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Ingresa el número de la marcha',
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor ingresa el número';
-                }
-                return null;
-              },
-              onChanged: (value) {
-                setState(() {
-                  if (value.isNotEmpty) {
-                    _number = int.tryParse(value) ?? _number;
-                  } else {
-                    _number = 0;
-                  }
-                });
-              }
-            ),
-            const SizedBox(height: 16),
-
-            // NAME
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Ingresa el nombre de la marcha',
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor ingresa el nombre';
-                }
-                return null;
-              },
-              onChanged: (value) => setState(() => _name = CapitalizeString().capitalizeString(value))
-            ),
-            const SizedBox(height: 16),
-
-            // AUTHOR
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Ingresa el autor',
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor ingresa el autor';
-                }
-                return null;
-              },
-              onChanged: (value) => setState(() => _author = CapitalizeString().capitalizeString(value))
-            ),
-            const SizedBox(height: 16),
-
-            //LINK
-            TextFormField(
-              decoration:
-                  const InputDecoration(labelText: 'Añadir link (opcional)'),
-              onChanged: (value) => setState(() => _link = value),
-            ),
-            const SizedBox(height: 16),
-
-            //MORE INFO
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Añadir nota (opcional)'),
-              onChanged: (value) => setState(() => _moreInfo = value),
-            ),
-            const SizedBox(height: 16),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-
-                //CANCEL BUTTON
-                OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar")
-                ),
-                const Spacer(flex: 1),
-
-                //SUBMIT BUTTON
-                FilledButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      March march = March.create(
-                        name: _name,
-                        author: _author,
-                        number: _number,
-                        link: _link,
-                        moreInformation: _moreInfo
-                      );
-                      await marchsProv.saveMarch(march);
-                      await ref.watch(marchsProvider.notifier).updateMarchsList(march);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text("Enviar"),
-                )
-              ],
-            )
-          ],
-        ),
       ),
     );
   }

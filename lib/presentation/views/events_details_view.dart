@@ -8,10 +8,9 @@ import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_repertoire.dart';
-import 'package:director_app_tfg/presentation/widgets/form_event.dart';
+import 'package:director_app_tfg/presentation/widgets/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -96,7 +95,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
                 ),
                 const Spacer(flex: 1),
                 if (userState.isAdmin) 
-                  _PopUpMenuButton(eventSelected: eventSelected),
+                  PopUpMenuButton(eventSelected: eventSelected),
               ],
             ),
           ),
@@ -211,50 +210,6 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             ),
         ],
       ),
-    );
-  }
-}
-
-class _PopUpMenuButton extends ConsumerWidget {
-  final Event eventSelected;
-
-  const _PopUpMenuButton({
-    required this.eventSelected,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final deleteEventUseCase = ref.watch(deleteEventUseCaseProvider);
-
-    return PopupMenuButton<String>(
-      onSelected: (String choice) async {
-        if (choice == 'Editar') {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Editar Convocatoria'),
-                content: EventsForm(eventSelected: eventSelected),
-              );
-            },
-          );
-        } else if (choice == 'Eliminar') {
-          await deleteEventUseCase.execute(eventSelected.id);
-          await ref.read(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected.id);
-          context.go("/home/0");
-        }
-      },
-      itemBuilder: (BuildContext context) => const <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
-          value: 'Editar',
-          child: Text('Editar'),
-        ),
-        PopupMenuItem<String>(
-          value: 'Eliminar',
-          child: Text('Eliminar'),
-        ),
-      ],
-      icon: const Icon(Icons.more_vert),
     );
   }
 }
