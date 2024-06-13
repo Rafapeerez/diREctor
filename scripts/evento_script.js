@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const admin = require('firebase-admin');
 
-const serviceAccount = require('/home/rafa/cosas/TFG/director-2024-redencion-firebase-adminsdk-i9dcs-21f4869b99.json');
+const serviceAccount = require('/home/rafa/cosas/TFG/director_app_tfg/scripts/director-2024-redencion-firebase-adminsdk-i9dcs-21f4869b99.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
