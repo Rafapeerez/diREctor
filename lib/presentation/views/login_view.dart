@@ -3,13 +3,80 @@ import 'package:director_app_tfg/infrastructure/services/google_services.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 
-class LogInView extends StatelessWidget {
+class LogInView extends StatefulWidget {
   const LogInView({super.key});
+
+  @override
+  State<LogInView> createState() => _LogInViewState();
+}
+
+class _LogInViewState extends State<LogInView> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _initNotifications();
+  }
+
+  Future<void> _initNotifications() async {
+    // Request permissions
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      provisional: false,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+
+      // Get the token
+      String? token = await _firebaseMessaging.getToken();
+      print('FCM Token: $token');
+
+      // Handle foreground messages
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print('Received a message while in the foreground!');
+        print('Message data: ${message.data}');
+
+        if (message.notification != null) {
+          print('Message also contained a notification: ${message.notification}');
+        }
+      });
+
+      // Handle messages that opened the app from a terminated state
+      FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+        if (message != null) {
+          print('Message also contained a notification: ${message.notification}');
+        }
+      });
+
+      // Handle messages that opened the app from a background state
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        print('Message opened from background state: ${message.notification}');
+      });
+
+      // Handle background messages
+      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  static Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+    print('Handling a background message: ${message.messageId}');
+  }
+
+  Future<void> subscribeToTopic() async {
+    await _firebaseMessaging.subscribeToTopic('events');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +107,8 @@ class _LogInButton extends ConsumerStatefulWidget {
 
 class _LogInButtonState extends ConsumerState<_LogInButton> {
   bool _isLoading = false;
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +152,16 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
                   context.go('/waiting-screen');
                 }
               } else {
+                String? token = await _messaging.getToken();
                 final createdMusician = Musician.create(
                   email: user.email!,
                   name: user.displayName ?? "",
                   isAllowed: false,
                   isAdmin: false,
+                  fcm: token ?? ""
                 );
                 await musicianProv.saveMusician(createdMusician);
+                await context.findAncestorStateOfType<_LogInViewState>()?.subscribeToTopic();
                 context.go('/waiting-screen');
               }
             }

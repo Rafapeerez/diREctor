@@ -14,7 +14,7 @@ class ProfileView extends ConsumerWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 300, // Ajusta el alto del DrawerHeader
+            height: 300, 
             width: double.infinity,
             child: DrawerHeader(
               decoration: BoxDecoration(
@@ -39,11 +39,6 @@ class ProfileView extends ConsumerWidget {
                           fontSize: 24,
                         ),
                       ),
-                      Spacer(),
-                      Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -59,7 +54,11 @@ class ProfileView extends ConsumerWidget {
           _TextField(title: 'Nombre Completo', value: userState.user!.displayName),
           _TextField(title: 'Email', value: userState.user!.email),
           _TextField(title: 'Instrumento', value: userState.instrument),
-          _TextField(title: 'Teléfono', value: userState.user!.phoneNumber),
+          _TextField(
+            title: 'Teléfono', 
+            value: userState.user!.phoneNumber,
+            isEditable: true,
+          ),
         ],
       ),
     );
@@ -70,10 +69,12 @@ class _TextField extends StatelessWidget {
   
   final String title;
   final String? value;
+  final bool isEditable;
 
   const _TextField({
     required this.title, 
-    required this.value
+    required this.value,
+    this.isEditable = false
   });
 
   @override
@@ -85,12 +86,34 @@ class _TextField extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start, 
         children: [
-          Text(
-            "$title:", 
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold
-            )
+          Row(
+            children: [
+              Text(
+                "$title:", 
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+              const Spacer(),
+              isEditable 
+                ? IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    showDialog(
+                      context: context, 
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          title: Text('Convocatoria'),
+                          content: _TelephoneForm(),
+                        );
+                      }
+                    );
+                  },
+                  color: Colors.black,
+                )
+                : const SizedBox()
+            ],
           ),
           const SizedBox(height: 5),
           Text(
@@ -101,6 +124,84 @@ class _TextField extends StatelessWidget {
           ),
           const SizedBox(height: 15)
         ],
+      ),
+    );
+  }
+}
+
+class _TelephoneForm extends ConsumerStatefulWidget {
+  
+
+  const _TelephoneForm();
+
+  @override
+  _TelephoneFormState createState() => _TelephoneFormState();
+}
+
+class _TelephoneFormState extends ConsumerState<_TelephoneForm> {
+  final _formKey = GlobalKey<FormState>();
+  int _telephoneNumber = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final userState = ref.watch(userProvider);
+    
+
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            //FORM
+            //DURATION
+            TextFormField(
+              initialValue: userState.user?.phoneNumber,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Ingresa el número de teléfono',
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor ingresa el número de teléfono';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                setState(() {
+                  setState(() {
+                    _telephoneNumber = int.parse(value);
+                  });
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            
+            //SUBMIT AND CANCEL BUTTONS
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancelar")
+                ),
+                const Spacer(flex: 1),
+
+                FilledButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (userState != null) {
+                        Navigator.of(context).pop();
+                      } else {
+                      }
+                      Navigator.of(context).pop();
+                    }                  
+                  },
+                  child: const Text("Enviar"),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

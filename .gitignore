@@ -35,6 +35,7 @@ migrate_working_dir/
 /web/
 /macos/
 /linux/
+scripts/node_modules
 
 # Symbolication related
 app.*.symbols

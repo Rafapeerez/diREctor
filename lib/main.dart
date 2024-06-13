@@ -1,4 +1,3 @@
-import 'package:director_app_tfg/api/firebase_api.dart';
 import 'package:director_app_tfg/config/theme/theme.dart';
 import 'package:director_app_tfg/firebase_options.dart';
 import 'package:director_app_tfg/presentation/providers/theme_provider.dart';
@@ -14,7 +13,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // await FirebaseApi().initNotifications();
   runApp(const ProviderScope(child: MainApp()));
 }
 

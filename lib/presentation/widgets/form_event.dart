@@ -19,7 +19,7 @@ class EventsForm extends ConsumerStatefulWidget {
 }
 
 class EventsFormState extends ConsumerState<EventsForm> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();  
   DateTime _selectedDate = DateTime.now();
   EventTypeEnum _type = EventTypeEnum.concierto;
   Duration _duration = const Duration();

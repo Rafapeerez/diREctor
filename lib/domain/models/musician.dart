@@ -5,6 +5,7 @@ class Musician {
   final String instrument;
   final bool isAllowed;
   final bool isAdmin;
+  final String fcm;
 
   Musician({
     required this.email,
@@ -12,7 +13,8 @@ class Musician {
     this.phoneNumber = "",
     this.instrument = "",
     required this.isAllowed,
-    required this.isAdmin
+    required this.isAdmin,
+    this.fcm = ""
   });
 
   factory Musician.create({
@@ -21,7 +23,8 @@ class Musician {
     String phoneNumber = "",
     String instrument = "",
     required bool isAllowed,
-    required bool isAdmin
+    required bool isAdmin,
+    String fcm = ""
   }) {
     return Musician(
       name: name,
@@ -29,7 +32,8 @@ class Musician {
       phoneNumber: phoneNumber,
       instrument: instrument,
       isAllowed: isAllowed,
-      isAdmin: isAdmin
+      isAdmin: isAdmin,
+      fcm: fcm
     );
   }
 }
