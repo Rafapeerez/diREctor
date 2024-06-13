@@ -4,8 +4,8 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
 exports.sendNotificationToTopic =
-    functions.firestore.document("eventos/{uid}").onWrite(
-        async (event) => {
+  functions.firestore.document("eventos/{uid}").onCreate(
+      async (event) => {
           const message = {
             notification: {
               title: "Nuevo evento",
@@ -13,8 +13,7 @@ exports.sendNotificationToTopic =
             },
             topic: "events",
           };
-
           const response = await admin.messaging().send(message);
           console.log(response);
-        },
+      },
     );
