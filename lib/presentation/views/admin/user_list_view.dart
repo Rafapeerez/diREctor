@@ -56,6 +56,7 @@ class UserListViewState extends ConsumerState<UserListView> {
                           size: 32,
                           color: Colors.green[700],
                         ),
+                        //TODO: REFACTORIZED
                         onPressed: (){
                           showDialog(
                             context: context, 
@@ -79,17 +80,47 @@ class UserListViewState extends ConsumerState<UserListView> {
                                   ),
                                   const Divider(),
                                   SimpleDialogOption(
-                                    onPressed: () => context.pop(),
+                                    onPressed: () async {
+                                      await musicianProv.updateMusician(Musician(
+                                        email: musician.email, 
+                                        name: musician.name,
+                                        instrument: "Bajo", 
+                                        isAllowed: true, 
+                                        isAdmin: false
+                                      ));
+                                      await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
+                                      context.pop();
+                                    },
                                     child: const Text('Bajo'),
                                   ),
                                   const Divider(),
                                   SimpleDialogOption(
-                                    onPressed: () => context.pop(),
+                                    onPressed: () async {
+                                      await musicianProv.updateMusician(Musician(
+                                        email: musician.email, 
+                                        name: musician.name,
+                                        instrument: "Corneta", 
+                                        isAllowed: true, 
+                                        isAdmin: false
+                                      ));
+                                      await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
+                                      context.pop();
+                                    },
                                     child: const Text('Corneta'),
                                   ),
                                   const Divider(),
                                   SimpleDialogOption(
-                                    onPressed: () => context.pop(),
+                                    onPressed: () async {
+                                      await musicianProv.updateMusician(Musician(
+                                        email: musician.email, 
+                                        name: musician.name,
+                                        instrument: "Percusión", 
+                                        isAllowed: true, 
+                                        isAdmin: false
+                                      ));
+                                      await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
+                                      context.pop();
+                                    },
                                     child: const Text('Percusión'),
                                   ),
                                 ],

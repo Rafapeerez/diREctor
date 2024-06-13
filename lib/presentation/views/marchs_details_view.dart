@@ -1,5 +1,6 @@
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
@@ -28,7 +29,7 @@ class MarchsDetailsView extends ConsumerWidget {
   }
 }
 
-class _CustomTitleSection extends StatelessWidget {
+class _CustomTitleSection extends ConsumerWidget {
   final March march;
   final int number;
 
@@ -38,7 +39,9 @@ class _CustomTitleSection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userState = ref.watch(userProvider);
+
     return Material(
       elevation: 5,
       child: Padding(
@@ -57,7 +60,9 @@ class _CustomTitleSection extends StatelessWidget {
               "Nº $number",
               style: const TextStyle(fontSize: 25),
             ),
-            PopUpMenuButton(marchSelected: march)
+            if (userState.isAdmin) PopUpMenuButton(marchSelected: march)
+            else const SizedBox(width: 20), 
+            
           ],
         ),
       ),

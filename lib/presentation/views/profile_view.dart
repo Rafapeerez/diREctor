@@ -1,3 +1,5 @@
+import 'package:director_app_tfg/domain/models/musician.dart';
+import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,7 +58,7 @@ class ProfileView extends ConsumerWidget {
           _TextField(title: 'Instrumento', value: userState.instrument),
           _TextField(
             title: 'Teléfono', 
-            value: userState.user!.phoneNumber,
+            value: userState.phoneNumber,
             isEditable: true,
           ),
         ],
@@ -140,22 +142,23 @@ class _TelephoneForm extends ConsumerStatefulWidget {
 
 class _TelephoneFormState extends ConsumerState<_TelephoneForm> {
   final _formKey = GlobalKey<FormState>();
-  int _telephoneNumber = 0;
+  String _telephoneNumber = "";
 
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
+    final musicianProv = ref.read(musicianProvider.notifier);
     
-
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
         child: Column(
           children: [
             //FORM
-            //DURATION
+            //PHONE NUMBER
             TextFormField(
-              initialValue: userState.user?.phoneNumber,
+              initialValue: userState.phoneNumber,
+              maxLength: 9,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: 'Ingresa el número de teléfono',
@@ -169,7 +172,7 @@ class _TelephoneFormState extends ConsumerState<_TelephoneForm> {
               onChanged: (value) {
                 setState(() {
                   setState(() {
-                    _telephoneNumber = int.parse(value);
+                    _telephoneNumber = value;
                   });
                 });
               },
@@ -189,9 +192,17 @@ class _TelephoneFormState extends ConsumerState<_TelephoneForm> {
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      if (userState != null) {
+                      if (userState.user != null) {
+                        await musicianProv.updateMusician(Musician(
+                          email: userState.user!.email!, 
+                          name: userState.user!.displayName!,
+                          instrument: userState.instrument, 
+                          isAllowed: true, 
+                          isAdmin: false,
+                          phoneNumber: _telephoneNumber
+                        ));
+                        ref.watch(userProvider.notifier).updatePhoneNumber(_telephoneNumber);
                         Navigator.of(context).pop();
-                      } else {
                       }
                       Navigator.of(context).pop();
                     }                  

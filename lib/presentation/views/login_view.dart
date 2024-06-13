@@ -18,12 +18,15 @@ class LogInView extends StatefulWidget {
 
 class _LogInViewState extends State<LogInView> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
+  String? _token;
+  
   @override
   void initState() {
     super.initState();
     _initNotifications();
   }
+
+  String? get token => _token;
 
   Future<void> _initNotifications() async {
     // Request permissions
@@ -35,43 +38,32 @@ class _LogInViewState extends State<LogInView> {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
 
       // Get the token
-      String? token = await _firebaseMessaging.getToken();
-      print('FCM Token: $token');
+      final FirebaseMessaging messaging = FirebaseMessaging.instance;
+      _token = await  messaging.getToken();
 
       // Handle foreground messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print('Received a message while in the foreground!');
-        print('Message data: ${message.data}');
-
-        if (message.notification != null) {
-          print('Message also contained a notification: ${message.notification}');
-        }
       });
 
       // Handle messages that opened the app from a terminated state
       FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-        if (message != null) {
-          print('Message also contained a notification: ${message.notification}');
-        }
       });
 
       // Handle messages that opened the app from a background state
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        print('Message opened from background state: ${message.notification}');
       });
 
       // Handle background messages
       FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+
+      setState(() {});
     } else {
-      print('User declined or has not accepted permission');
     }
   }
 
   static Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
-    print('Handling a background message: ${message.messageId}');
   }
 
   Future<void> subscribeToTopic() async {
@@ -91,15 +83,20 @@ class _LogInViewState extends State<LogInView> {
             const SizedBox(height: 190),
             Image.asset('lib/config/assets/images/icon.png'),
             const SizedBox(height: 60),
-            _LogInButton(),
+            if (_token != null) _LogInButton(token: _token),
           ],
         )
       ])
     );
   }
 }
+
 class _LogInButton extends ConsumerStatefulWidget {
   final GoogleServices googleServices = GoogleServices();
+  final String? token;
+
+  _LogInButton({required this.token});
+
 
   @override
   _LogInButtonState createState() => _LogInButtonState();
@@ -107,8 +104,6 @@ class _LogInButton extends ConsumerStatefulWidget {
 
 class _LogInButtonState extends ConsumerState<_LogInButton> {
   bool _isLoading = false;
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,19 +141,18 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
               final musician = ref.watch(musicianProvider);
               if (musician != null) {
                 if (musician.isAllowed == true) {
-                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument);
+                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument, musician.phoneNumber);
                   context.go("/home/0");
                 } else {
                   context.go('/waiting-screen');
                 }
               } else {
-                String? token = await _messaging.getToken();
                 final createdMusician = Musician.create(
                   email: user.email!,
                   name: user.displayName ?? "",
                   isAllowed: false,
                   isAdmin: false,
-                  fcm: token ?? ""
+                  fcm: widget.token ?? ""
                 );
                 await musicianProv.saveMusician(createdMusician);
                 await context.findAncestorStateOfType<_LogInViewState>()?.subscribeToTopic();
