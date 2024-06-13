@@ -21,18 +21,12 @@ class EventsViewState extends ConsumerState<EventsView> {
   @override
   void initState() {
     super.initState();
-    _loadEvents();
-  }
-
-  Future<void> _loadEvents() async {
-    final eventsNotifier = ref.read(eventsProvider.notifier);
-    await eventsNotifier.getAllEvents();
-    _events = ref.read(eventsProvider);
-    await _checkConfirmations();
+    _checkConfirmations();
   }
 
   Future<void> _checkConfirmations() async {
     final userState = ref.read(userProvider);
+    _events = ref.read(eventsProvider);
 
     for (final event in _events) {
       final bool hasConfirmed = await ref.read(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, event.id);
@@ -55,9 +49,9 @@ class EventsViewState extends ConsumerState<EventsView> {
         ? Stack(
             children: [
               ListView.builder(
-                itemCount: _events.length,
+                itemCount: events.length,
                 itemBuilder: (context, index) {
-                  final event = _events[index];
+                  final event = events[index];
                   final bool hasConfirmed = _hasConfirmedMap[event.id] ?? false;
 
                   if (event.date.isBefore(DateTime.now())) {

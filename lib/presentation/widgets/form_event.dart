@@ -50,6 +50,8 @@ class EventsFormState extends ConsumerState<EventsForm> {
 
   @override
   Widget build(BuildContext context) {
+    final eventsNotifier = ref.watch(eventsProvider.notifier);
+
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -205,7 +207,7 @@ class EventsFormState extends ConsumerState<EventsForm> {
                           moreInformation: _moreInfo
                         );
                         await ref.watch(eventProvider.notifier).saveEvent(event);
-                        await ref.watch(eventsProvider.notifier).updateEventsList(event);
+                        eventsNotifier.updateEventsList(event);
                       }
                       Navigator.of(context).pop();
                     }                  
