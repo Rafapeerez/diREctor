@@ -25,6 +25,9 @@ class EventsViewState extends ConsumerState<EventsView> {
   }
 
   Future<void> _checkConfirmations() async {
+    final eventsNotifier = ref.read(eventsProvider.notifier);
+    await eventsNotifier.getAllEvents();
+    
     final userState = ref.read(userProvider);
     _events = ref.read(eventsProvider);
 
