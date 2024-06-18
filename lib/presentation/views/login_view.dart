@@ -19,7 +19,7 @@ class LogInView extends StatefulWidget {
 class _LogInViewState extends State<LogInView> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String? _token;
-  
+
   @override
   void initState() {
     super.initState();
@@ -41,35 +41,17 @@ class _LogInViewState extends State<LogInView> {
 
       // Get the token
       final FirebaseMessaging messaging = FirebaseMessaging.instance;
-      _token = await  messaging.getToken();
-
-      // Handle foreground messages
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      });
-
-      // Handle messages that opened the app from a terminated state
-      FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-      });
-
-      // Handle messages that opened the app from a background state
-      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      });
-
-      // Handle background messages
-      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+      _token = await messaging.getToken();
 
       setState(() {});
     } else {
+      // Handle case where permissions are not granted
     }
-  }
-
-  static Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
   }
 
   Future<void> subscribeToTopic() async {
     await _firebaseMessaging.subscribeToTopic('events');
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +65,9 @@ class _LogInViewState extends State<LogInView> {
             const SizedBox(height: 190),
             Image.asset('lib/config/assets/images/icon.png'),
             const SizedBox(height: 60),
-            if (_token != null) _LogInButton(token: _token),
+            _LogInButton(
+              token: _token
+            ),
           ],
         )
       ])

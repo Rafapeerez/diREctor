@@ -71,7 +71,8 @@ class UserListViewState extends ConsumerState<UserListView> {
                                         name: musician.name,
                                         instrument: "Trompeta", 
                                         isAllowed: true, 
-                                        isAdmin: false
+                                        isAdmin: false,
+                                        fcm: musician.fcm
                                       ));
                                       await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
                                       context.pop();
@@ -86,7 +87,8 @@ class UserListViewState extends ConsumerState<UserListView> {
                                         name: musician.name,
                                         instrument: "Bajo", 
                                         isAllowed: true, 
-                                        isAdmin: false
+                                        isAdmin: false,
+                                        fcm: musician.fcm
                                       ));
                                       await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
                                       context.pop();
@@ -101,7 +103,8 @@ class UserListViewState extends ConsumerState<UserListView> {
                                         name: musician.name,
                                         instrument: "Corneta", 
                                         isAllowed: true, 
-                                        isAdmin: false
+                                        isAdmin: false,
+                                        fcm: musician.fcm
                                       ));
                                       await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
                                       context.pop();
@@ -116,7 +119,8 @@ class UserListViewState extends ConsumerState<UserListView> {
                                         name: musician.name,
                                         instrument: "Percusión", 
                                         isAllowed: true, 
-                                        isAdmin: false
+                                        isAdmin: false,
+                                        fcm: musician.fcm
                                       ));
                                       await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
                                       context.pop();
