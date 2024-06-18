@@ -35,7 +35,8 @@ void main() {
       email: "prueba@gmail.com", 
       name: "prueba", 
       isAllowed: false, 
-      isAdmin: false
+      isAdmin: false, 
+      fcm: 'prueba'
     );
 
     //WHEN

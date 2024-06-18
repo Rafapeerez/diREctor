@@ -14,7 +14,7 @@ void main() {
     //GIVEN      
     Musician firstMusician = Musician.create(email: "prueba@gmail.com", name: "Prueba", isAllowed: true, isAdmin: true);
     Musician secondMusician = Musician.create(email: "prueba2@gmail.com", name: "Prueba2", isAllowed: true, isAdmin: true);
-    List<Musician> musiciansList = [firstMusician, secondMusician];
+    List<String> musiciansList = [firstMusician.email, secondMusician.email];
 
     Event event = Event(
       id: const Uuid().v4(), 
@@ -23,7 +23,6 @@ void main() {
       location: "Puente Romano de Cordoba",
       duration: const Duration(hours: 2),
       attendance: musiciansList,
-      // repertoire: ,
       moreInformation: "Note"
     );
 
@@ -46,8 +45,8 @@ void main() {
 
     //GIVEN
 
-    MusicianDB firstMusician = MusicianDB(email: "prueba@gmail.com", name: "Prueba", isAllowed: true, isAdmin: true);
-    MusicianDB secondMusician = MusicianDB(email: "prueba2@gmail.com", name: "Prueba2", isAllowed: true, isAdmin: true);
+    MusicianDB firstMusician = MusicianDB(email: "prueba@gmail.com", name: "Prueba", isAllowed: true, isAdmin: true, fcm: 'prueba1');
+    MusicianDB secondMusician = MusicianDB(email: "prueba2@gmail.com", name: "Prueba2", isAllowed: true, isAdmin: true, fcm: 'prueba2');
     List<MusicianDB> musiciansList = [firstMusician, secondMusician];
 
     EventDB entity = EventDB(
@@ -71,7 +70,7 @@ void main() {
     expect(entity.date,               mappedEntity.date);
     expect(entity.location,           mappedEntity.location);
     expect(entity.duration,           mappedEntity.duration);
-    expect(entity.attendance?.length, mappedEntity.attendance?.length);
+    expect(entity.attendance.length, mappedEntity.attendance.length);
     expect(entity.moreInformation,    mappedEntity.moreInformation);
   
   });
