@@ -6,7 +6,7 @@ void main() {
     
     //GIVEN
     Duration value = const Duration(hours: 2); 
-    String result = "2 horas y 0 minutos";
+    String result = "2 horas";
     
     //WHEN
     String durationToString = DurationToString.durationToString(value);
@@ -19,7 +19,7 @@ void main() {
     
     //GIVEN
     Duration value = const Duration(hours: 1); 
-    String result = "1 hora y 0 minutos";
+    String result = "1 hora";
     
     //WHEN
     String durationToString = DurationToString.durationToString(value);

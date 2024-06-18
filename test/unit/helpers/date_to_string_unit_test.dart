@@ -6,7 +6,7 @@ void main() {
     
     //GIVEN
     DateTime value = DateTime(2003, 4, 5, 12, 30); // Year, month, day, hour, minute 
-    String result = "Día 5 de 4 del 2003 a las 12:30";
+    String result = "Día 5 de Abril de 2003 a las 12:30";
     
     //WHEN
     String dateToString = DateToString().dateString(value);
