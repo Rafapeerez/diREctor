@@ -7,7 +7,8 @@ class GetAllMarchsOrderByNameUseCase {
 
   Future<List<March>> execute() async {
     List<March> marchsList = await _marchRepository.getAllMarchs();
-    marchsList.sort(((a, b) => a.name.compareTo(b.name)));
-    return marchsList;
+    List<March> orderedList = List.from(marchsList); 
+    orderedList.sort(((a, b) => a.name.compareTo(b.name))); 
+    return orderedList; 
   }
 }

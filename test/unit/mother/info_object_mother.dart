@@ -47,6 +47,20 @@ class InfoObjectMother {
     );
   }
 
+  static Event createConcertWithRepertoire(List<String> repertoire) {
+    return Event(
+      id: const Uuid().v4(),
+      location: "Puente Romano de Cordoba",
+      type: EventTypeEnum.concierto,
+      date: DateTime(2024, 8, 30, 14, 30, 30),
+      repertoire: repertoire,
+      duration: const Duration(hours: 2),
+      attendance: [],
+      moreInformation: "Concert by the Symphony Orchestra"
+    );
+  }
+
+
   //MARCH
   static March createMarch1(){
     return March(
