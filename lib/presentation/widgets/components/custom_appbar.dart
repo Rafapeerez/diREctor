@@ -1,6 +1,8 @@
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   
   final GlobalKey<ScaffoldState> scaffoldKey;
   final bool hasArrowBack;
@@ -15,8 +17,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
+    final userState = ref.read(userProvider);
+
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -62,10 +66,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 20),
           IconButton(
-            icon: const Icon(
-              Icons.account_circle_outlined, 
-              size: 40, 
-              color: Colors.white
+            icon: CircleAvatar(
+              backgroundImage: NetworkImage(userState.user!.photoURL!),
+              radius: 20,
             ),
             onPressed: () {
               scaffoldKey.currentState!.openEndDrawer(); // Open EndDrawer
