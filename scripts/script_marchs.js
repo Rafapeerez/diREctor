@@ -14,7 +14,7 @@ const db = admin.firestore();
 const marchas = [
   {
     id: uuidv4(),
-    name: "Perdona a tu pueblo",
+    name: "Perdona a tu Pueblo",
     author: "Bernardo Velado Graña y Antonio Alcalde",
     number: 1,
     link: "https://www.youtube.com/watch?v=YiA5tlCS7BE",
@@ -30,7 +30,7 @@ const marchas = [
   },
   {
     id: uuidv4(),
-    name: "El Pan de vida",
+    name: "El Pan de Vida",
     author: "Juan Manuel Carmona",
     number: 3,
     link: "https://www.youtube.com/watch?v=FOEQgtXT_YE",
@@ -38,7 +38,7 @@ const marchas = [
   },
   {
     id: uuidv4(),
-    name: "Nazareno de la trinidad",
+    name: "Nazareno de la Trinidad",
     author: "José M. Mena Hervás",
     number: 4,
     link: "https://www.youtube.com/watch?v=opFqw8T0Isk",
@@ -198,7 +198,7 @@ const marchas = [
   },
   {
     id: uuidv4(),
-    name: "Entregado a su pueblo",
+    name: "Entregado a su Pueblo",
     author: "José Manuel Mena Hervás",
     number: 35,
     link: "https://www.youtube.com/watch?v=5OGCwVTNqdM",
@@ -270,7 +270,7 @@ const marchas = [
   },
   {
     id: uuidv4(),
-    name: "Nazareno Y Gitano",
+    name: "Nazareno y Gitano",
     author: "Pascual González",
     number: 49,
     link: "https://www.youtube.com/watch?v=LYJnKeGLXTo",
@@ -334,7 +334,7 @@ const marchas = [
   },
   {
     id: uuidv4(),
-    name: "Cinco LLagas",
+    name: "Cinco Llagas",
     author: "https://www.youtube.com/watch?v=9JBzpvINsPM",
     number: 58,
     link: "Nicolás Turienzo",
@@ -462,7 +462,7 @@ const marchas = [
   },
   {
     id: uuidv4(),
-    name: "¡Estrellla!",
+    name: "¡Estrella!",
     author: "-",
     number: 74,
     link: "https://www.youtube.com/watch?v=lbVK-YPZuUI",

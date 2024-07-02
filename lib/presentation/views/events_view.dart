@@ -3,7 +3,7 @@ import 'package:director_app_tfg/presentation/providers/event/event_provider.dar
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/custom_event_card.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_elevated_button.dart';
-import 'package:director_app_tfg/presentation/widgets/form_event.dart';
+import 'package:director_app_tfg/presentation/widgets/events/form_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

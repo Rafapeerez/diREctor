@@ -2,7 +2,7 @@ import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
-import 'package:director_app_tfg/presentation/widgets/form_event.dart';
+import 'package:director_app_tfg/presentation/widgets/events/form_event.dart';
 import 'package:director_app_tfg/presentation/widgets/march/form_march.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
