@@ -62,7 +62,8 @@ class _LogInViewState extends State<LogInView> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 190),
+            const SizedBox(height: 100),
+            Image.asset('lib/config/assets/images/diREctor.png'),
             Image.asset('lib/config/assets/images/icon.png'),
             const SizedBox(height: 60),
             _LogInButton(
