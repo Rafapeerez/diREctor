@@ -1,8 +1,10 @@
 import 'package:director_app_tfg/domain/models/musician.dart';
+import 'package:director_app_tfg/infrastructure/services/google_services.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileView extends ConsumerWidget {
   const ProfileView({super.key});
@@ -32,15 +34,27 @@ class ProfileView extends ConsumerWidget {
               ),
               child: Column(
                 children: [
-                  const Row(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Perfil',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
                         ),
                       ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.logout_outlined,
+                          color: Colors.white, 
+                          size: 25
+                        ),
+                        onPressed: () async {
+                          await GoogleServices.signOut();
+                          context.go("/");
+                        }
+                      )
                     ],
                   ),
                   const SizedBox(height: 20),
