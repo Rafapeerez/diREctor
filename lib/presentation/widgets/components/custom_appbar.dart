@@ -68,7 +68,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.white
             ),
             onPressed: () {
-              scaffoldKey.currentState!.openEndDrawer(); // Abre el endDrawer
+              scaffoldKey.currentState!.openEndDrawer(); // Open EndDrawer
             }
           ),
         ],
