@@ -12,16 +12,39 @@ class AppTheme {
   });
 
   ThemeData getTheme() {
-    return ThemeData(
-        useMaterial3: true,
-        brightness: isDarkMode ? Brightness.dark : Brightness.light,
-        colorSchemeSeed: const Color.fromRGBO(118, 151, 229, 1),
-        appBarTheme: const AppBarTheme(
-          centerTitle: false,
-        ));
-  }
+    const ColorScheme lightColorScheme = ColorScheme.light(
+      primary: Color(0xFF375CA8),
+      secondary: BUTTONS_COLOR,
+    );
 
-  //Importante para tener las propiedades final y el estado inmutable. MUY UTIL
+    const ColorScheme darkColorScheme = ColorScheme.dark(
+      primary: Color(0xFF375CA8),
+      secondary: BUTTONS_COLOR,
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: isDarkMode ? darkColorScheme : lightColorScheme,
+      brightness: isDarkMode ? Brightness.dark : Brightness.light,
+      appBarTheme: AppBarTheme(
+        centerTitle: false,
+        backgroundColor: isDarkMode ? darkColorScheme.primary : lightColorScheme.primary,
+      ),
+      buttonTheme: ButtonThemeData(
+        buttonColor: isDarkMode ? darkColorScheme.secondary : lightColorScheme.secondary,
+      ),
+    );
+  }
+  // ThemeData getTheme() {
+  //   return ThemeData(
+  //       useMaterial3: true,
+  //       brightness: isDarkMode ? Brightness.dark : Brightness.light,
+  //       colorSchemeSeed: const Color.fromRGBO(118, 151, 229, 1),
+  //       appBarTheme: const AppBarTheme(
+  //         centerTitle: false,
+  //       ));
+  // }
+
   AppTheme copyWith({int? selectedColor, bool? isDarkMode}) => AppTheme(
       selectedColor: this.selectedColor,
       isDarkMode: isDarkMode ?? this.isDarkMode);
