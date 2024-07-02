@@ -28,6 +28,11 @@ class FirebaseMusicianRepository extends MusicianRepository {
 
   @override
   Future<Musician?> updateMusician(Musician musician) {
-    return datasource.updateMusician(musician); 
+    return datasource.updateMusician(musician);
+  }
+
+  @override
+  Future<bool> deleteMusician(String email) {
+    return datasource.deleteMusician(email);
   }
 }

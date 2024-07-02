@@ -10,4 +10,6 @@ abstract class MusicianRepository {
   Future<List<Musician>> getNotAllowedMusicians();
 
   Future<Musician?> updateMusician(Musician musician);
+
+  Future<bool> deleteMusician(String email);
 }

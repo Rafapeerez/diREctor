@@ -103,4 +103,19 @@ class FirebaseMusicianDatasource implements MusicianRepository {
       throw Exception('Error al actualizar el usuario: $e');
     }
   }
+  
+  @override
+  Future<bool> deleteMusician(String email) async {
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    final snapshot = await usersCollection.get();
+    if ( snapshot.size != 0 ) {
+      try{
+        await usersCollection.doc(email).delete();
+
+      } catch (e) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
