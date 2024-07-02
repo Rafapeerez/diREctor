@@ -35,4 +35,9 @@ class FirebaseMusicianRepository extends MusicianRepository {
   Future<bool> deleteMusician(String email) {
     return datasource.deleteMusician(email);
   }
+
+  @override
+  Future<int> countNotAllowedMusicians() {
+    return datasource.countNotAllowedMusicians();
+  }
 }

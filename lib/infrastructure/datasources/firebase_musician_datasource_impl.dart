@@ -118,4 +118,14 @@ class FirebaseMusicianDatasource implements MusicianRepository {
     }
     return true;
   }
+  
+  @override
+  Future<int> countNotAllowedMusicians() async {
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    final AggregateQuerySnapshot querySnapshot = await usersCollection
+        .where('isAllowed', isEqualTo: false)
+        .count()
+        .get();
+    return querySnapshot.count!;
+  }
 }

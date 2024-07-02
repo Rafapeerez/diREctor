@@ -70,6 +70,7 @@ class _CustomExpansionPanelState extends State<CustomExpansionPanel> {
                           ? Icon(
                               Icons.circle_notifications,
                               color: colors.primary,
+                              size: 30,
                             )
                           : const SizedBox()
                         ],

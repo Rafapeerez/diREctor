@@ -105,4 +105,13 @@ class MockMusicianRepository extends _i1.Mock
         ),
         returnValue: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<int> countNotAllowedMusicians() => (super.noSuchMethod(
+        Invocation.method(
+          #countNotAllowedMusicians,
+          [],
+        ),
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 }

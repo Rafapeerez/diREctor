@@ -1,5 +1,6 @@
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/repositories/musician_repository.dart';
+import 'package:director_app_tfg/domain/usecases/musician/count_not_allowed_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/delete_musician_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_all_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_musician_by_id_usecase.dart';
@@ -19,6 +20,29 @@ final deleteMusicianUseCaseProvider = Provider((ref) {
   final musicianRepository = ref.read(musicianRepositoryProvider);
   return DeleteMusicianUseCase(musicianRepository);
 });
+
+
+//INT
+
+final countNotAllowedMusiciansProvider = StateNotifierProvider<CountMusicianProvider, int>((ref) {
+  final useCase = CountNotAllowedMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  return CountMusicianProvider(useCase);
+});
+
+class CountMusicianProvider extends StateNotifier<int> {
+  final CountNotAllowedMusiciansUseCase _countNotAllowedMusiciansUseCase;
+
+  CountMusicianProvider(
+    this._countNotAllowedMusiciansUseCase
+  ) : super(0);
+
+  Future<void> countNotAllowedMusicians() async {
+    int count = await _countNotAllowedMusiciansUseCase.execute();
+    state = count;
+  }
+}
+
+//MUSICIAN
 
 final musicianProvider = StateNotifierProvider<MusicianProvider, Musician?>((ref) {
   final saveMusicianUseCase = SaveMusicianUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
