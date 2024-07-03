@@ -62,12 +62,21 @@ class EventsViewState extends ConsumerState<EventsView> {
                   }
                   return Column(
                     children: [
-                      CustomEventCard(
-                        event: event,
-                        hasConfirmed: hasConfirmed,
-                        isAttendingEvent: true,
-                        route: '/home/0/eventsdetails-screen',
-                      )
+                      event.type.displayName == "Concierto" 
+                        ? CustomEventCard(
+                          event: event,
+                          hasConfirmed: hasConfirmed,
+                          isAttendingEvent: true,
+                          image: 'lib/config/assets/images/Concierto.jpg',
+                          route: '/home/0/eventsdetails-screen',
+                        )
+                        : CustomEventCard(
+                          event: event,
+                          hasConfirmed: hasConfirmed,
+                          isAttendingEvent: true,
+                          image: 'lib/config/assets/images/SalidasProcesionales.jpg',
+                          route: '/home/0/eventsdetails-screen',
+                        )
                     ],
                   );
                 },

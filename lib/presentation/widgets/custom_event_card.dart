@@ -8,6 +8,7 @@ class CustomEventCard extends ConsumerStatefulWidget {
   final Event event;
   final bool isAttendingEvent;
   final bool hasConfirmed;
+  final String image;
   final String route;
 
   const CustomEventCard({
@@ -15,6 +16,7 @@ class CustomEventCard extends ConsumerStatefulWidget {
     required this.event,
     required this.hasConfirmed,
     required this.route,
+    required this.image,
     this.isAttendingEvent = false,
   });
 
@@ -41,10 +43,7 @@ class CustomCardState extends ConsumerState<CustomEventCard> {
           borderRadius: BorderRadius.circular(30),
           child: Column(
             children: [
-              Container(
-                color: Colors.grey.shade700, 
-                height: 60
-              ),
+              Image.asset(widget.image),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),
