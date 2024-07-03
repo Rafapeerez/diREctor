@@ -2,7 +2,7 @@ import 'package:director_app_tfg/config/helpers/get_first_letter_from_each_word_
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
-import 'package:director_app_tfg/presentation/widgets/circle_letter.dart';
+import 'package:director_app_tfg/presentation/widgets/components/circle_letter.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_elevated_button.dart';
 import 'package:director_app_tfg/presentation/widgets/filter_botton_sheet.dart';
 import 'package:director_app_tfg/presentation/widgets/march/form_march.dart';

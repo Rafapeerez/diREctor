@@ -1,9 +1,9 @@
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
-import 'package:director_app_tfg/presentation/widgets/pop_up_menu_buttom.dart';
+import 'package:director_app_tfg/presentation/widgets/components/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_expansion_panel.dart';
 import 'package:director_app_tfg/presentation/widgets/videos/march_videos.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

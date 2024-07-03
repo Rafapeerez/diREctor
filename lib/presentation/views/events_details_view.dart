@@ -6,9 +6,10 @@ import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_h
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel.dart';
-import 'package:director_app_tfg/presentation/widgets/custom_expansion_repertoire.dart';
-import 'package:director_app_tfg/presentation/widgets/pop_up_menu_buttom.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_expansion_panel.dart';
+import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel_attendance.dart';
+import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel_repertoire.dart';
+import 'package:director_app_tfg/presentation/widgets/components/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -155,9 +156,17 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             expandedText: DurationToString.durationToString(eventSelected.duration)
           ),
 
-          const CustomExpansionRepertoire(
-            headerText: "Repertorio",
-          ),
+          userState.isAdmin 
+            ? const CustomExpansionPanelRepertoire(
+              headerText: "Repertorio",
+            )
+            : const SizedBox(),
+
+          userState.isAdmin 
+            ? const CustomExpansionPanelAttendance(
+              headerText: "Asistencia", 
+            ) 
+            : const SizedBox(),
 
           CustomExpansionPanel(
             headerText: "Notas", 
