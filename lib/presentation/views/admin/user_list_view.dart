@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/enums/instrumet_type_enum.dart';
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_submit_and_cancel_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -123,9 +124,29 @@ class UserListViewState extends ConsumerState<UserListView> {
                           size: 32,
                           color: Colors.red[700],
                         ),
-                        onPressed: () async {
-                          await deleteMusicianUseCase.execute(musician.email);
-                          await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
+                        onPressed: () {
+                          showDialog(
+                            context: context, 
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  "¿Está seguro que desea borrar de la lista al usuario?",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: SubmitAndCancelButtons(
+                                  onCancelPressed: () => Navigator.of(context).pop(), 
+                                  onSubmitedPressed: () async {
+                                    await deleteMusicianUseCase.execute(musician.email);
+                                    await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
+                                    Navigator.of(context).pop();
+                                  }, 
+                                )
+                              );
+                            },
+                          );
                         }
                       ),
                     ],

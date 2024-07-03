@@ -2,6 +2,7 @@ import 'package:director_app_tfg/config/helpers/capitalize_string_helper.dart';
 import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_submit_and_cancel_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -170,51 +171,39 @@ class EventsFormState extends ConsumerState<EventsForm> {
             ),
             const SizedBox(height: 16),
 
-            //SUBMIT AND CANCEL BUTTONS
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar")
-                ),
-                const Spacer(flex: 1),
-
-                FilledButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (widget.eventSelected != null) {
-                        // Update existing event
-                        Event updatedEvent = Event.update(
-                          uuid: widget.eventSelected!.id, 
-                          type: _type, 
-                          date: _selectedDate, 
-                          location: _location,
-                          attendance: widget.eventSelected!.attendance,
-                          duration: _duration,
-                          moreInformation: _moreInfo,
-                          repertoire: widget.eventSelected!.repertoire 
-                        );
-                        await ref.watch(eventProvider.notifier).updateEvent(widget.eventSelected!.id, updatedEvent);
-                        Navigator.of(context).pop();
-                      } else {
-                        // Save new event
-                        Event event = Event.create(
-                          type: _type, 
-                          date: _selectedDate, 
-                          location: _location,
-                          duration: _duration,
-                          moreInformation: _moreInfo
-                        );
-                        await ref.watch(eventProvider.notifier).saveEvent(event);
-                        eventsNotifier.updateEventsList(event);
-                      }
-                      Navigator.of(context).pop();
-                    }                  
-                  },
-                  child: const Text("Enviar"),
-                )
-              ],
+            SubmitAndCancelButtons(
+              onCancelPressed: () => Navigator.of(context).pop(), 
+              onSubmitedPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  if (widget.eventSelected != null) {
+                    // Update existing event
+                    Event updatedEvent = Event.update(
+                      uuid: widget.eventSelected!.id, 
+                      type: _type, 
+                      date: _selectedDate, 
+                      location: _location,
+                      attendance: widget.eventSelected!.attendance,
+                      duration: _duration,
+                      moreInformation: _moreInfo,
+                      repertoire: widget.eventSelected!.repertoire 
+                    );
+                    await ref.watch(eventProvider.notifier).updateEvent(widget.eventSelected!.id, updatedEvent);
+                    Navigator.of(context).pop();
+                  } else {
+                    // Save new event
+                    Event event = Event.create(
+                      type: _type, 
+                      date: _selectedDate, 
+                      location: _location,
+                      duration: _duration,
+                      moreInformation: _moreInfo
+                    );
+                    await ref.watch(eventProvider.notifier).saveEvent(event);
+                    eventsNotifier.updateEventsList(event);
+                  }
+                  Navigator.of(context).pop();
+                }                  
+              },
             )
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/infrastructure/services/google_services.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_submit_and_cancel_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -120,7 +121,7 @@ class _TextField extends StatelessWidget {
                       context: context, 
                       builder: (BuildContext context) {
                         return const AlertDialog(
-                          title: Text('Convocatoria'),
+                          title: Text('Número de teléfono'),
                           content: _TelephoneForm(),
                         );
                       }
@@ -193,37 +194,25 @@ class _TelephoneFormState extends ConsumerState<_TelephoneForm> {
             ),
             const SizedBox(height: 16),
             
-            //SUBMIT AND CANCEL BUTTONS
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar")
-                ),
-                const Spacer(flex: 1),
-
-                FilledButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (userState.user != null) {
-                        await musicianProv.updateMusician(Musician(
-                          email: userState.user!.email!, 
-                          name: userState.user!.displayName!,
-                          instrument: userState.instrument, 
-                          isAllowed: true, 
-                          isAdmin: false,
-                          phoneNumber: _telephoneNumber
-                        ));
-                        ref.watch(userProvider.notifier).updatePhoneNumber(_telephoneNumber);
-                        Navigator.of(context).pop();
-                      }
-                      Navigator.of(context).pop();
-                    }                  
-                  },
-                  child: const Text("Enviar"),
-                )
-              ],
+            SubmitAndCancelButtons(
+              onCancelPressed: () => Navigator.of(context).pop(), 
+              onSubmitedPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  if (userState.user != null) {
+                    await musicianProv.updateMusician(Musician(
+                      email: userState.user!.email!, 
+                      name: userState.user!.displayName!,
+                      instrument: userState.instrument, 
+                      isAllowed: true, 
+                      isAdmin: userState.isAdmin,
+                      phoneNumber: _telephoneNumber
+                    ));
+                    ref.watch(userProvider.notifier).updatePhoneNumber(_telephoneNumber);
+                    Navigator.of(context).pop();
+                  }
+                  Navigator.of(context).pop();
+                }                  
+              },
             )
           ],
         ),

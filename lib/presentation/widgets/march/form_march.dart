@@ -2,6 +2,7 @@
 import 'package:director_app_tfg/config/helpers/capitalize_string_helper.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
+import 'package:director_app_tfg/presentation/widgets/components/custom_submit_and_cancel_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -129,52 +130,38 @@ class EventsFormState extends ConsumerState<MarchsForm> {
             ),
             const SizedBox(height: 16),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
 
-                //CANCEL BUTTON
-                OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancelar")
-                ),
-                const Spacer(flex: 1),
-
-                //SUBMIT BUTTON
-                FilledButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if ( widget.marchSelected != null ) {
-                        March updatedMarch = March.update(
-                          uuid: widget.marchSelected!.id, 
-                          name: _name, 
-                          author: _author, 
-                          number: _number, 
-                          link: _link, 
-                          moreInformation: _moreInfo
-                        );
-                        await ref.watch(marchProvider.notifier).updateMarch(updatedMarch);
-                        ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
-                        Navigator.of(context).pop();
-
-                      } else {
-                        March march = March.create(
-                          name: _name,
-                          author: _author,
-                          number: _number,
-                          link: _link,
-                          moreInformation: _moreInfo
-                        );
-                        await marchsProv.saveMarch(march);
-                        await ref.watch(marchsProvider.notifier).updateMarchsList(march);
-                        ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
-                      }
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text("Enviar"),
-                )
-              ],
+            SubmitAndCancelButtons(
+              onCancelPressed: () => Navigator.of(context).pop(),
+              onSubmitedPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  if ( widget.marchSelected != null ) {
+                    March updatedMarch = March.update(
+                      uuid: widget.marchSelected!.id, 
+                      name: _name, 
+                      author: _author, 
+                      number: _number, 
+                      link: _link, 
+                      moreInformation: _moreInfo
+                    );
+                    await ref.watch(marchProvider.notifier).updateMarch(updatedMarch);
+                    ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
+                    Navigator.of(context).pop();
+                  } else {
+                    March march = March.create(
+                      name: _name,
+                      author: _author,
+                      number: _number,
+                      link: _link,
+                      moreInformation: _moreInfo
+                    );
+                    await marchsProv.saveMarch(march);
+                    await ref.watch(marchsProvider.notifier).updateMarchsList(march);
+                    ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
+                  }
+                  Navigator.of(context).pop();
+                }
+              },
             )
           ],
         ),
