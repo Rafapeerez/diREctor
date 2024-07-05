@@ -125,13 +125,37 @@ class FirebaseEventDatasource implements EventRepository {
   Future<Event> updateEvent(String eventId, Event event) async {
     try {
       DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(eventId);
-
       await eventRef.update(EventMapper.eventToEntity(event).toMap());
 
       return event;
-
     } catch (e) {
       return Event.empty();
+    }
+  }
+  
+  @override
+  Future<bool> deleteMusicianFromEvent(String eventId, String email) async {
+    try {
+      DocumentReference eventRef = FirebaseFirestore.instance.collection('eventos').doc(eventId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(eventRef);
+        if (snapshot.exists) {
+          Map<String, dynamic>? eventData = snapshot.data() as Map<String, dynamic>?;
+          if (eventData != null && eventData.containsKey('attendance')) {
+            List<dynamic> attendanceList = eventData['attendance'];
+            attendanceList.remove(email);
+
+            transaction.update(eventRef, {'attendance': attendanceList});
+          }
+        } else {
+          return false;
+        }
+      });
+
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

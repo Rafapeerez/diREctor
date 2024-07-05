@@ -15,4 +15,6 @@ abstract class EventRepository {
   Future<Event> updateRepertoire(List<String> repertoire, Event event);
 
   Future<Event> updateEvent(String eventId, Event event);
+
+  Future<bool> deleteMusicianFromEvent(String eventId, String email);
 }

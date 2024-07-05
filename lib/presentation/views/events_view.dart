@@ -32,7 +32,7 @@ class EventsViewState extends ConsumerState<EventsView> {
     _events = ref.read(eventsProvider);
 
     for (final event in _events) {
-      final bool hasConfirmed = await ref.read(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, event.id);
+      final bool hasConfirmed = await ref.read(attendanceProvider.notifier).hasConfirmed(userState.user!.email!, event.id);
       if (mounted) {
         setState(() {
           _hasConfirmedMap[event.id] = hasConfirmed;

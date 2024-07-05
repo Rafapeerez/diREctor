@@ -33,7 +33,7 @@ class CustomCardState extends ConsumerState<CustomEventCard> {
     return InkWell(
       onTap: () {
         context.go(widget.route);
-        selectedEventProv.state = widget.event;
+        selectedEventProv.updateEvent(widget.event);
       },
       child: Card(
         shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

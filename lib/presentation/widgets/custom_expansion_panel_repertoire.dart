@@ -8,11 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CustomExpansionPanelRepertoire extends ConsumerStatefulWidget {
   final String headerText;
   final bool isExpanded;
+  final ScrollController? scrollController;
 
   const CustomExpansionPanelRepertoire({
     super.key,
     required this.headerText,
     this.isExpanded = false,
+    this.scrollController
   });
 
   @override
@@ -30,14 +32,34 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
   void initState() {
     super.initState();
     _isExpanded = widget.isExpanded;
-    repertoire = ref.read(selectedEventProvider.notifier).state.repertoire;
+    repertoire = ref.read(selectedEventProvider).repertoire;
     _marchController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize repertoire here
+    repertoire = ref.read(selectedEventProvider).repertoire;
   }
   
   void toggleExapanded() {
     setState(() {
       _isExpanded = !_isExpanded;
+      _scroll(300);
     });
+  }
+
+  void _scroll(int offset) {
+    if (_isExpanded && widget.scrollController != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.scrollController!.animateTo(
+          widget.scrollController!.position.pixels + offset,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      });
+    }
   }
 
   @override
@@ -51,12 +73,11 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
           ExpansionPanelList(
             expandedHeaderPadding: EdgeInsets.zero,
             expansionCallback: (panelIndex, isExpanded) {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
+              toggleExapanded();
             },
             children: [
               ExpansionPanel(
+                isExpanded: _isExpanded,
                 headerBuilder: (context, isExpanded) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(8, 4, 8, 2),
@@ -93,8 +114,12 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
                             controller: textEditingController,
                             focusNode: focusNode,
                             decoration: const InputDecoration(
-                              labelText: 'Buscar marcha',
-                              border: OutlineInputBorder(),
+                              labelText: "Buscar",
+                              hintText: "Buscar",
+                              prefixIcon: Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                              ),
                             ),
                           );
                         },
@@ -107,8 +132,10 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
                               if (_marchName != "") {
                                 setState(() {
                                   selectedMarches.add(_marchName);
+                                  _marchController.clear();
                                 });
                               }
+                              FocusScope.of(context).unfocus();
                             },
                             child: const Text("Apuntar")
                           ),
@@ -152,8 +179,8 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
                           children: [
                             FilledButton(
                               onPressed: () async {
-                                Event updatedEvent = await eventProv.updateRepertoire(selectedMarches, ref.watch(selectedEventProvider.notifier).state);
-                                ref.read(selectedEventProvider.notifier).state = updatedEvent;
+                                Event updatedEvent = await eventProv.updateRepertoire(selectedMarches, ref.watch(selectedEventProvider));
+                                ref.read(selectedEventProvider.notifier).updateEvent(updatedEvent);
                                 setState(() {
                                   repertoire = updatedEvent.repertoire;
                                 });
@@ -194,7 +221,6 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
                     ]
                   ),
                 ),
-                isExpanded: _isExpanded,
               ),
             ],
           ),

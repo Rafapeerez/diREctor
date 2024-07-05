@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:director_app_tfg/config/helpers/date_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/duration_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
@@ -12,9 +11,7 @@ import 'package:director_app_tfg/presentation/widgets/custom_expansion_panel_rep
 import 'package:director_app_tfg/presentation/widgets/components/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 
 class EventsDetailsView extends ConsumerStatefulWidget {
@@ -32,6 +29,8 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
 
   Set<Marker> _markers = {};
   String _errorMessage = "";
+  final ScrollController _scrollController = ScrollController();  
+
 
   @override
   void initState() {
@@ -40,7 +39,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   }
 
   void _initEventSelected() async {
-    eventSelected = ref.read(selectedEventProvider.notifier).state;
+    eventSelected = ref.read(selectedEventProvider);
     LatLng targetLatLng = await GeolocalitationFromDirection().getLatLngFromAddress(eventSelected.location);
     setState(() {
       _position = CameraPosition(
@@ -76,11 +75,12 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
     final attendanceProv = ref.watch(eventProvider.notifier);
     
     if (userState.user!.email != null) {
-      ref.watch(hasConfirmedAttendanceProv.notifier).hasConfirmed(userState.user!.email!, eventSelected.id);
+      ref.watch(attendanceProvider.notifier).hasConfirmed(userState.user!.email!, eventSelected.id);
     }
-    bool hasConfirmedAttendance = ref.watch(hasConfirmedAttendanceProv);
+    bool hasConfirmedAttendance = ref.watch(attendanceProvider);
 
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: [
           Padding(
@@ -149,28 +149,34 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
             isExpanded: true,
             headerText: "Día y Hora",
             expandedText: DateToString().dateString(eventSelected.date),
+            scrollController: _scrollController,
           ),
 
           CustomExpansionPanel(
             headerText: "Duración", 
-            expandedText: DurationToString.durationToString(eventSelected.duration)
+            expandedText: DurationToString.durationToString(eventSelected.duration),
+            scrollController: _scrollController,
           ),
 
           userState.isAdmin 
-            ? const CustomExpansionPanelRepertoire(
+            ? CustomExpansionPanelRepertoire(
               headerText: "Repertorio",
+              scrollController: _scrollController,
             )
             : const SizedBox(),
 
           userState.isAdmin 
-            ? const CustomExpansionPanelAttendance(
+            ? CustomExpansionPanelAttendance(
               headerText: "Asistencia", 
+              event: eventSelected,
+              scrollController: _scrollController,
             ) 
             : const SizedBox(),
 
           CustomExpansionPanel(
             headerText: "Notas", 
-            expandedText: eventSelected.moreInformation
+            expandedText: eventSelected.moreInformation,
+            scrollController: _scrollController,
           ),
           const SizedBox(height: 10),
 
@@ -188,7 +194,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
                       instrument: userState.instrument
                     );
                     await attendanceProv.confirmAttendance(musician, eventSelected);
-                    await ref.watch(hasConfirmedAttendanceProv.notifier).updateAttendance(true);
+                    await ref.watch(attendanceProvider.notifier).updateAttendance(true);
                   }
                 },
                 style: const ButtonStyle(
