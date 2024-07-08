@@ -145,7 +145,7 @@ class EventsFormState extends ConsumerState<MarchsForm> {
                       moreInformation: _moreInfo
                     );
                     await ref.watch(marchProvider.notifier).updateMarch(updatedMarch);
-                    ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
+                    ref.read(marchsProvider.notifier).getAllMarchsOrderByNumber();
                     Navigator.of(context).pop();
                   } else {
                     March march = March.create(
@@ -157,7 +157,7 @@ class EventsFormState extends ConsumerState<MarchsForm> {
                     );
                     await marchsProv.saveMarch(march);
                     await ref.watch(marchsProvider.notifier).updateMarchsList(march);
-                    ref.read(marchsProvider.notifier).getAllMarchsOrderByName();
+                    ref.read(marchsProvider.notifier).getAllMarchsOrderByNumber();
                   }
                   Navigator.of(context).pop();
                 }

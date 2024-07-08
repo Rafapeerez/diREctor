@@ -4,7 +4,6 @@ import 'package:director_app_tfg/presentation/providers/march/march_provider.dar
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/components/circle_letter.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_elevated_button.dart';
-import 'package:director_app_tfg/presentation/widgets/filter_botton_sheet.dart';
 import 'package:director_app_tfg/presentation/widgets/march/form_march.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,21 +18,29 @@ class MarchsView extends ConsumerStatefulWidget {
 
 class MarchsViewState extends ConsumerState<MarchsView> {
 
+  late List<March> filteredSearchMarch; 
+  final TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _checkAndLoadEvents();
+
+    searchController.addListener(() {
+      filterSearchResults(searchController.text);
+    });
   }
 
   void _checkAndLoadEvents() {
     final marchs = ref.read(marchsProvider);
     final marchsNotifier = ref.read(marchsProvider.notifier);
     if (marchs.isEmpty) {
-      marchsNotifier.getAllMarchsOrderByName();
+      marchsNotifier.getAllMarchsOrderByNumber();
     }
+    filteredSearchMarch = marchs;
   }
 
-  void showDialogMethod() {
+  void showDialogMethod() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -45,19 +52,17 @@ class MarchsViewState extends ConsumerState<MarchsView> {
     );
   }
 
-  void showFilterBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return const FilterBottomSheet();
-      },
-    );
+  void filterSearchResults(String query) {
+    final marchs = ref.watch(marchsProvider);
+    if (query.isEmpty) {
+      setState(() {
+        filteredSearchMarch = List.from(marchs);
+      });
+    } else {
+      setState(() {
+        filteredSearchMarch = marchs.where((item) => item.name.toLowerCase().contains(query.toLowerCase())).toList();
+      });
+    }
   }
 
   @override
@@ -66,65 +71,50 @@ class MarchsViewState extends ConsumerState<MarchsView> {
     final marchs = ref.watch(marchsProvider);
 
     return marchs.isNotEmpty
-        ? Stack(
+        ? Column(
           children: [
-            ListView.builder(
-              itemCount: marchs.length,
-              itemBuilder: (context, index) {
-                final march = marchs[index];
-                return Column(
-                  children: [
-                    _CustomMarch(
-                      march: march,
-                      letter: GetFirstLetterFromEachWordOfString.getFirstLetterFromEachWordOfString(march.name)
-                    ),
-                  ],
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8,10,8,0),
+              child: TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  labelText: "Buscar",
+                  hintText: "Buscar",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                ),
+              ),
             ),
-            if (userState.isAdmin)
-              CustomElevatedButton(
-                icon: Icons.more_vert,
-                onPressed: () {
-                  final RenderBox button = context.findRenderObject() as RenderBox;
-                  final Offset buttonPosition = button.localToGlobal(Offset.zero);
-                  final double screenHeight = MediaQuery.of(context).size.height;
-                  final double screenWidth = MediaQuery.of(context).size.width;
-                  final double dx = screenWidth - buttonPosition.dx;
-                  final double dy = screenHeight - buttonPosition.dy - 150;
-                  showMenu(
-                    context: context,
-                    position: RelativeRect.fromLTRB(dx, dy, 20, 0),
-                    items: const [
-                      PopupMenuItem(
-                        value: 'Añadir',
-                        child: Text('Añadir'),
-                      ),
-                      PopupMenuItem(
-                        value: 'Filtrar',
-                        child: Text('Filtrar'),
-                      ),
-                    ],
-                    elevation: 8.0,
-                  ).then((choice) {
-                    if (choice != null) {
-                      if (choice == 'Añadir') {
+            Expanded(
+              child: Stack(
+                children: [
+                  ListView.builder(
+                    itemCount: filteredSearchMarch.length,
+                    itemBuilder: (context, index) {
+                      final march = filteredSearchMarch[index];
+                      return Column(
+                        children: [
+                          _CustomMarch(
+                            march: march,
+                            letter: GetFirstLetterFromEachWordOfString.getFirstLetterFromEachWordOfString(march.name)
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  if (userState.isAdmin)
+                    CustomElevatedButton(
+                      icon: Icons.add,
+                      onPressed: () {
                         showDialogMethod();
-                      } else if (choice == 'Filtrar') {
-                        showFilterBottomSheet();
-                      }
-                    }
-                  });
-                },
-              )
-            else
-              CustomElevatedButton(
-                icon: Icons.filter_alt_rounded,
-                onPressed: () {
-                  showFilterBottomSheet();
-                },
-              )
-          ]
+                      },
+                    )
+                ]
+              ),
+            )
+          ],
         )
         : Stack(
           children: [
