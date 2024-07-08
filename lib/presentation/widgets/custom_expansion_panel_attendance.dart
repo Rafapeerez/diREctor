@@ -23,7 +23,7 @@ class CustomExpansionPanelAttendance extends ConsumerStatefulWidget {
 
 class CustomExpansionPanelAttendanceState extends ConsumerState<CustomExpansionPanelAttendance> {
   late bool _isExpanded;
-  late List<String> filteredAttendance;
+  late List<String> filteredSearchAttendance;
   final TextEditingController searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -31,8 +31,7 @@ class CustomExpansionPanelAttendanceState extends ConsumerState<CustomExpansionP
   void initState() {
     super.initState();
     _isExpanded = widget.isExpanded;
-    
-    filteredAttendance = [];
+    filteredSearchAttendance = [];
 
     searchController.addListener(() {
       filterSearchResults(searchController.text);
@@ -47,11 +46,11 @@ class CustomExpansionPanelAttendanceState extends ConsumerState<CustomExpansionP
     final attendance = ref.read(selectedEventProvider).attendance;
     if (query.isEmpty) {
       setState(() {
-        filteredAttendance = List.from(attendance);
+        filteredSearchAttendance = List.from(attendance);
       });
     } else {
       setState(() {
-        filteredAttendance = attendance.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
+        filteredSearchAttendance = attendance.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
       });
     }
   }
@@ -131,9 +130,9 @@ class CustomExpansionPanelAttendanceState extends ConsumerState<CustomExpansionP
                           radius: const Radius.circular(10),
                           child: ListView.builder(
                             controller: _scrollController,
-                            itemCount: filteredAttendance.length,
+                            itemCount: filteredSearchAttendance.length,
                             itemBuilder: (context, index) {
-                              final musician = filteredAttendance[index];
+                              final musician = filteredSearchAttendance[index];
                               return Column(
                                 children: [
                                   Row(

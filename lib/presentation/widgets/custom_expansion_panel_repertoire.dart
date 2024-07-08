@@ -39,14 +39,13 @@ class CustomExpansionPanelRepertoireState extends ConsumerState<CustomExpansionP
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Initialize repertoire here
     repertoire = ref.read(selectedEventProvider).repertoire;
   }
   
   void toggleExapanded() {
     setState(() {
       _isExpanded = !_isExpanded;
-      _scroll(300);
+      _scroll(20);
     });
   }
 

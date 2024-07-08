@@ -31,7 +31,6 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
   String _errorMessage = "";
   final ScrollController _scrollController = ScrollController();  
 
-
   @override
   void initState() {
     super.initState();  
