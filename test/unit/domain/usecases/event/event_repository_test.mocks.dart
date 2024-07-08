@@ -166,4 +166,20 @@ class MockEventRepository extends _i1.Mock implements _i3.EventRepository {
           ),
         )),
       ) as _i4.Future<_i2.Event>);
+
+  @override
+  _i4.Future<bool> deleteMusicianFromEvent(
+    String? eventId,
+    String? email,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteMusicianFromEvent,
+          [
+            eventId,
+            email,
+          ],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }

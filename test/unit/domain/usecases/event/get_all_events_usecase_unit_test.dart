@@ -18,11 +18,11 @@ void main() {
   group("GetAllEventsUseCase", () {
     test("should return a list of events when the call to the repository is successful", () async {
       //GIVEN
-        final List<Event> eventList = [
-          InfoObjectMother.createConcert(),
-          InfoObjectMother.createProcesion()
-        ];
-        when(mockEventRepository.getAllEvents()).thenAnswer((_) async => eventList);
+      final List<Event> eventList = [
+        InfoObjectMother.createConcert(),
+        InfoObjectMother.createProcesion()
+      ];
+      when(mockEventRepository.getAllEvents()).thenAnswer((_) async => eventList);
 
       //WHEN
       final result = await useCase.execute();
