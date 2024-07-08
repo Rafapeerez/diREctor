@@ -16,7 +16,8 @@ class ProfileView extends ConsumerWidget {
     final userState = ref.watch(userProvider);
     
     return Drawer(
-      child: Column(
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           SizedBox(
             height: 300, 
