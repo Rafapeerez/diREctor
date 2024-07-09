@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:director_app_tfg/domain/repositories/musician_repository.dart';
 import 'package:director_app_tfg/domain/usecases/musician/count_not_allowed_musicians_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/musician/decrement_total_events_attendance_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/delete_musician_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_all_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_musician_by_id_usecase.dart';
@@ -47,21 +48,30 @@ class CountMusicianProvider extends StateNotifier<int> {
 }
 
 
-final incrementTotalEventsAttendanceProvider = StateNotifierProvider<IncrementTotalEventsAttendanceProvider, int>((ref) {
-  final useCase = IncrementTotalEventsAttendanceUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+final changeTotalEventsAttendanceProvider = StateNotifierProvider<IncrementTotalEventsAttendanceProvider, int>((ref) {
+  final incrementTotalEventsAttendanceUseCase = IncrementTotalEventsAttendanceUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  final decrementTotalEventsAttendanceUseCase = DecrementTotalEventsAttendanceUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
   
-  return IncrementTotalEventsAttendanceProvider(useCase);
+
+  return IncrementTotalEventsAttendanceProvider(incrementTotalEventsAttendanceUseCase, decrementTotalEventsAttendanceUseCase);
 });
 
 class IncrementTotalEventsAttendanceProvider extends StateNotifier<int> {
   final IncrementTotalEventsAttendanceUseCase _incrementTotalEventsAttendanceUseCase;
+  final DecrementTotalEventsAttendanceUseCase _decrementTotalEventsAttendanceUseCase;
 
   IncrementTotalEventsAttendanceProvider(
-    this._incrementTotalEventsAttendanceUseCase
+    this._incrementTotalEventsAttendanceUseCase,
+    this._decrementTotalEventsAttendanceUseCase
   ) : super(0);
 
   Future<void> incrementTotalEventsAttendance(String email) async {
     int total = await _incrementTotalEventsAttendanceUseCase.execute(email);
+    state = total;
+  }
+
+  Future<void> decrementTotalEventsAttendance(String email) async {
+    int total = await _decrementTotalEventsAttendanceUseCase.execute(email);
     state = total;
   }
 }

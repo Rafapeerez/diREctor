@@ -16,4 +16,6 @@ abstract class MusicianRepository {
   Future<int> countNotAllowedMusicians();
 
   Future<int> incrementTotalEventsAttendance(String email);
+
+  Future<int> decrementTotalEventsAttendance(String email);
 }

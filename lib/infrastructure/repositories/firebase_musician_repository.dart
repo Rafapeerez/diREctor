@@ -40,9 +40,14 @@ class FirebaseMusicianRepository extends MusicianRepository {
   Future<int> countNotAllowedMusicians() {
     return datasource.countNotAllowedMusicians();
   }
-  
+
   @override
   Future<int> incrementTotalEventsAttendance(String email) {
     return datasource.incrementTotalEventsAttendance(email);
+  }
+
+  @override
+  Future<int> decrementTotalEventsAttendance(String email) {
+    return datasource.decrementTotalEventsAttendance(email);
   }
 }

@@ -124,4 +124,14 @@ class MockMusicianRepository extends _i1.Mock
         ),
         returnValue: _i4.Future<int>.value(0),
       ) as _i4.Future<int>);
+
+  @override
+  _i4.Future<int> decrementTotalEventsAttendance(String? email) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #decrementTotalEventsAttendance,
+          [email],
+        ),
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 }

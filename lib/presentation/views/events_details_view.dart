@@ -197,7 +197,7 @@ class EventsDetailsViewState extends ConsumerState<EventsDetailsView> {
                     );
                     await attendanceProv.confirmAttendance(musician, eventSelected);
                     await ref.watch(attendanceProvider.notifier).updateAttendance(true);
-                    ref.read(incrementTotalEventsAttendanceProvider.notifier).incrementTotalEventsAttendance(musician.email);
+                    ref.read(changeTotalEventsAttendanceProvider.notifier).incrementTotalEventsAttendance(musician.email);
                   }
                 },
                 style: const ButtonStyle(

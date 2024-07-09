@@ -148,4 +148,24 @@ class FirebaseMusicianDatasource implements MusicianRepository {
       throw Exception("User with email $email not found.");
     }
   }
+  
+  @override
+  Future<int> decrementTotalEventsAttendance(String email) async {
+    final CollectionReference usersCollection = FirebaseFirestore.instance.collection('usuario');
+    final QuerySnapshot querySnapshot = await usersCollection.where('email', isEqualTo: email).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final DocumentSnapshot userDoc = querySnapshot.docs.first;
+      final DocumentReference userDocRef = userDoc.reference;
+
+      final int currentAttendance = userDoc.get('totalEventsAttendance') ?? 0;
+
+      final int newAttendance = currentAttendance - 1;
+      await userDocRef.update({'totalEventsAttendance': newAttendance});
+
+      return newAttendance;
+    } else {
+      return 0;
+    }
+  }
 }
