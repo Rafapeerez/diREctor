@@ -7,24 +7,36 @@ final userProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
 });
 
 class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier() : super(const UserState(user: null, isAdmin: false, instrument: "-", phoneNumber: ""));
+  UserNotifier() : super(
+    const UserState(
+      user: null, 
+      isAdmin: false, 
+      instrument: "-", 
+      phoneNumber: "",
+      fcm: "",
+      totalEventsAttendance: 0
+    )
+  );
 
-  void signIn(User? user, bool isAdmin, String instrument, String phoneNumber){
+  void signIn(User? user, bool isAdmin, String instrument, String phoneNumber, String fcm, int totalEventsAttendance){
     state = state.copyWith(
       user: user,
       isAdmin: isAdmin,
       instrument: instrument,
-      phoneNumber: phoneNumber
+      phoneNumber: phoneNumber,
+      fcm: fcm,
+      totalEventsAttendance: totalEventsAttendance
     );
   }
-  
 
   void updatePhoneNumber (String phoneNumber) async {
     state = state.copyWith(
       user: state.user,
       isAdmin: state.isAdmin,
       instrument: state.instrument,
-      phoneNumber: phoneNumber
+      phoneNumber: phoneNumber,
+      fcm: state.fcm,
+      totalEventsAttendance: state.totalEventsAttendance
     );
   }
 }
@@ -35,26 +47,34 @@ class UserState extends Equatable{
   final bool isAdmin;
   final String instrument;
   final String phoneNumber;
+  final String fcm;
+  final int totalEventsAttendance;
 
   const UserState({
     required this.user,
     this.instrument = "-",
     this.isAdmin = false,
-    this.phoneNumber = ""
+    this.phoneNumber = "",
+    required this.fcm,
+    required this.totalEventsAttendance
   });
 
   copyWith({
     required User? user,
     required bool isAdmin,
     required String instrument,
-    required String phoneNumber
+    required String phoneNumber,
+    required String fcm,
+    required int totalEventsAttendance
   }) => UserState(    
     user: user,
     isAdmin: isAdmin,
     instrument: instrument,
-    phoneNumber: phoneNumber
+    phoneNumber: phoneNumber,
+    fcm: fcm,
+    totalEventsAttendance: totalEventsAttendance
   );
   
   @override
-  List<Object?> get props => [user, isAdmin, instrument, phoneNumber]; 
+  List<Object?> get props => [user, isAdmin, instrument, phoneNumber, fcm, totalEventsAttendance]; 
 }

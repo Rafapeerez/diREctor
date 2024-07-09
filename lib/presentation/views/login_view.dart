@@ -36,16 +36,12 @@ class _LogInViewState extends State<LogInView> {
       sound: true,
       provisional: false,
     );
-
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-
       // Get the token
       final FirebaseMessaging messaging = FirebaseMessaging.instance;
       _token = await messaging.getToken();
 
       setState(() {});
-    } else {
-      // Handle case where permissions are not granted
     }
   }
 
@@ -126,7 +122,7 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
               final musician = ref.watch(musicianProvider);
               if (musician != null) {
                 if (musician.isAllowed == true) {
-                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument, musician.phoneNumber);
+                  ref.read(userProvider.notifier).signIn(user, musician.isAdmin, musician.instrument, musician.phoneNumber, musician.fcm, musician.totalEventsAttendance);
                   context.go("/home/0");
                 } else {
                   context.go('/waiting-screen');
@@ -137,7 +133,8 @@ class _LogInButtonState extends ConsumerState<_LogInButton> {
                   name: user.displayName ?? "",
                   isAllowed: false,
                   isAdmin: false,
-                  fcm: widget.token ?? ""
+                  fcm: widget.token ?? "",
+                  totalEventsAttendance: 0,
                 );
                 await musicianProv.saveMusician(createdMusician);
                 await context.findAncestorStateOfType<_LogInViewState>()?.subscribeToTopic();

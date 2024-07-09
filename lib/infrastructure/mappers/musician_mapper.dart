@@ -10,7 +10,8 @@ class MusicianMapper {
     phoneNumber: musicianDB.phoneNumber,
     isAllowed: musicianDB.isAllowed, 
     isAdmin: musicianDB.isAdmin,
-    fcm: musicianDB.fcm
+    fcm: musicianDB.fcm,
+    totalEventsAttendance: musicianDB.totalEventsAttendance
   );
 
   static MusicianDB musicianToEntity(Musician musician) => MusicianDB(
@@ -20,6 +21,7 @@ class MusicianMapper {
     phoneNumber: musician.phoneNumber,
     isAllowed: musician.isAllowed, 
     isAdmin: musician.isAdmin,
-    fcm: musician.fcm
+    fcm: musician.fcm,
+    totalEventsAttendance: musician.totalEventsAttendance
   );
 }

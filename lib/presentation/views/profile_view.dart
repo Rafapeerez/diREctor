@@ -200,14 +200,20 @@ class _TelephoneFormState extends ConsumerState<_TelephoneForm> {
               onSubmitedPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   if (userState.user != null) {
-                    await musicianProv.updateMusician(Musician(
-                      email: userState.user!.email!, 
-                      name: userState.user!.displayName!,
-                      instrument: userState.instrument, 
-                      isAllowed: true, 
-                      isAdmin: userState.isAdmin,
-                      phoneNumber: _telephoneNumber
-                    ));
+                    await musicianProv.getMusicianById(userState.user!.email!);
+                    final musician = ref.watch(musicianProvider);
+                    await musicianProv.updateMusician(
+                      Musician(
+                        email: userState.user!.email!, 
+                        name: userState.user!.displayName!,
+                        instrument: userState.instrument, 
+                        isAllowed: musician!.isAllowed, 
+                        fcm: userState.fcm,
+                        isAdmin: userState.isAdmin,
+                        phoneNumber: _telephoneNumber,
+                        totalEventsAttendance: musician.totalEventsAttendance
+                      )
+                    );
                     ref.watch(userProvider.notifier).updatePhoneNumber(_telephoneNumber);
                     Navigator.of(context).pop();
                   }

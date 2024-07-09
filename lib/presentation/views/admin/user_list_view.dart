@@ -29,14 +29,17 @@ class UserListViewState extends ConsumerState<UserListView> {
     SimpleDialogOption _buildSimpleDialogOption( BuildContext context, MusicianProvider musicianProv, Musician musician, String instrument ) {
       return SimpleDialogOption(
         onPressed: () async {
-          await musicianProv.updateMusician(Musician(
-            email: musician.email, 
-            name: musician.name,
-            instrument: instrument, 
-            isAllowed: true, 
-            isAdmin: false,
-            fcm: musician.fcm
-          ));
+          await musicianProv.updateMusician(
+            Musician(
+              email: musician.email, 
+              name: musician.name,
+              instrument: instrument, 
+              isAllowed: true, 
+              isAdmin: false,
+              fcm: musician.fcm,
+              totalEventsAttendance: musician.totalEventsAttendance
+            )
+          );
           await ref.read(musiciansProvider.notifier).updateNotAllowedList(musician);
           Navigator.of(context).pop();
         },

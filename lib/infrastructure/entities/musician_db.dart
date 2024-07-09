@@ -6,6 +6,7 @@ class MusicianDB {
   final bool isAllowed;
   final bool isAdmin;
   final String fcm;
+  final int totalEventsAttendance;
 
   MusicianDB({
     required this.email,
@@ -14,7 +15,8 @@ class MusicianDB {
     this.instrument = "",
     required this.isAllowed,
     required this.isAdmin,
-    required this.fcm
+    required this.fcm,
+    required this.totalEventsAttendance
   });
 
   Map<String, dynamic> toMap() {
@@ -25,7 +27,8 @@ class MusicianDB {
       'instrument': instrument,
       'isAllowed': isAllowed,
       'isAdmin': isAdmin,
-      'fcm': fcm
+      'fcm': fcm,
+      'totalEventsAttendance': totalEventsAttendance
     };
   }
 
@@ -37,7 +40,8 @@ class MusicianDB {
       instrument: map['instrument'],
       isAllowed: map['isAllowed'],
       isAdmin: map['isAdmin'],
-      fcm: map['fcm']
+      fcm: map['fcm'],
+      totalEventsAttendance: map['totalEventsAttendance']
     );
   }
 }

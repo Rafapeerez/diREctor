@@ -6,6 +6,7 @@ class Musician {
   final bool isAllowed;
   final bool isAdmin;
   final String fcm;
+  final int totalEventsAttendance;
 
   Musician({
     required this.email,
@@ -14,7 +15,8 @@ class Musician {
     this.instrument = "",
     required this.isAllowed,
     required this.isAdmin,
-    this.fcm = ""
+    required this.fcm,
+    required this.totalEventsAttendance
   });
 
   factory Musician.create({
@@ -24,7 +26,8 @@ class Musician {
     String instrument = "",
     required bool isAllowed,
     required bool isAdmin,
-    String fcm = ""
+    required String fcm,
+    required int totalEventsAttendance
   }) {
     return Musician(
       name: name,
@@ -33,7 +36,8 @@ class Musician {
       instrument: instrument,
       isAllowed: isAllowed,
       isAdmin: isAdmin,
-      fcm: fcm
+      fcm: fcm,
+      totalEventsAttendance: totalEventsAttendance
     );
   }
 }

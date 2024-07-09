@@ -5,6 +5,7 @@ import 'package:director_app_tfg/domain/usecases/musician/delete_musician_usecas
 import 'package:director_app_tfg/domain/usecases/musician/get_all_musicians_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_musician_by_id_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/get_not_allowed_musicians_usecase.dart';
+import 'package:director_app_tfg/domain/usecases/musician/increment_total_events_attendance_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/save_musician_usecase.dart';
 import 'package:director_app_tfg/domain/usecases/musician/update_musician_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_musician_datasource_impl.dart';
@@ -16,6 +17,8 @@ final musicianRepositoryProvider = Provider<MusicianRepository>((ref) {
   return FirebaseMusicianRepository(FirebaseMusicianDatasource());
 });
 
+
+
 final deleteMusicianUseCaseProvider = Provider((ref) {
   final musicianRepository = ref.read(musicianRepositoryProvider);
   return DeleteMusicianUseCase(musicianRepository);
@@ -26,6 +29,7 @@ final deleteMusicianUseCaseProvider = Provider((ref) {
 
 final countNotAllowedMusiciansProvider = StateNotifierProvider<CountMusicianProvider, int>((ref) {
   final useCase = CountNotAllowedMusiciansUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  
   return CountMusicianProvider(useCase);
 });
 
@@ -33,12 +37,32 @@ class CountMusicianProvider extends StateNotifier<int> {
   final CountNotAllowedMusiciansUseCase _countNotAllowedMusiciansUseCase;
 
   CountMusicianProvider(
-    this._countNotAllowedMusiciansUseCase
+    this._countNotAllowedMusiciansUseCase,
   ) : super(0);
 
   Future<void> countNotAllowedMusicians() async {
     int count = await _countNotAllowedMusiciansUseCase.execute();
     state = count;
+  }
+}
+
+
+final incrementTotalEventsAttendanceProvider = StateNotifierProvider<IncrementTotalEventsAttendanceProvider, int>((ref) {
+  final useCase = IncrementTotalEventsAttendanceUseCase(FirebaseMusicianRepository(FirebaseMusicianDatasource()));
+  
+  return IncrementTotalEventsAttendanceProvider(useCase);
+});
+
+class IncrementTotalEventsAttendanceProvider extends StateNotifier<int> {
+  final IncrementTotalEventsAttendanceUseCase _incrementTotalEventsAttendanceUseCase;
+
+  IncrementTotalEventsAttendanceProvider(
+    this._incrementTotalEventsAttendanceUseCase
+  ) : super(0);
+
+  Future<void> incrementTotalEventsAttendance(String email) async {
+    int total = await _incrementTotalEventsAttendanceUseCase.execute(email);
+    state = total;
   }
 }
 

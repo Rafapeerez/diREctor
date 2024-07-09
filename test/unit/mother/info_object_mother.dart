@@ -104,7 +104,8 @@ class InfoObjectMother {
       isAdmin: false,
       fcm: "asdfadbhjcioadosbfhuwioefbeadsnjklvbjiepbcipsasjipe",
       instrument: InstrumentTypeEnum.trumpet.displayName,
-      phoneNumber: "+34777777770"
+      phoneNumber: "+34777777770",
+      totalEventsAttendance: 0
     );
   }
 
@@ -116,7 +117,8 @@ class InfoObjectMother {
       isAdmin: false,
       fcm: "asdfadbhjcioadosbfhuwioefbeadsnjklvbjiepbcipsasjope",
       instrument: InstrumentTypeEnum.percussion.displayName,
-      phoneNumber: "+34777777771"
+      phoneNumber: "+34777777771",
+      totalEventsAttendance: 0
     );
   }
 
@@ -128,7 +130,8 @@ class InfoObjectMother {
       isAdmin: true,
       fcm: "asdfadbhjcioadosbfhuwioefbeadsnjklvbjiepbcipsasjiupe",
       instrument: InstrumentTypeEnum.bass.displayName,
-      phoneNumber: "+34777777772"
+      phoneNumber: "+34777777772",
+      totalEventsAttendance: 0
     );
   }
 }
