@@ -1,22 +1,15 @@
-import 'package:director_app_tfg/domain/models/enums/holy_week_name_enum.dart';
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
-import 'package:director_app_tfg/presentation/providers/event/holy_week_event_provider.dart';
+import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomHolyWeekCard extends ConsumerStatefulWidget {
   final HolyWeekEvent? holyWeekEvent;
-  final HolyWeekNameEnum name;
-  final String image;
-  final String route;
 
   const CustomHolyWeekCard({
     super.key,
     this.holyWeekEvent,
-    required this.name,
-    this.route = "",
-    required this.image,
   });
 
   @override
@@ -50,7 +43,7 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
           );
         }
         else {
-          context.go(widget.route);
+          context.go("/home/1/holyweekdetails-screen");
           selectedHolyWeekEventProv.state = widget.holyWeekEvent;
         }
       },
@@ -62,7 +55,7 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
           borderRadius: BorderRadius.circular(30),
           child: Column(
             children: [
-              Image.network("https://firebasestorage.googleapis.com/v0/b/director-2024-redencion.appspot.com/o/DomingoRamos.jpg?alt=media&token=ea808e7d-b2e7-44fc-9f3b-7f4039e363f1"),
+              Image.network(widget.holyWeekEvent!.imageURL),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),
@@ -71,7 +64,7 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
                   children: [
                     const SizedBox(height: 5),
                     Text(
-                      widget.name.displayName,
+                      widget.holyWeekEvent!.name.displayName,
                       style: const TextStyle(
                         fontSize: 20,
                       ),

@@ -1,4 +1,5 @@
 enum HolyWeekNameEnum {
+  descanso("Descanso"),
   juevesPasion("Jueves de Pasión"),
   viernesDolores("Viernes de Dolores"),
   sabadoPasion("Sábado de Pasión"),

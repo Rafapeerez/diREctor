@@ -4,7 +4,7 @@ import 'package:director_app_tfg/config/helpers/date_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/duration_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
-import 'package:director_app_tfg/presentation/providers/event/holy_week_event_provider.dart';
+import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_expansion_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

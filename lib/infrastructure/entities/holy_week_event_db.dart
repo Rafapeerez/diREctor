@@ -34,14 +34,19 @@ class HolyWeekEventDB extends EventDB {
   }
 
   static HolyWeekEventDB fromMap(Map<String, dynamic> map) {
-    EventDB event = EventDB.fromMap(map);
+    
+    dynamic dateValue = map['date'];
+    if (dateValue is Timestamp) {
+      dateValue = dateValue.toDate();
+    }
+
     return HolyWeekEventDB(
-      id: event.id,
-      type: event.type,
-      date: event.date,
-      location: event.location,
-      duration: event.duration,
-      moreInformation: event.moreInformation,
+      id: map['id'],
+      type: map['type'],
+      date: dateValue,
+      location: map['location'],
+      duration: map['duration'],
+      moreInformation: map['moreInformation'],
       holyWeekName: map['holyWeekName'],
       imageURL: map['imageURL']
     );
