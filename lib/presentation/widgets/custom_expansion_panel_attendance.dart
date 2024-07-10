@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/event.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/musician/musician_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -152,6 +153,8 @@ class CustomExpansionPanelAttendanceState extends ConsumerState<CustomExpansionP
                                           ref.read(selectedEventProvider.notifier).removeAttendee(musician);
                                           await ref.read(attendanceProvider.notifier).deleteMusicianFromEvent(widget.event.id, musician);
                                           ref.read(changeTotalEventsAttendanceProvider.notifier).decrementTotalEventsAttendance(musician);
+                                          int totalEventsAttended = await ref.read(changeTotalEventsAttendanceProvider.notifier).decrementTotalEventsAttendance(musician);
+                                          ref.watch(userProvider.notifier).updateTotalEventsAttended(totalEventsAttended);
                                           filterSearchResults(searchController.text);
                                         },
                                       ),

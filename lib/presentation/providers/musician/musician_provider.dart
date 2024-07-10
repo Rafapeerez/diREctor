@@ -65,14 +65,16 @@ class IncrementTotalEventsAttendanceProvider extends StateNotifier<int> {
     this._decrementTotalEventsAttendanceUseCase
   ) : super(0);
 
-  Future<void> incrementTotalEventsAttendance(String email) async {
+  Future<int> incrementTotalEventsAttendance(String email) async {
     int total = await _incrementTotalEventsAttendanceUseCase.execute(email);
     state = total;
+    return total;
   }
 
-  Future<void> decrementTotalEventsAttendance(String email) async {
+  Future<int> decrementTotalEventsAttendance(String email) async {
     int total = await _decrementTotalEventsAttendanceUseCase.execute(email);
     state = total;
+    return total;
   }
 }
 

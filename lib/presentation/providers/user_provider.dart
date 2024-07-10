@@ -39,6 +39,17 @@ class UserNotifier extends StateNotifier<UserState> {
       totalEventsAttendance: state.totalEventsAttendance
     );
   }
+
+  void updateTotalEventsAttended (int totalEventsAttended) async {
+    state = state.copyWith(
+      user: state.user,
+      isAdmin: state.isAdmin,
+      instrument: state.instrument,
+      phoneNumber: state.phoneNumber,
+      fcm: state.fcm,
+      totalEventsAttendance: totalEventsAttended
+    );
+  }
 }
 
 class UserState extends Equatable{

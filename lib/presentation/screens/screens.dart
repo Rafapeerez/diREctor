@@ -6,3 +6,4 @@ export 'package:director_app_tfg/presentation/screens/waiting_screen.dart';
 export 'package:director_app_tfg/presentation/screens/admin/user_list_screen.dart';
 export 'package:director_app_tfg/presentation/screens/pdf_viewer_screen.dart';
 export 'package:director_app_tfg/presentation/screens/holy_week_details_screen.dart';
+export 'package:director_app_tfg/presentation/screens/achievement_screen.dart';

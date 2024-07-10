@@ -53,6 +53,12 @@ final appRouter = GoRouter(
           name: PdfViewerScreen.name,
           builder: (BuildContext context, GoRouterState state) => const PdfViewerScreen(),
         ),
+
+        GoRoute(
+          path: 'achievement-screen',
+          name: AchievementScreen.name,
+          builder: (BuildContext context, GoRouterState state) => const AchievementScreen(),
+        )
       ]
     ),
   ]

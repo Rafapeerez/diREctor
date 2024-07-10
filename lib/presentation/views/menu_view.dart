@@ -67,6 +67,13 @@ class MenuViewState extends ConsumerState<MenuView> {
               context.go("/home/0/pdfviewer-screen");
             },
           ),
+          CustomListTile(
+            option: "Logros",
+            icon: const Icon(Icons.timeline_outlined, size: 30),
+            onTap: () {
+              context.go("/home/0/achievement-screen");
+            },
+          ),
           if (userState.isAdmin)
             CustomListTile(
               option: "Solicitudes",
