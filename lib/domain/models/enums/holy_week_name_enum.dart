@@ -13,4 +13,11 @@ enum HolyWeekNameEnum {
 
   const HolyWeekNameEnum(this.displayName);
   final String displayName;
+
+  static HolyWeekNameEnum fromDisplayName(String displayName) {
+    return HolyWeekNameEnum.values.firstWhere(
+      (e) => e.displayName == displayName,
+      orElse: () => throw Exception('Invalid enum display name: $displayName'),
+    );
+  }
 }

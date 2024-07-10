@@ -1,6 +1,8 @@
 import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
+import 'package:director_app_tfg/domain/models/enums/holy_week_name_enum.dart';
 import 'package:director_app_tfg/domain/models/enums/instrumet_type_enum.dart';
 import 'package:director_app_tfg/domain/models/event.dart';
+import 'package:director_app_tfg/domain/models/holy_week_event.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/domain/models/musician.dart';
 import 'package:uuid/uuid.dart';
@@ -57,6 +59,19 @@ class InfoObjectMother {
       duration: const Duration(hours: 2),
       attendance: [],
       moreInformation: "Concert by the Symphony Orchestra"
+    );
+  }
+
+  //HOLY WEEK EVENT
+  static HolyWeekEvent createHolyWeekEvent(){
+    return HolyWeekEvent(
+      name: HolyWeekNameEnum.domingoRamos, 
+      imageURL: "example//:image", 
+      id: const Uuid().v4(), 
+      date: DateTime(2024, 8, 30, 14, 30, 30),
+      location: "Iglesia de San Francisco",
+      duration: const Duration(hours: 2),
+      moreInformation: "Example"
     );
   }
 

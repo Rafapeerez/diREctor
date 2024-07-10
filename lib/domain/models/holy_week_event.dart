@@ -5,9 +5,11 @@ import 'package:uuid/uuid.dart';
 
 class HolyWeekEvent extends Event {
   final HolyWeekNameEnum name;
+  final String imageURL;
 
   HolyWeekEvent({
     required this.name,
+    required this.imageURL,
     required super.id, 
     super.type = EventTypeEnum.salidaProcesional, 
     required super.date, 
@@ -18,6 +20,7 @@ class HolyWeekEvent extends Event {
 
   HolyWeekEvent.empty()
     : name = HolyWeekNameEnum.juevesPasion,
+    imageURL = "",
       super(
         id: "",
         type: EventTypeEnum.salidaProcesional,
@@ -27,6 +30,7 @@ class HolyWeekEvent extends Event {
 
   factory HolyWeekEvent.create({
     required HolyWeekNameEnum name,
+    required String image,
     required DateTime date,
     required String location,
     Duration duration = Duration.zero,
@@ -36,6 +40,7 @@ class HolyWeekEvent extends Event {
     return HolyWeekEvent(
       id: uuid,
       name: name,
+      imageURL: image,
       date: date, 
       location: location,
       duration: duration,

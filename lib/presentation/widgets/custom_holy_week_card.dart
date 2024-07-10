@@ -62,7 +62,7 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
           borderRadius: BorderRadius.circular(30),
           child: Column(
             children: [
-              Image.asset(widget.image),
+              Image.network("https://firebasestorage.googleapis.com/v0/b/director-2024-redencion.appspot.com/o/DomingoRamos.jpg?alt=media&token=ea808e7d-b2e7-44fc-9f3b-7f4039e363f1"),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),
