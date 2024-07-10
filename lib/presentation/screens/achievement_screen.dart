@@ -10,10 +10,10 @@ class AchievementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScaffold(
+    return CustomScaffold(
       hasArrowBack: true,
       body: AchievementView(),
-      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 0),
     );
   }
 }
