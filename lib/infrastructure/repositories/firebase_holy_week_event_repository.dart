@@ -12,8 +12,8 @@ class FirebaseHolyWeekEventRepository extends HolyWeekEventRepository {
   }
 
   @override
-  Future<bool> changeToRestDay(String eventId) {
-    return datasource.changeToRestDay(eventId);
+  Future<bool> changeToRestDay(HolyWeekEvent event) {
+    return datasource.changeToRestDay(event);
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
 import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,7 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
   @override
   Widget build(BuildContext context) {
     final selectedHolyWeekEventProv = ref.read(selectedHolyWeekEventProvider.notifier);
+    final userState = ref.watch(userProvider);
 
     return InkWell(
       onTap: () {
@@ -29,13 +31,26 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Descanso'),
-                content: const Text('Hoy tenemos día de decanso.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Cerrar'),
+                content: const Text('Hoy tenemos día de descanso.'),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cerrar'),
+                      ),
+                      userState.isAdmin 
+                        ? TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cambiar'),
+                        )
+                        : const SizedBox()
+                    ],
                   ),
                 ],
               );

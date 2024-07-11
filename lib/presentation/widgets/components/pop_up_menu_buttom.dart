@@ -1,6 +1,8 @@
 import 'package:director_app_tfg/domain/models/event.dart';
+import 'package:director_app_tfg/domain/models/holy_week_event.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
+import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/events/form_event.dart';
 import 'package:director_app_tfg/presentation/widgets/march/form_march.dart';
@@ -11,17 +13,20 @@ import 'package:go_router/go_router.dart';
 class PopUpMenuButton extends ConsumerWidget {
   final Event? eventSelected;
   final March? marchSelected;
+  final HolyWeekEvent? holyWeekEvent;
 
   const PopUpMenuButton({
     super.key, 
     this.eventSelected,
-    this.marchSelected
+    this.marchSelected,
+    this.holyWeekEvent
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final deleteEventUseCase = ref.watch(deleteEventUseCaseProvider);
     final deleteMarchUseCase = ref.watch(deleteMarchUseCaseProvider);
+    final changeToRestDayUseCase = ref.watch(changeToRestDayUseCaseProvider);
 
     return PopupMenuButton<String>(
       onSelected: (String choice) async {
@@ -54,18 +59,36 @@ class PopUpMenuButton extends ConsumerWidget {
             await ref.read(marchsProvider.notifier).updateMarchsListAfterDelete(marchSelected!.id);
             context.go("/home/2");
           }
+        } else if (choice == 'Descanso') {
+          await changeToRestDayUseCase.execute(holyWeekEvent!);
+          context.go("/home/1");
         }
       },
-      itemBuilder: (BuildContext context) => const <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
-          value: 'Editar',
-          child: Text('Editar'),
-        ),
-        PopupMenuItem<String>(
-          value: 'Eliminar',
-          child: Text('Eliminar'),
-        ),
-      ],
+      itemBuilder: (BuildContext context) {
+        List<PopupMenuEntry<String>> items = <PopupMenuEntry<String>>[
+          const PopupMenuItem<String>(
+            value: 'Editar',
+            child: Text('Editar'),
+          ),
+        ];
+        if (holyWeekEvent == null) {
+          items.add(
+            const PopupMenuItem<String>(
+              value: 'Eliminar',
+              child: Text('Eliminar'),
+            ),
+          );
+        }
+        else {
+          items.add(
+            const PopupMenuItem<String>(
+              value: 'Descanso',
+              child: Text('Descanso'),
+            ),
+          );
+        }
+        return items;
+      },
       icon: const Icon(Icons.more_vert),
     );
   }

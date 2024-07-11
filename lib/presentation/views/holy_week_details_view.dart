@@ -5,7 +5,9 @@ import 'package:director_app_tfg/config/helpers/duration_to_string_helper.dart';
 import 'package:director_app_tfg/config/helpers/geolocalitation_from_direction_helper.dart';
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
 import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
+import 'package:director_app_tfg/presentation/providers/user_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_expansion_panel.dart';
+import 'package:director_app_tfg/presentation/widgets/components/pop_up_menu_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -69,6 +71,8 @@ class EventsDetailsViewState extends ConsumerState<HolyWeekDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userProvider);
+    
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -80,11 +84,12 @@ class EventsDetailsViewState extends ConsumerState<HolyWeekDetailsView> {
                 Text(
                   holyWeekEventSelected?.name.displayName ?? "Descanso",
                   style: const TextStyle(
-                    fontSize: 25,
+                    fontSize: 24,
                   ),
                 ),
-                const Spacer(flex: 1),
-
+                const Spacer(),
+                if (userState.isAdmin) 
+                  PopUpMenuButton(holyWeekEvent: holyWeekEventSelected),
               ],
             ),
           ),
