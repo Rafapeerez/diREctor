@@ -23,7 +23,7 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
 
     return InkWell(
       onTap: () {
-        if (widget.holyWeekEvent == null) {
+        if ( widget.holyWeekEvent!.location.isEmpty && widget.holyWeekEvent!.imageURL.contains('Descanso')) {
           showDialog(
             context: context,
             builder: (BuildContext context) {

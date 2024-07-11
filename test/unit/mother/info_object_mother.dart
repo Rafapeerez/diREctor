@@ -63,12 +63,24 @@ class InfoObjectMother {
   }
 
   //HOLY WEEK EVENT
-  static HolyWeekEvent createHolyWeekEvent(){
+  static HolyWeekEvent createHolyWeekEvent1(){
     return HolyWeekEvent(
       name: HolyWeekNameEnum.domingoRamos, 
       imageURL: "example//:image", 
       id: const Uuid().v4(), 
       date: DateTime(2024, 8, 30, 14, 30, 30),
+      location: "Iglesia de San Francisco",
+      duration: const Duration(hours: 2),
+      moreInformation: "Example"
+    );
+  }
+
+  static HolyWeekEvent createHolyWeekEvent2(){
+    return HolyWeekEvent(
+      name: HolyWeekNameEnum.lunesSanto, 
+      imageURL: "example//:image", 
+      id: const Uuid().v4(), 
+      date: DateTime(2024, 8, 31, 14, 30, 30),
       location: "Iglesia de San Francisco",
       duration: const Duration(hours: 2),
       moreInformation: "Example"

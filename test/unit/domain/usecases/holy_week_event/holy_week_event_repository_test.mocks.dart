@@ -53,10 +53,11 @@ class MockHolyWeekEventRepository extends _i1.Mock
       ) as _i4.Stream<List<_i2.HolyWeekEvent>>);
 
   @override
-  _i4.Future<bool> changeToRestDay(String? eventId) => (super.noSuchMethod(
+  _i4.Future<bool> changeToRestDay(_i2.HolyWeekEvent? event) =>
+      (super.noSuchMethod(
         Invocation.method(
           #changeToRestDay,
-          [eventId],
+          [event],
         ),
         returnValue: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);

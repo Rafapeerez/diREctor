@@ -9,7 +9,7 @@ void main() {
   test("should convert an holy week event from domain to db", (){
 
     //GIVEN      
-    HolyWeekEvent holyWeekEvent = InfoObjectMother.createHolyWeekEvent();
+    HolyWeekEvent holyWeekEvent = InfoObjectMother.createHolyWeekEvent1();
 
     //WHEN
     HolyWeekEvent mappedEvent = HolyWeekEventMapper.holyWeekEventToDomain(HolyWeekEventMapper.holyWeekEventToEntity(holyWeekEvent));
