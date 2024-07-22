@@ -4,11 +4,13 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
+import 'dart:typed_data' as _i5;
 
 import 'package:director_app_tfg/domain/models/holy_week_event.dart' as _i2;
 import 'package:director_app_tfg/domain/repositories/holy_week_event_repository.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -63,27 +65,43 @@ class MockHolyWeekEventRepository extends _i1.Mock
       ) as _i4.Future<bool>);
 
   @override
-  _i4.Future<_i2.HolyWeekEvent> updateHolyWeekEvent(
-    String? eventId,
-    _i2.HolyWeekEvent? event,
-  ) =>
+  _i4.Future<_i2.HolyWeekEvent> updateHolyWeekEvent(_i2.HolyWeekEvent? event) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateHolyWeekEvent,
-          [
-            eventId,
-            event,
-          ],
+          [event],
         ),
         returnValue: _i4.Future<_i2.HolyWeekEvent>.value(_FakeHolyWeekEvent_0(
           this,
           Invocation.method(
             #updateHolyWeekEvent,
-            [
-              eventId,
-              event,
-            ],
+            [event],
           ),
         )),
       ) as _i4.Future<_i2.HolyWeekEvent>);
+
+  @override
+  _i4.Future<String> uploadImageToStorage(
+    _i5.Uint8List? file,
+    String? eventId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #uploadImageToStorage,
+          [
+            file,
+            eventId,
+          ],
+        ),
+        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+          this,
+          Invocation.method(
+            #uploadImageToStorage,
+            [
+              file,
+              eventId,
+            ],
+          ),
+        )),
+      ) as _i4.Future<String>);
 }

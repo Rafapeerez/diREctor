@@ -128,7 +128,6 @@ class _TextField extends StatelessWidget {
                       }
                     );
                   },
-                  color: Colors.black,
                 )
                 : const SizedBox()
             ],
