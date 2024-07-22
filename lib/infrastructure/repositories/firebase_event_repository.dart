@@ -8,7 +8,7 @@ class FirebaseEventRepository extends EventRepository {
   FirebaseEventRepository(this.datasource);
 
   @override
-  Future<List<Event>> getAllEvents() {
+  Stream<List<Event>> getAllEvents() {
     return datasource.getAllEvents();
   }
 

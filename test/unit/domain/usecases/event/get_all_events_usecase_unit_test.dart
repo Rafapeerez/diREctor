@@ -22,16 +22,17 @@ void main() {
         InfoObjectMother.createConcert(),
         InfoObjectMother.createProcesion()
       ];
-      when(mockEventRepository.getAllEvents()).thenAnswer((_) async => eventList);
+      final List<Event> expectedList = List.from(eventList)..sort((a, b) => a.date.compareTo(b.date));
+
+      final stream = Stream<List<Event>>.fromIterable([eventList]);
+      when(mockEventRepository.getAllEvents()).thenAnswer((_) => stream);
 
       //WHEN
-      final result = await useCase.execute();
+      final result = await useCase.execute().first;
 
       //THEN
       verify(mockEventRepository.getAllEvents()).called(1);
-      expect(result.length, eventList.length);
-      expect(result.first, eventList.first);
-      expect(result[1], eventList[1]);
+      expect(result, equals(expectedList));
     });
 
     test('should throw an exception when the call to the repository fails', () async {

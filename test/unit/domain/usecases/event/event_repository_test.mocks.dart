@@ -58,13 +58,13 @@ class MockEventRepository extends _i1.Mock implements _i3.EventRepository {
       ) as _i4.Future<_i2.Event>);
 
   @override
-  _i4.Future<List<_i2.Event>> getAllEvents() => (super.noSuchMethod(
+  _i4.Stream<List<_i2.Event>> getAllEvents() => (super.noSuchMethod(
         Invocation.method(
           #getAllEvents,
           [],
         ),
-        returnValue: _i4.Future<List<_i2.Event>>.value(<_i2.Event>[]),
-      ) as _i4.Future<List<_i2.Event>>);
+        returnValue: _i4.Stream<List<_i2.Event>>.empty(),
+      ) as _i4.Stream<List<_i2.Event>>);
 
   @override
   _i4.Future<void> deleteEvent(String? eventId) => (super.noSuchMethod(

@@ -7,23 +7,13 @@ import 'package:director_app_tfg/infrastructure/mappers/event_mapper.dart';
 
 class FirebaseEventDatasource implements EventRepository {
   @override
-  Future<List<Event>> getAllEvents() async {
-    final CollectionReference eventsCollection = FirebaseFirestore.instance.collection('eventos');
-    final snapshot = await eventsCollection.get();
-
-    if (snapshot.size != 0) {
-      try {
-        final eventsList = snapshot.docs.map((doc) {
-          final EventDB eventDB = EventDB.fromMap(doc.data() as Map<String, dynamic>);
-          return EventMapper.eventToDomain(eventDB);
-        }).toList();
-        return eventsList;
-      } catch (e) {
-        throw Exception('Error al obtener los eventos: $e');
-      }
-    } else {
-      return List.empty();
-    }
+  Stream<List<Event>> getAllEvents() {
+    return FirebaseFirestore.instance
+      .collection('eventos')
+      .snapshots()
+      .map((snapshot) => 
+        snapshot.docs.map((doc) => EventMapper.eventToDomain(EventDB.fromMap(doc.data()))).toList()
+      );    
   }
 
   @override

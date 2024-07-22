@@ -114,36 +114,44 @@ class EventProvider extends StateNotifier<Event?> {
 
 //LIST
 
+final eventsStreamProvider = StreamProvider<List<Event>>((ref) {
+  final getAllEventsUseCase = GetAllEventsUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
+  return getAllEventsUseCase.execute();
+});
+
 final eventsProvider = StateNotifierProvider<EventsProvider, List<Event>>((ref) {
   final getAllEventsUseCase = GetAllEventsUseCase(FirebaseEventRepository(FirebaseEventDatasource()));
-
   return EventsProvider(getAllEventsUseCase);
 });
 
 class EventsProvider extends StateNotifier<List<Event>> {
   final GetAllEventsUseCase _getAllEventsUseCase;
+  late final Stream<List<Event>> _eventsStream;
 
-  EventsProvider(this._getAllEventsUseCase) : super(List.empty());
-
-  Future<void> getAllEvents() async {
-    List<Event> eventsList = await _getAllEventsUseCase.execute();
-    state = eventsList;
+  EventsProvider(this._getAllEventsUseCase) : super([]) {
+    _eventsStream = _getAllEventsUseCase.execute();
+    _listenToEvents();
   }
 
-  Future<void> updateEventsList(Event event) async {
-    List<Event> updatedList = [...state];
-    if (updatedList.isEmpty) {
-      updatedList = [event];
+  void _listenToEvents() {
+    _eventsStream.listen((events) {
+      state = events;
+    });
+  }
+
+  void updateEventsList(Event event) {
+    final updatedList = [...state];
+    final index = updatedList.indexWhere((e) => e.id == event.id);
+    if (index != -1) {
+      updatedList[index] = event;
     } else {
-      updatedList.add(event); 
+      updatedList.add(event);
     }
     state = updatedList;
   }
 
-  Future<void> updateEventsListAfterDelete(String eventId) async {
-    List<Event> updatedList = [...state];
-    updatedList.removeWhere((event) => event.id == eventId);
-    state = updatedList;
+  void updateEventsListAfterDelete(String eventId) {
+    state = state.where((event) => event.id != eventId).toList();
   }
 }
 
@@ -184,3 +192,18 @@ class AttendanceProvider extends StateNotifier<bool>{
 
 }
 
+
+
+
+
+final confirmationsProvider = StateNotifierProvider<ConfirmationsNotifier, Map<String, bool>>((ref) {
+  return ConfirmationsNotifier();
+});
+
+class ConfirmationsNotifier extends StateNotifier<Map<String, bool>> {
+  ConfirmationsNotifier() : super({});
+
+  void setConfirmation(String eventId, bool confirmed) {
+    state = {...state, eventId: confirmed};
+  }
+}

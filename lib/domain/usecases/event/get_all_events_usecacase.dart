@@ -5,8 +5,7 @@ class GetAllEventsUseCase {
   final EventRepository _eventRepository;
   GetAllEventsUseCase(this._eventRepository);
 
-  Future<List<Event>> execute() async {
-    List<Event> eventsList = await _eventRepository.getAllEvents();
-    return eventsList;
+  Stream<List<Event>> execute() {
+    return _eventRepository.getAllEvents();
   }
 }

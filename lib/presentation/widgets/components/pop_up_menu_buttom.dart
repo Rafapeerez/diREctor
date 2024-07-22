@@ -58,7 +58,7 @@ class PopUpMenuButton extends ConsumerWidget {
         } else if (choice == 'Eliminar') {
           if (eventSelected != null) {
             await deleteEventUseCase.execute(eventSelected!.id);
-            await ref.read(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected!.id);
+            ref.read(eventsProvider.notifier).updateEventsListAfterDelete(eventSelected!.id);
             context.go("/home/0");
           }
           else if ( marchSelected != null ) {

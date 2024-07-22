@@ -15,47 +15,60 @@ class EventsView extends ConsumerStatefulWidget {
 }
 
 class EventsViewState extends ConsumerState<EventsView> {
-  final Map<String, bool> _hasConfirmedMap = {};
-  List<Event> _events = [];
+  bool _isCheckingConfirmations = false;
 
   @override
   void initState() {
     super.initState();
-    _checkConfirmations();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkConfirmations(ref.read(eventsProvider));
+    });
   }
 
-  Future<void> _checkConfirmations() async {
-    final eventsNotifier = ref.read(eventsProvider.notifier);
-    await eventsNotifier.getAllEvents();
-    
-    final userState = ref.read(userProvider);
-    _events = ref.read(eventsProvider);
+  Future<void> _checkConfirmations(List<Event> events) async {
+    if (_isCheckingConfirmations) return;
+    _isCheckingConfirmations = true;
 
-    for (final event in _events) {
+    final userState = ref.read(userProvider);
+    final confirmations = ref.read(confirmationsProvider.notifier);
+
+    for (final event in events) {
+      if (!mounted) break;
       final bool hasConfirmed = await ref.read(attendanceProvider.notifier).hasConfirmed(userState.user!.email!, event.id);
       if (mounted) {
-        setState(() {
-          _hasConfirmedMap[event.id] = hasConfirmed;
-        });
+        confirmations.setConfirmation(event.id, hasConfirmed);
       }
     }
-  }
 
+    if (mounted) {
+      setState(() {
+        _isCheckingConfirmations = false;
+      });
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final eventsProv = ref.read(eventProvider.notifier);
     final events = ref.watch(eventsProvider);
     final userState = ref.watch(userProvider);
     final bool hasFutureEvents = events.any((event) => event.date.isAfter(DateTime.now()));
+    final confirmations = ref.watch(confirmationsProvider);
 
-    return _events.isNotEmpty && hasFutureEvents
+    ref.listen<List<Event>>(eventsProvider, (previous, next) {
+      if (previous != next) {
+        _checkConfirmations(next);
+      }
+    });
+    
+    return events.isNotEmpty && hasFutureEvents
         ? Stack(
             children: [
               ListView.builder(
                 itemCount: events.length,
                 itemBuilder: (context, index) {
                   final event = events[index];
-                  final bool hasConfirmed = _hasConfirmedMap[event.id] ?? false;
+                  final bool hasConfirmed = confirmations[event.id] ?? false;
 
                   if (event.date.isBefore(DateTime.now())) {
                     return const SizedBox();
