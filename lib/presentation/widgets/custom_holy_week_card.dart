@@ -1,6 +1,7 @@
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
 import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/user_provider.dart';
+import 'package:director_app_tfg/presentation/widgets/holy_week_event/form_holy_week_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +46,15 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
                       userState.isAdmin 
                         ? TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Nuevo contrato'),
+                                  content: HolyWeekEventsForm(holyWeekEventSelected: widget.holyWeekEvent),
+                                );
+                              },
+                            );                         
                           },
                           child: const Text('Cambiar'),
                         )
@@ -70,7 +79,13 @@ class CustomCardState extends ConsumerState<CustomHolyWeekCard> {
           borderRadius: BorderRadius.circular(30),
           child: Column(
             children: [
-              Image.network(widget.holyWeekEvent!.imageURL),
+              AspectRatio(
+                aspectRatio: 3.5 / 1,
+                child: Image.network(
+                  widget.holyWeekEvent!.imageURL,
+                  fit: BoxFit.cover,
+                ),
+              ),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),

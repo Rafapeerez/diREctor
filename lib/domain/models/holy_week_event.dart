@@ -47,4 +47,24 @@ class HolyWeekEvent extends Event {
       moreInformation: moreInformation
     );
   }
+
+  factory HolyWeekEvent.update({
+    required String id,
+    required HolyWeekNameEnum name,
+    required String image,
+    required DateTime date,
+    required String location,
+    required Duration duration,
+    required String moreInformation 
+  }) {
+    return HolyWeekEvent(
+      id: id,
+      name: name,
+      imageURL: image,
+      date: date, 
+      location: location,
+      duration: duration,
+      moreInformation: moreInformation
+    );
+  }
 }

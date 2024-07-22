@@ -1,57 +1,53 @@
+import 'dart:typed_data';
+
 import 'package:director_app_tfg/config/helpers/capitalize_string_helper.dart';
-import 'package:director_app_tfg/domain/models/enums/event_type_enum.dart';
-import 'package:director_app_tfg/domain/models/event.dart';
-import 'package:director_app_tfg/presentation/providers/event/event_provider.dart';
+import 'package:director_app_tfg/domain/models/holy_week_event.dart';
+import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/components/custom_submit_and_cancel_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
-class EventsForm extends ConsumerStatefulWidget {
+class HolyWeekEventsForm extends ConsumerStatefulWidget {
 
-  final Event? eventSelected;
+  final HolyWeekEvent? holyWeekEventSelected;
 
-  const EventsForm({
+  const HolyWeekEventsForm({
     super.key,
-    this.eventSelected
+    this.holyWeekEventSelected
   });
 
   @override
-  EventsFormState createState() => EventsFormState();
+  HolyWeekEventsFormState createState() => HolyWeekEventsFormState();
 }
 
-class EventsFormState extends ConsumerState<EventsForm> {
+class HolyWeekEventsFormState extends ConsumerState<HolyWeekEventsForm> {
   final _formKey = GlobalKey<FormState>();  
   DateTime _selectedDate = DateTime.now();
-  EventTypeEnum _type = EventTypeEnum.concierto;
   Duration _duration = const Duration();
   String _location = "";
   String _moreInfo = "";
+  Uint8List? _imageFile;
+  String? imageUrl;
 
   List<String> options = ['Concierto', 'Salida Procesional'];
+
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.eventSelected != null) {
-      // Initialize with existing event data
-      _selectedDate = widget.eventSelected!.date;
-      _type = widget.eventSelected!.type;
-      _duration = widget.eventSelected!.duration;
-      _location = widget.eventSelected!.location;
-      _moreInfo = widget.eventSelected!.moreInformation;
-    } else {
-      // Initialize with default values
-      _selectedDate = DateTime.now();
-      _type = EventTypeEnum.concierto;
-      _duration = const Duration();
-      _location = "";
-      _moreInfo = "";
+    if (widget.holyWeekEventSelected != null) {
+      _selectedDate = widget.holyWeekEventSelected!.date;
+      _duration = widget.holyWeekEventSelected!.duration;
+      _location = widget.holyWeekEventSelected!.location;
+      _moreInfo = widget.holyWeekEventSelected!.moreInformation;
+      imageUrl = widget.holyWeekEventSelected!.imageURL;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final eventsNotifier = ref.watch(eventsProvider.notifier);
 
     return SingleChildScrollView(
       child: Form(
@@ -59,30 +55,6 @@ class EventsFormState extends ConsumerState<EventsForm> {
         child: Column(
           children: [
             //FORM
-            //TYPE
-            DropdownButtonFormField<String>(
-              value: _type.displayName,
-              items: options.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              decoration: const InputDecoration(
-                labelText: 'Selecciona una opción',
-              ),
-              onChanged: (String? newValue) {
-                if (newValue! == "Concierto") {
-                  setState(() {
-                    _type = EventTypeEnum.concierto;
-                  });
-                } else {
-                  setState(() {
-                    _type = EventTypeEnum.salidaProcesional;
-                  });
-                }
-              },
-            ),
 
             //LOCATION
             TextFormField(
@@ -138,6 +110,37 @@ class EventsFormState extends ConsumerState<EventsForm> {
             ),
             const SizedBox(height: 16),
 
+            //IMAGE
+            _imageFile != null
+                ? Image.memory(
+                    _imageFile!,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  )
+                : widget.holyWeekEventSelected!.imageURL.isNotEmpty
+                    ? Image.network(
+                        widget.holyWeekEventSelected!.imageURL,
+                        width: 200,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(Icons.image, size: 100),
+            ElevatedButton(
+              onPressed: () async {
+                final ImagePicker picker = ImagePicker();
+                final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  final imageFile = await image.readAsBytes();
+                  setState(() {
+                    _imageFile = imageFile;
+                  });
+                }
+              },
+              child: const Text("Elegir Imagen"),
+            ),
+            const SizedBox(height: 16),
+
             //DATE
             ListTile(
               title: const Text("Ingresa una fecha: "),
@@ -170,41 +173,52 @@ class EventsFormState extends ConsumerState<EventsForm> {
               },
             ),
             const SizedBox(height: 16),
-
+            
             SubmitAndCancelButtons(
-              onCancelPressed: () => Navigator.of(context).pop(), 
-              onSubmitedPressed: () async {
+              onCancelPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+              onSubmitedPressed: _isLoading ? null : () async {
                 if (_formKey.currentState!.validate()) {
-                  if (widget.eventSelected != null) {
-                    // Update existing event
-                    Event updatedEvent = Event.update(
-                      uuid: widget.eventSelected!.id, 
-                      type: _type, 
-                      date: _selectedDate, 
-                      location: _location,
-                      attendance: widget.eventSelected!.attendance,
-                      duration: _duration,
-                      moreInformation: _moreInfo,
-                      repertoire: widget.eventSelected!.repertoire 
-                    );
-                    await ref.watch(eventProvider.notifier).updateEvent(widget.eventSelected!.id, updatedEvent);
-                    Navigator.of(context).pop();
-                  } else {
-                    // Save new event
-                    Event event = Event.create(
-                      type: _type, 
-                      date: _selectedDate, 
-                      location: _location,
-                      duration: _duration,
-                      moreInformation: _moreInfo
-                    );
-                    await ref.watch(eventProvider.notifier).saveEvent(event);
-                    eventsNotifier.updateEventsList(event);
+                  setState(() {
+                    _isLoading = true;
+                  });
+
+                  if (widget.holyWeekEventSelected != null) {
+                    try {
+                      final uploadImageUseCase = ref.read(uploadImageProvider);
+                      final updateHolyWeekEventUseCase = ref.read(updateHolyWeekEventProvider);
+                      
+                      if (_imageFile != null) {
+                        imageUrl = await uploadImageUseCase.execute(_imageFile!, widget.holyWeekEventSelected!.id);
+                      }
+
+                      HolyWeekEvent updatedEvent = HolyWeekEvent.update(
+                          id: widget.holyWeekEventSelected!.id,
+                          name: widget.holyWeekEventSelected!.name,
+                          image: imageUrl!,
+                          date: _selectedDate, 
+                          location: _location,
+                          duration: _duration,
+                          moreInformation: _moreInfo
+                        );
+                        await updateHolyWeekEventUseCase.execute(updatedEvent);
+              
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      // Manejar el error aquí
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error al actualizar el evento: $e')),
+                      );
+                    } finally {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
                   }
-                  Navigator.of(context).pop();
-                }                  
+                }
               },
-            )
+              isLoading: _isLoading,
+            ),
           ],
         ),
       ),

@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
 import 'package:director_app_tfg/domain/repositories/holy_week_event_repository.dart';
 import 'package:director_app_tfg/infrastructure/entities/holy_week_event_db.dart';
 import 'package:director_app_tfg/infrastructure/mappers/holy_week_event_mapper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseHolyWeekEventDatasource implements HolyWeekEventRepository {
   
@@ -42,9 +45,25 @@ class FirebaseHolyWeekEventDatasource implements HolyWeekEventRepository {
   }
 
   @override
-  Future<HolyWeekEvent> updateHolyWeekEvent(String eventId, HolyWeekEvent event) {
-    // TODO: implement updateEvent
-    throw UnimplementedError();
+  Future<String> uploadImageToStorage(Uint8List file, String eventId) async {
+    final ref = FirebaseStorage.instance.ref().child("$eventId.png");
+    final uploadTask = ref.putData(file);
+    await uploadTask.whenComplete(() => {});
+    return await ref.getDownloadURL();
   }
 
+  @override
+  Future<HolyWeekEvent> updateHolyWeekEvent(HolyWeekEvent updatedEvent) async {
+    try {
+      DocumentReference eventRef = FirebaseFirestore.instance.collection('semanaSanta').doc(updatedEvent.id);
+      HolyWeekEventDB holyWeekEventDB = HolyWeekEventMapper.holyWeekEventToEntity(updatedEvent);
+      Map<String, dynamic> eventData = holyWeekEventDB.toMap();
+      
+      await eventRef.update(eventData);
+
+      return updatedEvent; 
+    } catch (e) {
+      throw Exception('Error al actualizar el evento: $e');
+    }
+  }
 }

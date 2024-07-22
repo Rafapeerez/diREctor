@@ -5,6 +5,7 @@ import 'package:director_app_tfg/presentation/providers/event/event_provider.dar
 import 'package:director_app_tfg/presentation/providers/holy_week_event/holy_week_event_provider.dart';
 import 'package:director_app_tfg/presentation/providers/march/march_provider.dart';
 import 'package:director_app_tfg/presentation/widgets/events/form_event.dart';
+import 'package:director_app_tfg/presentation/widgets/holy_week_event/form_holy_week_event.dart';
 import 'package:director_app_tfg/presentation/widgets/march/form_march.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +39,12 @@ class PopUpMenuButton extends ConsumerWidget {
                 return AlertDialog(
                   title: const Text('Editar Convocatoria'),
                   content: EventsForm(eventSelected: eventSelected),
+                );
+              }
+              if ( holyWeekEvent != null ) {
+                return AlertDialog(
+                  title: Text(holyWeekEvent!.name.displayName),
+                  content: HolyWeekEventsForm(holyWeekEventSelected: holyWeekEvent),
                 );
               }
               else {
