@@ -207,7 +207,7 @@ const marchas = [
   {
     id: uuidv4(),
     name: "Resucitó",
-    author: "Frabcisco José Gómez Argüello",
+    author: "Francisco José Gómez Argüello",
     number: 36,
     link: "https://www.youtube.com/watch?v=nJeqh5-tyLI",
     moreInformation: ""
@@ -335,17 +335,17 @@ const marchas = [
   {
     id: uuidv4(),
     name: "Cinco Llagas",
-    author: "https://www.youtube.com/watch?v=9JBzpvINsPM",
+    author: "Nicolás Turienzo",
     number: 58,
-    link: "Nicolás Turienzo",
+    link: "https://www.youtube.com/watch?v=9JBzpvINsPM",
     moreInformation: ""
   },
   {
     id: uuidv4(),
     name: "Cristo de San Julián",
-    author: "https://www.youtube.com/watch?v=wAE6UdIZ85w",
+    author: "Manuel Rodriguez Ruiz",
     number: 59,
-    link: "Manuel Rodriguez Ruiz",
+    link: "https://www.youtube.com/watch?v=wAE6UdIZ85w",
     moreInformation: ""
   },
   {

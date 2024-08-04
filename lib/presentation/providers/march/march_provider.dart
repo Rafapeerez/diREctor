@@ -1,11 +1,11 @@
 import 'package:director_app_tfg/domain/models/march.dart';
 import 'package:director_app_tfg/domain/repositories/march_repository.dart';
-import 'package:director_app_tfg/domain/usecases/march/delete_march_usecase.dart';
-import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_order_by_name_usecase.dart';
-import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_order_by_number_usecase.dart';
-import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_usecase.dart';
-import 'package:director_app_tfg/domain/usecases/march/save_march_usecase.dart';
-import 'package:director_app_tfg/domain/usecases/march/update_march_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/delete_march_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/get_all_marchs_order_by_name_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/get_all_marchs_order_by_number_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/get_all_marchs_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/save_march_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/update_march_usecase.dart';
 import 'package:director_app_tfg/infrastructure/datasources/firebase_march_datasource_impl.dart';
 import 'package:director_app_tfg/infrastructure/repositories/firebase_march_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

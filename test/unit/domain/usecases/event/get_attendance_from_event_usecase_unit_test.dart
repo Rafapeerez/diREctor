@@ -1,4 +1,4 @@
-import 'package:director_app_tfg/domain/usecases/event/get_attendance_from_event_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/event/get_attendance_from_event_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

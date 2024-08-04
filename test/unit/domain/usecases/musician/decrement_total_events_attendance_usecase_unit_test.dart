@@ -1,5 +1,5 @@
 import 'package:director_app_tfg/domain/models/musician.dart';
-import 'package:director_app_tfg/domain/usecases/musician/decrement_total_events_attendance_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/musician/decrement_total_events_attendance_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

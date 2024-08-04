@@ -1,5 +1,5 @@
 import 'package:director_app_tfg/domain/models/holy_week_event.dart';
-import 'package:director_app_tfg/domain/usecases/holy_week_event/change_to_rest_day_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/holy_week_event/change_to_rest_day_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

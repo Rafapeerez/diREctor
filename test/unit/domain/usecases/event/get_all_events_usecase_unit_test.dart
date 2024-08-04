@@ -1,5 +1,5 @@
 import 'package:director_app_tfg/domain/models/event.dart';
-import 'package:director_app_tfg/domain/usecases/event/get_all_events_usecacase.dart';
+import 'package:director_app_tfg/aplication/usecases/event/get_all_events_usecacase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

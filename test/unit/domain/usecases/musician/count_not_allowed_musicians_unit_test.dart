@@ -1,4 +1,4 @@
-import 'package:director_app_tfg/domain/usecases/musician/count_not_allowed_musicians_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/musician/count_not_allowed_musicians_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

@@ -1,4 +1,4 @@
-import 'package:director_app_tfg/domain/usecases/march/get_all_marchs_order_by_name_usecase.dart';
+import 'package:director_app_tfg/aplication/usecases/march/get_all_marchs_order_by_name_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:director_app_tfg/domain/models/march.dart';
