@@ -13,7 +13,7 @@ class PdfViewerScreen extends StatelessWidget {
     return CustomScaffold(
       hasArrowBack: true,
       body: SfPdfViewer.asset(
-        "lib/config/assets/UsoBlockchain.pdf" 
+        "lib/config/assets/REGIMEN_INTERNO.pdf" 
       ),
     );
   }

@@ -37,6 +37,8 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   mockito: ^5.4.4
   build_runner: ^2.3.3
 
@@ -45,7 +47,7 @@ flutter:
 
   assets:
     - lib/config/assets/images/
-    - lib/config/assets/UsoBlockchain.pdf
+    - lib/config/assets/REGIMEN_INTERNO.pdf
 
 flutter_icons:
   image_path: "lib/config/assets/images/icon.png"
