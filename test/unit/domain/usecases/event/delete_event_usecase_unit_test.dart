@@ -12,7 +12,7 @@ void main() {
     useCase = DeleteEventUseCase(mockEventRepository);
   });
 
-  group("DeleteEventUseCasse", () {
+  group("DeleteEventUseCase", () {
     test("", () => null);
   });
 }
