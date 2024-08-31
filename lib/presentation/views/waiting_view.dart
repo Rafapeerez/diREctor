@@ -13,7 +13,7 @@ class WaitingView extends StatelessWidget {
             children: [
               const SizedBox(height: 40),
               const Text(
-                "¡¡¡Bienvenido!!!",
+                "¡¡¡Bienvenido/a!!!",
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold

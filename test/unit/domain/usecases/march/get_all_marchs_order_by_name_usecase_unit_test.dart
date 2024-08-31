@@ -30,9 +30,9 @@ void main() {
       // THEN
 
       expect(result.length, maList.length);
-      expect(result.first.name, maList[2].name); // El primer elemento de result debe ser el tercero de marchList
-      expect(result[1].name, maList[0].name); // El segundo elemento de result debe ser el primero de marchList
-      expect(result[2].name, maList[1].name); // El tercer elemento de result debe ser el segundo de marchList
+      expect(result.first.name, maList[2].name); // The first result element must be the third marchList element
+      expect(result[1].name, maList[0].name); // The second result element must be the first marchList element
+      expect(result[2].name, maList[1].name); // The third result element must be the second marchList element
       verify(mockMarchRepository.getAllMarchs()).called(1);
     });
 
